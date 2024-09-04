@@ -12,7 +12,7 @@ const CustomAvatar = (props) => {
         alt={'DevelopSaleth'}
         size="big"
         style={{
-            backgroundColor:"green",
+            backgroundColor:"#1677FF",
             display:'flex',
             alignItems:'center',
             border:'none'

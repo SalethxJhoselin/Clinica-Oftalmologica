@@ -6,6 +6,7 @@ import Home from '../components/layout/Home';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import Navbar from '../components/Layout/Navbar';
 import Sidebar from '../components/Layout/Sidebar';
+import Pagos from '../components/views/atencionesMedicas/Pagos';
 
 const MyRoutes = ({ isLoggedIn, userType }) => {
     return (
@@ -25,6 +26,7 @@ const MyRoutes = ({ isLoggedIn, userType }) => {
                 <Route path="/register" element={<Navigate to="/" />} />
                 <Route path="/homess" element={<Home />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/estadisticas" element={<Pagos />} />
 
             </Route>
             {/* Ruta de redirección si la página no existe */}

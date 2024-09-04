@@ -1,65 +1,61 @@
-import styled from "styled-components";
-import CurrentUser from "./NavbarComponents/CurrentUser";
-import { MenuOutlined,AimOutlined } from '@ant-design/icons';
+import React from 'react';
+import { useAuth } from '../users/AuthContext';
+import { MenuOutlined, AimOutlined, LeftOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
+import CurrentUser from './NavbarComponents/CurrentUser';
+const Sidebar = () => {
+  const { sidebarOpen, setSidebarOpen } = useAuth();
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
-    <Container isOpen={sidebarOpen}>
-      <button className="SidebarButton">
-        <AimOutlined/>
+    <div className={`bg-white sticky top-0 h-screen pt-5 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
+      <button
+        className="absolute top-12 right-0 w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer transform transition-transform duration-300"
+        onClick={toggleSidebar}
+        style={{ transform: sidebarOpen ? 'rotate(0)' : 'rotate(180deg)' }}
+      >
+        <LeftOutlined />
       </button>
-      <div className="sidebarContent">
+      <div className="flex flex-col items-center space-y-4 pb-6">
         <div className="userContent">
           <CurrentUser />
         </div>
-        <h2>
-          sajho
-        </h2>
-
+        {sidebarOpen && <h2 className="text-gray-700">Administrador</h2>}
       </div>
-    </Container>
-  )
-}
+      {linksArray.map(({ icon, label, to }) => (
+        <div className="mb-4" key={label}>
+          <NavLink
+            to={to}
+            className={({ isActive }) => `
+              flex items-center text-white-700 p-2 hover:bg-gray-200 rounded-lg transition-all duration-300
+              ${isActive ? 'bg-gray-300' : ''}
+            `}
+          >
+            <div className="mr-2">
+              {icon}
+            </div>
+            {sidebarOpen && <span>{label}</span>}
+          </NavLink>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-const Container = styled.div`
-  color: gray;
-  background: pink;
-  position:sticky;
-  padding-top:20px;
-  .SidebarButton{
-    position:absolute;
-    top:48px;
-    right:-0px;
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    background:white;
-    box-shadow:0 0 4px 
-  }
+const linksArray = [
+  {
+    label: "home",
+    icon: <AimOutlined />,
+    to: "/home"
+  },
+  {
+    label: "estadisticas",
+    icon: <MenuOutlined />,
+    to: "/estadisticas"
+  },
+];
 
-  .sidebarContent{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding-bottom:24px;
-  
-    .userContent{
-      display:flex;
-      user{
-        max-width:100%;
-        height:auto;
-      }
-        cursor:pointer;
-        transition:all 0.3s;
-        transform:${({})}
-    }
-      h2{
-        display:${({ isOpen }) => (!isOpen ? `none` : `block`)};
-      } 
-  }
-
-
-`;
-
-export default Sidebar
+export default Sidebar;

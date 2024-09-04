@@ -1,37 +1,32 @@
-
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar';
 import MyRoutes from './routes/routes';
-import React, { useState } from 'react';
 import Sidebar from './components/Layout/Sidebar';
-import styled from 'styled-components';
+import { AuthProvider, useAuth } from './components/users/AuthContext';
 
-const App = () => {
+const AppContent = () => {
+  const { isLoggedIn, sidebarOpen, setSidebarOpen } = useAuth();
 
-  const isLoggedIn = localStorage.getItem('loggedIn') === 'true'; // Esto asume que has guardado 'true' o 'false' en localStorage
-  const userType = localStorage.getItem('userType');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
-    <>
-      <BrowserRouter>
-        {/*<Container className={sidebarOpen ? "sidebarState active" : ""}>
-          {isLoggedIn && (<>
-            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          </>)}*/}
-          <Navbar isLoggedIn={isLoggedIn} userType={userType} />
-          <MyRoutes isLoggedIn={isLoggedIn} userType={userType} />
-        {/*</Container>*/}
-      </BrowserRouter>
-    </>
+    <div className="flex h-screen bg-gray-200 transition-all duration-300">
+      {isLoggedIn && (
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      )}
+      <div className="flex-1 flex flex-col overflow-x-hidden">
+        <Navbar />
+        <MyRoutes />
+      </div>
+    </div>
   );
 };
-const Container = styled.div`
-  display:grid;
-  grid-template-columns:70px auto;
-  background:white;
-  {/*el & representa "sidebarState"*/}
-  &.active{
-    grid-template-columns:200px auto
-  }
-`;
+
+const App = () => (
+  <BrowserRouter>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  </BrowserRouter>
+);
+
 export default App;
