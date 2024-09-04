@@ -42,10 +42,10 @@ export const user = [
         firstName: "John",
         firstLastName: "Doe",
         secondLastName: "Smith",
-        CI: 1234567890,  // Número de cédula de identidad
+        CI: "123",  // Número de cédula de identidad
         birthdate: "1990-01-01",
         email: "johndoe@example.com",
-        password: "password123",
+        password: "456",
         confirmPassword: "password123",
         avatarUrl: "https://example.com/avatar/johndoe.png" // URL del avatar
     }

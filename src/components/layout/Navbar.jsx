@@ -3,27 +3,25 @@ import { navLists } from '../../utils';
 import { LoginOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import CurrentUser from './NavbarComponents/CurrentUser';
-import { useState } from 'react';
+import { useState,useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-//import Toggel from './NavbarComponents/Toggel';
+const Navbar = ({ userType }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
+    // Verificar el estado de autenticación al cargar el componente
+    useEffect(() => {
+        const loggedIn = localStorage.getItem("loggedIn") === "true";
+        setIsLoggedIn(loggedIn);
+    }, []);
 
-const Navbar = ({ isLoggedIn, userType }) => {
-    const [isLoggedOut, setIsLoggedOut] = useState(isLoggedIn)
     const handleLogOut = () => {
-        setIsLoggedOut(!isLoggedOut);
-        //solo es para prueba, modificar por el token 
-        window.localStorage.setItem("loggedIn", "false");
-        navigate("/login")
+        localStorage.setItem("loggedIn", "false");
+        localStorage.removeItem("authToken");  // Eliminar el token de autenticación
+        setIsLoggedIn(false);
+        navigate("/login");  // Redirige al usuario a la página de inicio de sesión
     };
-    //const navigate=useNavigate()
-    const user=localStorage.getItem("loggedIn")||""
-    
-    console.log("isLoggedIn");
-    console.log(isLoggedIn);
-    
-    console.log(isLoggedOut)
     return (
         <header className="bg-white w-full py-3 sm:px-10 px-5 flex justify-between justify-center screen-max-width items-center">
             <img src={assets.eyeImg} alt="Eye" width={30}
@@ -38,7 +36,7 @@ const Navbar = ({ isLoggedIn, userType }) => {
                 ))}
             </div>
             <div className="flex items-baseline max-sm:justify-end max-sm:flex-1 space-x-4">
-                {/*{!isLoggedOut && (<>
+                {!isLoggedIn && (<>
                     <Button type="default" shape="round" href='/login'>
                         <LoginOutlined />
                     </Button>
@@ -46,11 +44,11 @@ const Navbar = ({ isLoggedIn, userType }) => {
                         <UserAddOutlined />
                     </Button>
                 </>)}
-                {isLoggedOut && (<>
+                {isLoggedIn && (<>
                     <Button shape="round" onClick={handleLogOut}>Cerrar sesion</Button>
                     <CurrentUser userType={userType} />
-                </>)}*/}
-                {!user? (<>
+                </>)}
+                {/*{!isLoggedIn ? (<>
                     <Button type="default" shape="round" href='/login'>
                         <LoginOutlined />
                     </Button>
@@ -61,7 +59,7 @@ const Navbar = ({ isLoggedIn, userType }) => {
                  (<>
                     <Button shape="round" onClick={handleLogOut}>Cerrar sesion</Button>
                     <CurrentUser userType={userType} />
-                </>)}
+                </>)}*/}
 
             </div>
         </header>

@@ -4,25 +4,29 @@ import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../utils';
 import ForgotPassword from './ForgotPassword';
-import { useNavigate } from 'react-router-dom';
+import { user } from '../../utils/test';
 
 const FormLogin = () => {
     const navigate = useNavigate(); // Para redirigir al usuario
 
     const onFinish = (values) => {
-        console.log('Enviando los datos del usuario: ', values);
-        window.localStorage.setItem("loggedIn", "true");//simulando enviar los datos
-        // Simular la respuesta del servidor con un token de autenticación
-        const simulatedToken = 'simulated_jwt_token_1234567890';
-        
-        // Almacenar el token en localStorage (o sessionStorage)
-        localStorage.setItem('authToken', simulatedToken);
-        
-        console.log('Token de autenticación simulado recibido: ', simulatedToken);
+        const { username, password } = values;
+        const foundUser = user.find(u => u.CI === username && u.password === password);
+        if (foundUser) {
+            // Si las credenciales coinciden, simular un inicio de sesión exitoso
+            window.localStorage.setItem("loggedIn", "true");
+            const simulatedToken = 'simulated_jwt_token_1234567890';
+            localStorage.setItem('authToken', simulatedToken);
 
-        // Redirigir al usuario a la página "Home"
-        navigate('/home');
-        
+            console.log('Inicio de sesión exitoso, token: ', simulatedToken);
+
+            // Redirigir al usuario a la página "Home"
+            navigate('/home');
+        } else {
+            // Si las credenciales no coinciden, mostrar un mensaje de error
+            console.log('Error: Usuario o contraseña incorrectos');
+        }
+
     };
     return (
         <div className="flex h-screen">
