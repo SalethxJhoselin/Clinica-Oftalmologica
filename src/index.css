@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*{
+  margin:0;
+  padding:0;
+  box-sizing: borden-box;
+  font-family: Verdana, cursive, Tahoma, sans-serif;
+}
+
+body{
+  color:black;
+  width:100dvw;
+  overflow-x:hidden;
+  height:100%;
+  background: rgb(228, 228, 228);
+  border-color: #3b3b3b;
+  user-select: none;
+}
+
+.screen-max-width{
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  position: relative;
+  max-width:1120px;
+}
+
+.white-icon {
+  color: #FFFFFF;
+}
+.green-button {
+  background-color: #90CA4B;
+  color: #FFFFFF;
+  border-color: #446b14;
+}
+/* Estilo para el botón en su estado hover */
+.ant-btn:hover {
+  color: #000000;
+  border-color: #10421b!important; /* Color del borde al pasar el cursor */
+}
+
+/* Estilo para el botón en su estado activo */
+.ant-btn:active {
+  color: #000000;
+  border-color: #12411d!important; /* Color del borde al hacer clic */
+  background-color: #e4ac14;
+}
+
+.custom-button {
+  background-color: white;
+  border-color:'#90CA4B';
+  color: white;
+}
+
+
