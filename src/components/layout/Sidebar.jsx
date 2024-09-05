@@ -11,7 +11,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className={`bg-white sticky top-0 h-screen pt-5 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
+    <div className={`bg-white sticky top-0 h-screen pt-5 transition-all duration-300 border-r border-gray-300 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
       <button
         className="absolute top-12 right-0 w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer transform transition-transform duration-300"
         onClick={toggleSidebar}
