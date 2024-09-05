@@ -1,6 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Crear el contexto de autenticación
+/*Crear el contexto de autenticación ya que manejar este estado en multiples componentes
+puede volverse complicado con el Context API de React creamos una fuente central de 
+información que puede ser accedida por cualquier componente en la jerarquía de la aplicación.
+*/
 const AuthContext = createContext();
 
 // Proveedor del contexto
@@ -8,20 +11,17 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('loggedIn') === 'true');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Función para iniciar sesión
   const login = () => {
     setIsLoggedIn(true);
     localStorage.setItem('loggedIn', 'true');
   };
 
-  // Función para cerrar sesión
   const logout = () => {
     setIsLoggedIn(false);
     localStorage.setItem('loggedIn', 'false');
     localStorage.removeItem('authToken');
   };
 
-  // Asegúrate de que el estado se sincroniza con el localStorage
   useEffect(() => {
     const handleStorageChange = () => {
       setIsLoggedIn(localStorage.getItem('loggedIn') === 'true');
@@ -41,5 +41,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook para usar el contexto
+// useAuth->Hook que permite acceder al contexto de autenticación fácilmente desde cualquier componente.
 export const useAuth = () => useContext(AuthContext);

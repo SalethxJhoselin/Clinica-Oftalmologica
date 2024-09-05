@@ -1,9 +1,12 @@
-import React from 'react'
+import { useAuth } from '../users/AuthContext';
 import { Navigate,Outlet } from 'react-router-dom'
 
 const ProtectedRoute = () => {
-    const isLoggedIn =window.localStorage.getItem("loggedIn");//solo para prueba, modificar
-  return isLoggedIn ==="true" ?<Outlet/>: <Navigate to="login"/>;
-}
+  const { isLoggedIn } = useAuth(); // Obtiene el estado de autenticación
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+  return <Outlet />;
+};
 
 export default ProtectedRoute

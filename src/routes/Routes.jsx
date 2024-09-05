@@ -4,33 +4,36 @@ import FormRegister from '../components/users/FormRegister';
 import ForgotPassword from '../components/users/ForgotPassword';
 import Home from '../components/layout/Home';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
-import Navbar from '../components/Layout/Navbar';
-import Sidebar from '../components/Layout/Sidebar';
 import Pagos from '../components/views/atencionesMedicas/Pagos';
+import { useAuth } from '../components/users/AuthContext';
 
-const MyRoutes = ({ isLoggedIn, userType }) => {
+const MyRoutes = () => {
+    const { isLoggedIn } = useAuth();
     return (
         <Routes>
             {/* no logged*/}
-            {!isLoggedIn && (
+            {!isLoggedIn ? (
                 <>
-                    {/*<Route path="/" element={<Layout />} />*/}
                     <Route path="/login" element={<FormLogin />} />
                     <Route path="/register" element={<FormRegister />} />
                     <Route path="/forgotPassword" element={<ForgotPassword />} />
                 </>
+            ) : (
+                <>
+                    {/* Si el usuario está logueado, redirigir cualquier intento de acceder a las rutas públicas al home */}
+                    <Route path="/login" element={<Navigate to="/home" />} />
+                    <Route path="/register" element={<Navigate to="/home" />} />
+                    <Route path="/forgotPassword" element={<Navigate to="/home" />} />
+                </>
             )}
             {/*Protected Routes */}
-            <Route element={<ProtectedRoute />} >
-                <Route path="/login" element={<Navigate to="/" />} />
-                <Route path="/register" element={<Navigate to="/" />} />
-                <Route path="/homess" element={<Home />} />
+            <Route element={<ProtectedRoute />}>
                 <Route path="/home" element={<Home />} />
                 <Route path="/estadisticas" element={<Pagos />} />
-
             </Route>
-            {/* Ruta de redirección si la página no existe */}
-            <Route path="*" element={<Navigate to="/" />} />
+
+            {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
+            <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
         </Routes>
     )
 }

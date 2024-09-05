@@ -4,17 +4,18 @@ import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../components/users/AuthContext';
 import assets from '../../utils';
+import { user } from '../../utils/test';//solo para prueba,
 
 const FormLogin = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
     const onFinish = (values) => {
-        const { username, password } = values;
-        // Aquí deberías validar las credenciales de usuario
-        if (username && password) { // Simula validación exitosa
-            login();
-            navigate('/home');
+        const { username, password } = values;        
+        const foundUser = user.find(u => u.CI === username && u.password === password);//validamos las credenciales
+        if (foundUser) { // Simula validación exitosa
+            login();// Llamamos a la función login del AuthContext,actualiza el estado isLoggedIn y guarda la información de sesión en el localStorage
+            navigate('/home');  // Redirigimos al usuario a la página principal
         } else {
             console.log('Error: Usuario o contraseña incorrectos');
         }
