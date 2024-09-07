@@ -1,9 +1,13 @@
-import { LockOutlined, UserOutlined, MailOutlined} from '@ant-design/icons';
+import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, DatePicker } from 'antd';
 import assets from '../../utils';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../components/users/AuthContext';
 
 const FormRegister = () => {
+    const navigate = useNavigate();
+    const { login } = useAuth();
     const onFinish = async (values) => {
         const { confirmPassword, ...rest } = values;
         if (values.password !== confirmPassword) {
@@ -13,6 +17,8 @@ const FormRegister = () => {
         try {
             const response = await axios.post('https://clinica-oftalmologica.onrender.com/usuarios/registrarse', rest);
             console.log('Registro exitoso:', response.data);
+            login();
+            navigate('/home');
         } catch (error) {
             console.error('Error al registrar:', error.response.data);
         }
