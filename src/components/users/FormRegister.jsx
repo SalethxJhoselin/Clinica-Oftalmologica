@@ -1,11 +1,21 @@
-import React from 'react';
-import { LockOutlined, UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, MailOutlined} from '@ant-design/icons';
 import { Button, Form, Input, DatePicker } from 'antd';
 import assets from '../../utils';
+import axios from 'axios';
 
 const FormRegister = () => {
-    const onFinish = (values) => {
-        console.log('envia los datos del usuario: ', values);
+    const onFinish = async (values) => {
+        const { confirmPassword, ...rest } = values;
+        if (values.password !== confirmPassword) {
+            console.error('Las contraseñas no coinciden');
+            return;
+        }
+        try {
+            const response = await axios.post('https://clinica-oftalmologica.onrender.com/usuarios/registrarse', rest);
+            console.log('Registro exitoso:', response.data);
+        } catch (error) {
+            console.error('Error al registrar:', error.response.data);
+        }
     };
 
     return (
@@ -19,7 +29,7 @@ const FormRegister = () => {
             </div>
             <div className="w-1/2 flex items-center justify-center bg-white max-sm:w-full">
                 <Form
-                    name="Login"
+                    name="Register"
                     initialValues={{
                         remember: true,
                     }}
@@ -30,7 +40,7 @@ const FormRegister = () => {
                 >
                     <h1 className='py-3'>Registro de Usuario</h1>
                     <Form.Item
-                        name="firstName"
+                        name="nombre"
                         rules={[
                             {
                                 required: true,
@@ -41,7 +51,7 @@ const FormRegister = () => {
                         <Input prefix={<UserOutlined />} placeholder="Nombre" />
                     </Form.Item>
                     <Form.Item
-                        name="firstLastName"
+                        name="apellido_paterno"
                         rules={[
                             {
                                 required: true,
@@ -52,7 +62,7 @@ const FormRegister = () => {
                         <Input prefix={<UserOutlined />} placeholder="Primer Apellido" />
                     </Form.Item>
                     <Form.Item
-                        name="secondLastName"
+                        name="apellido_materno"
                         rules={[
                             {
                                 required: true,
@@ -64,16 +74,16 @@ const FormRegister = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="birthdate"
+                        name="fecha_nacimiento"
                         rules={[{
                             required: true,
                             message: 'Por favor ingrese su fecha de nacimiento!'
                         }]}
                     >
-                        <DatePicker prefix={<UserOutlined />} className="w-full" placeholder="Fecha de Nacimiento" />
+                        <DatePicker className="w-full" placeholder="Fecha de Nacimiento" />
                     </Form.Item>
                     <Form.Item
-                        name="CI"
+                        name="ci"
                         rules={[
                             {
                                 required: true,
@@ -99,29 +109,29 @@ const FormRegister = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Por favor ingrese su contrasena!',
+                                message: 'Por favor ingrese su contraseña!',
                             },
                         ]}
                     >
-                        <Input prefix={<LockOutlined />} type="password" placeholder="Contrasena" />
+                        <Input prefix={<LockOutlined />} type="password" placeholder="Contraseña" />
                     </Form.Item>
                     <Form.Item
                         name="confirmPassword"
                         rules={[
                             {
                                 required: true,
-                                message: 'Por favor ingrese nuevamente su contrasena!',
+                                message: 'Por favor ingrese nuevamente su contraseña!',
                             },
                         ]}
                     >
-                        <Input prefix={<LockOutlined />} type="password" placeholder="Confirmar Contrasena" />
+                        <Input prefix={<LockOutlined />} type="password" placeholder="Confirmar Contraseña" />
                     </Form.Item>
 
                     <Form.Item>
                         <Button block type="primary" htmlType="submit">
                             Registrarse
                         </Button>
-                        <h1>Ya tienes una cuenta? <a href="/login">Inicia sesion!</a></h1>
+                        <h1>Ya tienes una cuenta? <a href="/login">Inicia sesión!</a></h1>
 
                     </Form.Item>
                 </Form>
@@ -129,4 +139,5 @@ const FormRegister = () => {
         </div>
     );
 };
+
 export default FormRegister;
