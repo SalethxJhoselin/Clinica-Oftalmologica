@@ -1,5 +1,6 @@
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-//import Navbar from './components/Layout/Navbar';
+import Navbar from './components/Layout/Navbar';
 import MyRoutes from './routes/routes';
 import Sidebar from './components/Layout/Sidebar';
 import { AuthProvider, useAuth } from './components/users/AuthContext';
@@ -14,7 +15,7 @@ const AppContent = () => {
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       )}
       <div className="flex-1 flex flex-col overflow-x-hidden">
-        {/*<Navbar />*/}
+        <Navbar />
         <MyRoutes />
       </div>
     </div>
