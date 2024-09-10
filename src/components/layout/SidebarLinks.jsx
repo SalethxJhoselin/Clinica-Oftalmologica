@@ -7,7 +7,7 @@ const SidebarLinks = () => [
     subMenu: [
       {
         label: "Gestionar Roles",
-        to: "/admin/roles",
+        to: "/admin/manageRoles",
       },
       {
         label: "Gestionar Permisos",

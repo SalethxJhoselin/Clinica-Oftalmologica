@@ -9,7 +9,7 @@ import  assets from '../../utils';
 const Navbar = () => {
     const { isLoggedIn, logout } = useAuth();
     return (
-        <header className="bg-white w-full py-3 sm:px-10 px-5 flex justify-between border-b border-gray-300">
+        <header className="bg-white w-full py-3 sm:px-10 px-5 flex justify-between border-b border-gray-300 shadow-md rounded-2xl">
             <img src={assets.eyeImg} alt="Eye" width={30} className="cursor-pointer" />
             <div className="flex flex-1 justify-center items-center max-sm:hidden">
                 {navLists.map((nav) => (

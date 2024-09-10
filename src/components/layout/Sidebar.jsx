@@ -25,7 +25,7 @@ const Sidebar = () => {
   return (
     <Sider
       width={256}
-      className={`bg-white border-r`}
+      className={`bg-white border-r rounded-3xl shadow-lg`}
       collapsedWidth={80}
       collapsible
       collapsed={!sidebarOpen}

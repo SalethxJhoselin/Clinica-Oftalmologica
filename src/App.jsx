@@ -9,7 +9,7 @@ const AppContent = () => {
   const { isLoggedIn, sidebarOpen, setSidebarOpen } = useAuth();
 
   return (
-    <div className="flex h-screen bg-gray-200 transition-all duration-300">
+    <div className="flex h-screen bg-white-100 transition-all duration-300">
       {isLoggedIn && (
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       )}
