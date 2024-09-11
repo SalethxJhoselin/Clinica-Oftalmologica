@@ -7,6 +7,8 @@ import ProtectedRoute from '../components/layout/ProtectedRoute';
 import Pagos from '../components/views/atencionesMedicas/Pagos';
 import { useAuth } from '../components/users/AuthContext';
 import Usuarios from '../components/views/atencionesMedicas/Usuarios';
+import ManageRoles from '../components/views/manageUsers/ManageRoles';
+import ManagePermissions from '../components/views/manageUsers/ManagePermissions';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -31,6 +33,8 @@ const MyRoutes = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/estadisticas" element={<Pagos />} />
                 <Route path="/usuarios" element={<Usuarios />} />
+                <Route path="/admin/manageRoles" element={<ManageRoles />} />
+                <Route path="/admin/permissions" element={<ManagePermissions />} />
             </Route>
 
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
