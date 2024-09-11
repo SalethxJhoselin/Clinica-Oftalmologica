@@ -3,7 +3,7 @@ import { Space, Table, Button, Input, Typography } from 'antd';
 import RoleModal from './RoleModal';
 
 // Datos simulados
-const simulatedRoles = [
+const simulatedRoles = [ //aqui
   { id: 1, name: 'Administrador', permissions: [{ id: 1, name: 'Crear usuario' }, { id: 2, name: 'Eliminar usuario' }] },
   { id: 2, name: 'Usuario', permissions: [{ id: 3, name: 'Ver contenido' }] }
 ];
@@ -68,6 +68,12 @@ const ManageRoles = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => renderEditableInput(text, record, 'name'),
     },
     {
       title: 'Nombre',

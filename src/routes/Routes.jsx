@@ -9,6 +9,8 @@ import { useAuth } from '../components/users/AuthContext';
 import Usuarios from '../components/views/atencionesMedicas/Usuarios';
 import ManageRoles from '../components/views/manageUsers/ManageRoles';
 import ManagePermissions from '../components/views/manageUsers/ManagePermissions';
+import ManageProfession from '../components/views/manageProfession/ManageProfession';
+import ManageUsuarios from '../components/views/manageUsers/ManageUsuarios';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -35,6 +37,8 @@ const MyRoutes = () => {
                 <Route path="/usuarios" element={<Usuarios />} />
                 <Route path="/admin/manageRoles" element={<ManageRoles />} />
                 <Route path="/admin/permissions" element={<ManagePermissions />} />
+                <Route path="/personnel/professions-registry" element={<ManageProfession />} />
+                <Route path="/admin/users" element={<ManageUsuarios />} />
             </Route>
 
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
