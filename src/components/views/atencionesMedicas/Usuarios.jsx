@@ -8,7 +8,7 @@ function Usuarios() {
         <tbody>
           <tr>
             <td>
-              <label htmlFor="nombre">S:</label>
+              <label htmlFor="nombre">nombre:</label>
             </td>
             <td>
               <input type="text" id="nombre" name="nombre" required />
