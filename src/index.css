@@ -57,3 +57,63 @@ body {
 .add-role-button {
   margin-top: 16px;
 }
+
+@media (max-width: 600px) {
+  .screen-max-width {
+    max-width: 100%;
+    padding: 0 10px; /* Ajusta el padding para evitar el desbordamiento */
+  }
+
+  .navbar {
+    font-size: 14px; /* Tamaño de fuente más pequeño para mejor ajuste */
+  }
+
+  .table {
+    font-size: 12px; /* Tamaño de fuente más pequeño para tablas */
+    overflow-x: auto; /* Añade scroll horizontal si la tabla es demasiado ancha */
+  }
+
+  .button {
+    padding: 10px 15px; /* Ajusta el tamaño de los botones para pantallas pequeñas */
+  }
+}
+
+/* Pantallas medianas (601px - 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .screen-max-width {
+    max-width: 90%; /* Ajusta el max-width para pantallas más grandes que móviles */
+    padding: 0 20px;
+  }
+
+  .navbar {
+    font-size: 16px;
+  }
+
+  .table {
+    font-size: 14px;
+  }
+
+  .button {
+    padding: 12px 20px; /* Ajusta el tamaño de los botones para pantallas medianas */
+  }
+}
+
+/* Pantallas grandes (≥ 1025px) */
+@media (min-width: 1025px) {
+  .screen-max-width {
+    max-width: 1120px; /* Ancho máximo para pantallas grandes */
+    padding: 0 30px;
+  }
+
+  .navbar {
+    font-size: 18px;
+  }
+
+  .table {
+    font-size: 16px;
+  }
+
+  .button {
+    padding: 14px 25px; /* Ajusta el tamaño de los botones para pantallas grandes */
+  }
+}
