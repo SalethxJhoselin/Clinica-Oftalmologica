@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar';
-import MyRoutes from './routes/routes';
+import MyRoutes from './routes/Routes'; //modifique esto a Routes de routes
 import Sidebar from './components/Layout/Sidebar';
 import { AuthProvider, useAuth } from './components/users/AuthContext';
 
