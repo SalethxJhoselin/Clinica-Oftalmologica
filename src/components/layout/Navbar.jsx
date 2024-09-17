@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { LoginOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import  { navLists } from '../../utils';
-import CurrentUser from './NavbarComponents/CurrentUser';
+import CurrentUser from '../users/CurrentUser';
 import  assets from '../../utils';
 
 const Navbar = () => {

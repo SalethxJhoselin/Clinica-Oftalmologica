@@ -51,3 +51,42 @@ export const user = [
     }
 ];
 
+export const employeeData = [{
+    "id": 1,
+    "apellido_paterno": "Gonzales",
+    "apellido_materno": "Pérez",
+    "nombres": "Juan Carlos",
+    "CI": "12345678",
+    "fecha_nacimiento": "1990-05-15",
+    "genero": "Masculino",
+    "telefono": "76543210",
+    "email": "juancarlos@example.com",
+    "profesion": {
+        "id": 1,
+        "nombre": "Ingeniero"
+    },
+    "rol": {
+        "id": 1,
+        "nombre": "recepcionista"
+    },
+    "estado": "activo"
+}, {
+    "id": 2,
+    "apellido_paterno": "Rodríguez",
+    "apellido_materno": "López",
+    "nombres": "Maria Isabel",
+    "CI": "87654321",
+    "fecha_nacimiento": "1992-08-25",
+    "genero": "Femenino",
+    "telefono": "76509876",
+    "email": "mariaisabel@example.com",
+    "profesion": {
+        "id": 2,
+        "nombre": "Doctora"
+    },
+    "rol": {
+        "id": 2,
+        "nombre": "administradora"
+    },
+    "estado": "activo"
+}];

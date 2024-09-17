@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 const RoleModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,8 +23,17 @@ const RoleModal = ({ getDatos }) => {
 
     return (
         <>
-            <Button className="w-full font-bold" onClick={() => setIsModalOpen(true)}>
-                Agregar Rol
+            <Button
+                style={{
+                    backgroundColor: '#4CAF50', // Color de fondo
+                    color: '#fff', // Color del texto
+                    borderRadius: '15px', // Bordes redondeados
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' // Sombra
+                }}
+                onClick={() => setIsModalOpen(true)}
+            >
+                <PlusOutlined />
+                <span>Nuevo</span>
             </Button>
             <Modal
                 title="Agregar Rol"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import RoleModal from './RoleModal';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // Datos simulados
 const simulatedRoles = [ //aqui
@@ -76,12 +77,6 @@ const ManageRoles = () => {
       render: (text, record) => renderEditableInput(text, record, 'name'),
     },
     {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => renderEditableInput(text, record, 'name'),
-    },
-    {
       title: 'Acción',
       key: 'action',
       render: (_, record) => (
@@ -93,8 +88,14 @@ const ManageRoles = () => {
             </>
           ) : (
             <>
-              <Button type="text" onClick={() => handleEditRole(record.id)}>Editar</Button>
-              <Button onClick={() => handleDeleteRole(record.id)}>Eliminar</Button>
+              <Button type="primary"onClick={() => handleEditRole(record.id)}><EditOutlined /></Button>
+              <Button style={{
+                    backgroundColor: '#F44336', 
+                    color: '#fff', 
+                    borderRadius: '10px', 
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}
+                onClick={() => handleDeleteRole(record.id)}><DeleteOutlined /></Button>
             </>
           )}
         </Space>
@@ -105,6 +106,9 @@ const ManageRoles = () => {
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Roles</Title>
+      <div className="flex justify-end mb-6">
+        <RoleModal getDatos={() => setRoles(simulatedRoles)} />
+      </div>
       <Table
         columns={columns}
         dataSource={roles}
@@ -112,9 +116,6 @@ const ManageRoles = () => {
         pagination={{ pageSize: 5, size: 'small' }}
         bordered
       />
-      <div className="add-role-button">
-        <RoleModal getDatos={() => setRoles(simulatedRoles)} />
-      </div>
     </div>
   );
 };

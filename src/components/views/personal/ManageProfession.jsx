@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import ProfessionModal from './ProfessionModal'; // Asegúrate de tener este componente para agregar profesiones
 import axios from 'axios';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const ManageProfession = () => {
@@ -96,8 +97,14 @@ const ManageProfession = () => {
             </>
           ) : (
             <>
-              <Button type="text" onClick={() => handleEditProfession(record.id)}>Editar</Button>
-              <Button onClick={() => handleDeleteProfession(record.id)}>Eliminar</Button>
+              <Button type="primary" onClick={() => handleEditProfession(record.id)}><EditOutlined /></Button>
+              <Button style={{
+                backgroundColor: '#F44336',
+                color: '#fff',
+                borderRadius: '10px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+              }}
+                nClick={() => handleDeleteProfession(record.id)}><DeleteOutlined /></Button>
             </>
           )}
         </Space>
@@ -108,6 +115,13 @@ const ManageProfession = () => {
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Profesiones</Title>
+
+      <div className="flex justify-end mb-6">
+        <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
+          .then(response => setProfessions(response.data))
+          .catch(error => console.error('Error al obtener las profesiones:', error))}
+        />
+      </div>
       <Table
         columns={columns}
         dataSource={professions}
@@ -115,12 +129,6 @@ const ManageProfession = () => {
         pagination={{ pageSize: 5, size: 'small' }}
         bordered
       />
-      <div className="add-profession-button">
-        <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
-          .then(response => setProfessions(response.data))
-          .catch(error => console.error('Error al obtener las profesiones:', error))}
-        />
-      </div>
     </div>
   );
 };

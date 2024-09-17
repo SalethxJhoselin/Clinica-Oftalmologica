@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import '../estilos/Usuario.css';
+import './Perfil.css';
 
-const Usuarios = () => {
+const Perfil = () => {
     const [nombre, setNombre] = useState('Juan Pérez');
     const [email, setEmail] = useState('juan.perez@example.com');
     const [telefono, setTelefono] = useState('789456123');
@@ -137,4 +137,4 @@ const Usuarios = () => {
         </div>
     );
 };
-export default Usuarios;
+export default Perfil;

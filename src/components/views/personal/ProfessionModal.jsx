@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
 import axios from 'axios';
+import { PlusOutlined } from '@ant-design/icons';
 
 const ProfessionModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,8 +35,15 @@ const ProfessionModal = ({ getDatos }) => {
 
     return (
         <>
-            <Button className="w-full font-bold" onClick={() => setIsModalOpen(true)}>
-                Agregar Profesión
+            <Button style={{
+                backgroundColor: '#4CAF50', // Color de fondo
+                color: '#fff', // Color del texto
+                borderRadius: '15px', // Bordes redondeados
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' // Sombra
+            }}
+                onClick={() => setIsModalOpen(true)}>
+                <PlusOutlined />
+                <span>Nuevo</span>
             </Button>
             <Modal
                 title="Agregar Profesión"

@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { LeftOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import CurrentUser from './NavbarComponents/CurrentUser';
+import CurrentUser from '../users/CurrentUser';
 import SidebarLinks from './SidebarLinks';
 
 const { Sider } = Layout;

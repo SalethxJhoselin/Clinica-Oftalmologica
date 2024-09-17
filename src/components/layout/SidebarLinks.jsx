@@ -7,7 +7,7 @@ const SidebarLinks = () => [
     subMenu: [
       {
         label: "Gestionar Roles",
-        to: "/admin/manageRoles",
+        to: "/admin/roles",
       },
       {
         label: "Gestionar Permisos",
@@ -50,8 +50,8 @@ const SidebarLinks = () => [
     icon: <TeamOutlined />,
     subMenu: [
       {
-        label: "Registro de Empleados",
-        to: "/personnel/employee-registry",
+        label: "Administrar Empleados",
+        to: "/personnel/manageEmployees",
       },
       {
         label: "Registro de Profesiones",
