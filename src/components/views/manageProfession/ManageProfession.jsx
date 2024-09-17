@@ -1,12 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import ProfessionModal from './ProfessionModal'; // Asegúrate de tener este componente para agregar profesiones
-
-// Datos simulados para profesiones
-const simulatedProfessions = [
-  { id: 1, name: 'Oftalmólogo' },
-  { id: 2, name: 'Optometrista' }
-];
+import axios from 'axios';
 
 const { Title } = Typography;
 const ManageProfession = () => {
@@ -16,18 +11,28 @@ const ManageProfession = () => {
 
   // Obtener datos
   useEffect(() => {
-    setProfessions(simulatedProfessions);
+    axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
+      .then(response => setProfessions(response.data))
+      .catch(error => console.error('Error al obtener las profesiones:', error));
   }, []);
 
   const handleEditProfession = useCallback((professionId) => {
     setEditingProfessionId(professionId);
     const profession = professions.find(prof => prof.id === professionId);
-    setEditedData({ [professionId]: { name: profession.name } });
+    setEditedData({ [professionId]: { nombre: profession.nombre } });
   }, [professions]);
 
   const handleSaveProfession = useCallback((professionId) => {
-    console.log("Datos modificados:", editedData[professionId]);
-    setEditingProfessionId(null);
+    axios.post('https://clinica-oftalmologica.onrender.com/profesiones/editar', { id: professionId, ...editedData[professionId] })
+      .then(() => {
+        console.log("Datos modificados:", editedData[professionId]);
+        setEditingProfessionId(null);
+        // Actualizar la lista de profesiones
+        axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
+          .then(response => setProfessions(response.data))
+          .catch(error => console.error('Error al obtener las profesiones:', error));
+      })
+      .catch(error => console.error('Error al guardar la profesión:', error));
   }, [editedData]);
 
   const handleCancelEdit = useCallback(() => {
@@ -36,8 +41,12 @@ const ManageProfession = () => {
   }, []);
 
   const handleDeleteProfession = useCallback((professionId) => {
-    console.log(`Simulación de eliminación de la profesión con ID ${professionId}`);
-    setProfessions(prevProfessions => prevProfessions.filter(prof => prof.id !== professionId));
+    axios.delete('https://clinica-oftalmologica.onrender.com/profesiones/eliminar', { data: { id: professionId } })
+      .then(() => {
+        console.log(`Simulación de eliminación de la profesión con ID ${professionId}`);
+        setProfessions(prevProfessions => prevProfessions.filter(prof => prof.id !== professionId));
+      })
+      .catch(error => console.error('Error al eliminar la profesión:', error));
   }, []);
 
   const handleInputChange = useCallback((value, professionId, field) => {
@@ -51,7 +60,7 @@ const ManageProfession = () => {
   }, []);
 
   const renderEditableInput = useCallback((text, record, dataIndex) => {
-    if (record.id === editingProfessionId && dataIndex === 'name') {
+    if (record.id === editingProfessionId && dataIndex === 'nombre') {
       return (
         <Input
           value={editedData[record.id]?.[dataIndex] || text}
@@ -71,9 +80,9 @@ const ManageProfession = () => {
     },
     {
       title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => renderEditableInput(text, record, 'name'),
+      dataIndex: 'nombre',
+      key: 'nombre',
+      render: (text, record) => renderEditableInput(text, record, 'nombre'),
     },
     {
       title: 'Acción',
@@ -107,7 +116,10 @@ const ManageProfession = () => {
         bordered
       />
       <div className="add-profession-button">
-        <ProfessionModal getDatos={() => setProfessions(simulatedProfessions)} />
+        <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
+          .then(response => setProfessions(response.data))
+          .catch(error => console.error('Error al obtener las profesiones:', error))}
+        />
       </div>
     </div>
   );

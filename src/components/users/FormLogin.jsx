@@ -2,7 +2,7 @@ import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../components/users/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import assets from '../../utils';
 import axios from 'axios';
 

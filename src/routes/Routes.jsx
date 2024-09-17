@@ -4,7 +4,7 @@ import FormRegister from '../components/users/FormRegister';
 import ForgotPassword from '../components/users/ForgotPassword';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import Pagos from '../components/views/atencionesMedicas/Pagos';
-import { useAuth } from '../components/users/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import Usuarios from '../components/views/atencionesMedicas/Usuarios';
 import ManageRoles from '../components/views/manageUsers/ManageRoles';
 import ManagePermissions from '../components/views/manageUsers/ManagePermissions';

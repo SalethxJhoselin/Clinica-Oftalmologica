@@ -3,7 +3,7 @@ import { Button, Form, Input, DatePicker } from 'antd';
 import assets from '../../utils';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../components/users/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const FormRegister = () => {
     const navigate = useNavigate();
