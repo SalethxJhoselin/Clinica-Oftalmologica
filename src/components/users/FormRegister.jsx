@@ -25,7 +25,7 @@ const FormRegister = () => {
     };
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-screen fixed top-0 left-0 right-0">
             <div className="relative w-1/2 h-full overflow-hidden max-sm:hidden">
                 <img
                     src={assets.auth}

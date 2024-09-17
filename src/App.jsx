@@ -16,7 +16,9 @@ const AppContent = () => {
       )}
       <div className="flex-1 flex flex-col overflow-x-hidden">
         <Navbar />
-        <MyRoutes />
+        <div className="pt-16">
+          <MyRoutes />
+        </div>
       </div>
     </div>
   );

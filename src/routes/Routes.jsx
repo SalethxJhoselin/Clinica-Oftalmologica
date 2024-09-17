@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate, BrowserRouter } from 
 import FormLogin from '../components/users/FormLogin';
 import FormRegister from '../components/users/FormRegister';
 import ForgotPassword from '../components/users/ForgotPassword';
-import Home from '../components/layout/Home';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import Pagos from '../components/views/atencionesMedicas/Pagos';
 import { useAuth } from '../components/users/AuthContext';
@@ -11,6 +10,8 @@ import ManageRoles from '../components/views/manageUsers/ManageRoles';
 import ManagePermissions from '../components/views/manageUsers/ManagePermissions';
 import ManageProfession from '../components/views/manageProfession/ManageProfession';
 import ManageUsuarios from '../components/views/manageUsers/ManageUsuarios';
+import Home from '../components/pages/Home';
+
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -30,9 +31,9 @@ const MyRoutes = () => {
                     <Route path="/forgotPassword" element={<Navigate to="/home" />} />
                 </>
             )}
+            <Route path="/home" element={<Home />} />
             {/*Protected Routes */}
             <Route element={<ProtectedRoute />}>
-                <Route path="/home" element={<Home />} />
                 <Route path="/estadisticas" element={<Pagos />} />
                 <Route path="/usuarios" element={<Usuarios />} />
                 <Route path="/admin/manageRoles" element={<ManageRoles />} />
