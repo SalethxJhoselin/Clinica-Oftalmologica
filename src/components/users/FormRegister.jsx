@@ -88,8 +88,7 @@ const FormRegister = () => {
                     <Form.Item
                         name="ci"
                         rules={[{
-                            required: true,
-                            message: 'Por favor ingrese su CI!',
+                            required: true, message: 'Por favor ingrese su CI!',
                         }]}
                     >
                         <Input prefix={<UserOutlined />} placeholder="C.I." />
@@ -97,9 +96,8 @@ const FormRegister = () => {
                     <Form.Item
                         name="email"
                         rules={[{
-                            required: true,
-                            message: 'Por favor ingrese su E-mail!',
-                        }]}
+                            required: true, message: 'Por favor ingrese su E-mail!',
+                        }, { type: 'email', message: 'El email no es válido' }]}
                     >
                         <Input prefix={<MailOutlined />} placeholder="E-mail" />
                     </Form.Item>
