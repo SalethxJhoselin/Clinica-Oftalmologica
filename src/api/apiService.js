@@ -38,7 +38,7 @@ export const getUserByCI = async (ciUser) => {
         console.log(response)
         return response.data;
     } catch (error) {
-        console.error('Error al obtener los datos del empleado:', error);
+        console.error('Error al obtener los datos del usaurio:', error);
         throw error;
     }
 };
@@ -148,6 +148,35 @@ export const deleteProfession = async (professionId) => {
         return api.post(`/profesiones/crear`, professionData);
     } catch (error) {
         console.error('Error al crear la profesión:', error);
+        throw error;
+    }
+};
+//==========EMPLOYEES====================================
+export const getAllEmployees = async () => {
+    try {
+        const response = await api.get('/empleado/listar');
+        return response;
+    } catch (error) {
+        console.error('Error al obtener lista de empleados:', error);
+        throw error;
+    }
+};
+export const createEmployee = (employeeData) => {
+    try {
+        console.log("employeeData")
+        console.log(employeeData)
+        return api.post(`/empleado/crear`, employeeData);
+    } catch (error) {
+        console.error('Error al registrar al empleado:', error);
+        throw error;
+    }
+};
+export const updateEmployee = async (professionId, updatedData) => {
+    try {
+        const response = await api.post(`/profesiones/editar`, { id: professionId, ...updatedData });
+        return response.data;
+    } catch (error) {
+        console.error('Error al editar la profesión:', error);
         throw error;
     }
 };

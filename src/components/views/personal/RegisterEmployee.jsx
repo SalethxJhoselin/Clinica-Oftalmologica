@@ -1,32 +1,31 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal, Input, Form, Select, message } from 'antd';
+import { Button, Modal, Input, Form, Select, message, DatePicker } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { fetchRoles, getProfessions, getUserByCI } from '../../../api/apiService';
-
+import { fetchRoles, getProfessions, getUserByCI, createEmployee } from '../../../api/apiService';
 const { Option } = Select;
-const datosss = {
-    "id": 1,
-    "ci": "123",
-    "nombre": "Jhon",
-    "apellido_paterno": "Andia",
-    "apellido_materno": "Merino",
-    "fecha_nacimiento": "2003-06-05T00:00:00.000Z",
-    "email": "juan.perez@example.com",
-    "password": "$2a$10$zyga.WM9Mof3574bCSZ5x.JNIjq2tiE7RYmNND2s.QzIjlQKtje1e",
-    "rol_id": null,
-    "estado": true,
-    "telefono": null,
-    "genero": null
-}
+
 const RegisterEmployee = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [roles, setRoles] = useState([]);
     const [professions, setProfessions] = useState([]);
     const [userData, setUserData] = useState(null);
-
+    const employe =
+    {
+        "id": 15,
+        "ci": "121212",
+        "nombre": "marcelo",
+        "apellido_paterno": "camacho",
+        "apellido_materno": "gutierrez",
+        "fecha_nacimiento": "2002-10-24T00:00:00.000Z",
+        "email": "marcelo@gmail.com",
+        "password": "$2a$10$/8JMgjhXoaRZHvAIa3JsoO/7c24YmWvRyp.LP/cSTS806YpJhamrG",
+        "rol_id": 2,
+        "estado": true,
+        "telefono": null,
+        "genero": null
+    }
     useEffect(() => {
-        // Fetch roles and professions on component mount
         const fetchData = async () => {
             try {
                 const rolesData = await fetchRoles();
@@ -51,42 +50,47 @@ const RegisterEmployee = () => {
         setUserData(null); // Limpiar los datos del usuario al cerrar el modal
     };
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         try {
-            // Aquí puedes agregar la lógica para registrar al empleado
-            console.log('Datos del empleado:', values);
+            // Mapear valores del formulario al formato esperado por el backend
+            const employeeData = {
+                direccion: values.direccion,
+                fecha_contratacion: values.fechaContratacion.format('YYYY-MM-DD'),
+                usuario_id: userData?.id || null,
+                profesiones_id: values.profesion,
+                estadoo: values.estado === 'activo' ? 'true' : 'false',
+                rol_id: values.rol,
+            };
+
+            await createEmployee(employeeData); // Enviar datos al backend
             message.success('Empleado registrado exitosamente');
-            form.resetFields(); 
+            form.resetFields();
             setIsModalOpen(false);
         } catch (error) {
             message.error('Error al registrar el empleado');
         }
     };
-//rellena automaticamente en el form
+
     const handleEnterCI = async (e) => {
         const ciValue = e.target.value;
         try {
-            const user = datosss; /*await getUserByCI(ciValue);*/ //no me funciona la peticion
-            setUserData(user);
+            console.log("ciValue")
+            console.log(ciValue)
+            const user = employe; {/*await getUserByCI(ciValue);*/ }
             console.log("user")
             console.log(user)
+            setUserData(user);
             form.setFieldsValue({
                 ci: user.ci,
                 apellidoPaterno: user.apellido_paterno,
                 apellidoMaterno: user.apellido_materno,
                 nombres: user.nombre,
                 email: user.email,
-                telefono: user.telefono || '',
-                genero: user.genero || '',
-                profesion: user.profesion?.id || undefined,
-                rol: user.rol_id || undefined,
-                estado: user.estado ? 'activo' : 'inactivo'
             });
         } catch (error) {
             message.error('Error al obtener los datos del empleado');
         }
     };
-
     return (
         <>
             <Button
@@ -127,7 +131,6 @@ const RegisterEmployee = () => {
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
                         name="apellidoMaterno"
                         label="Apellido Materno"
@@ -140,7 +143,6 @@ const RegisterEmployee = () => {
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
                         name="genero"
                         label="Género"
@@ -150,14 +152,12 @@ const RegisterEmployee = () => {
                             <Option value="Femenino">Femenino</Option>
                         </Select>
                     </Form.Item>
-
                     <Form.Item
                         name="telefono"
                         label="Teléfono"
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
                         name="email"
                         label="Email"
@@ -165,7 +165,6 @@ const RegisterEmployee = () => {
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
                         name="profesion"
                         label="Profesión"
@@ -177,7 +176,6 @@ const RegisterEmployee = () => {
                             ))}
                         </Select>
                     </Form.Item>
-
                     <Form.Item
                         name="rol"
                         label="Rol"
@@ -189,7 +187,6 @@ const RegisterEmployee = () => {
                             ))}
                         </Select>
                     </Form.Item>
-
                     <Form.Item
                         name="estado"
                         label="Estado"
@@ -199,11 +196,17 @@ const RegisterEmployee = () => {
                             <Option value="inactivo">Inactivo</Option>
                         </Select>
                     </Form.Item>
-
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Registrar Empleado
-                        </Button>
+                    <Form.Item
+                        name="direccion"
+                        label="Dirección"
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="fechaContratacion"
+                        label="Fecha de Contratación"
+                    >
+                        <DatePicker format="YYYY-MM-DD" />
                     </Form.Item>
                 </Form>
             </Modal>
