@@ -6,6 +6,28 @@ const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
+//==========LOGIN====================================
+export const loginRequest = async (ci, password) => {
+    try {
+        const response = await api.post(`/usuarios/login`, {
+            ci,
+            password,
+        });
+        return response.data; // Aquí puedes devolver el token u otros datos si es necesario
+    } catch (error) {
+        throw new Error('Error al ingresar');
+    }
+};
+//==========REGISTER====================================
+export const registerRequest = async (userData) => {
+    try {
+        const response = await api.post(`/usuarios/registrarse`, userData);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error al ingresar');
+    }
+};
+//==========ROLES====================================
 export const fetchRoles = async () => {
     try {
         const response = await api.get('/roles/obtenerRoles');
@@ -45,14 +67,6 @@ export const createRole = async (roleName) => {
         throw new Error('Error al crear el rol');
     }
 };
-export const fetchPermissions = async () => {
-    try {
-        const response = await api.get('/permisos/listar');
-        return response.data;
-    } catch (error) {
-        throw new Error('Error al obtener permisos');
-    }
-};
 export const fetchRolePermissions = async () => {
     try {
         const response = await api.get(`/roles/permisos`);
@@ -64,4 +78,14 @@ export const fetchRolePermissions = async () => {
 export const updateRolePermissions = async (roleId, permissionsData) => {
     const response = await api.put(`/roles/${roleId}/permissions`, permissionsData);
     return response.data;
+};
+
+//==========PERMISSIONS====================================
+export const fetchPermissions = async () => {
+    try {
+        const response = await api.get('/permisos/listar');
+        return response.data;
+    } catch (error) {
+        throw new Error('Error al obtener permisos');
+    }
 };

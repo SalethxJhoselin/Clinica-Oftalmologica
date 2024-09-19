@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import RoleModal from './RoleModal';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { fetchRoles, updateRole, deleteRole } from '../../../api/rolesApi';
+import { fetchRoles, updateRole, deleteRole } from '../../../api/apiService';
 
 const { Title } = Typography;
 const ManageRoles = () => {

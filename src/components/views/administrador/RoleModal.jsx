@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { createRole } from '../../../api/rolesApi';
+import { createRole } from '../../../api/apiService';
 
 const RoleModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
