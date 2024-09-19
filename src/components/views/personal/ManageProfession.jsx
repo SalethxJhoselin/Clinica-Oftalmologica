@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import ProfessionModal from './ProfessionModal'; // Asegúrate de tener este componente para agregar profesiones
-import axios from 'axios';
+import { getProfessions, editProfession, deleteProfession } from '../../../api/apiService';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -10,11 +10,17 @@ const ManageProfession = () => {
   const [editedData, setEditedData] = useState({});
   const [professions, setProfessions] = useState([]);
 
-  // Obtener datos
+  const fetchProfessions = async () => {
+    try {
+      const data = await getProfessions();
+      setProfessions(data);
+    } catch (error) {
+      console.error('Error al obtener las profesiones:', error);
+    }
+  };
+
   useEffect(() => {
-    axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
-      .then(response => setProfessions(response.data))
-      .catch(error => console.error('Error al obtener las profesiones:', error));
+    fetchProfessions();
   }, []);
 
   const handleEditProfession = useCallback((professionId) => {
@@ -23,17 +29,14 @@ const ManageProfession = () => {
     setEditedData({ [professionId]: { nombre: profession.nombre } });
   }, [professions]);
 
-  const handleSaveProfession = useCallback((professionId) => {
-    axios.post('https://clinica-oftalmologica.onrender.com/profesiones/editar', { id: professionId, ...editedData[professionId] })
-      .then(() => {
-        console.log("Datos modificados:", editedData[professionId]);
-        setEditingProfessionId(null);
-        // Actualizar la lista de profesiones
-        axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
-          .then(response => setProfessions(response.data))
-          .catch(error => console.error('Error al obtener las profesiones:', error));
-      })
-      .catch(error => console.error('Error al guardar la profesión:', error));
+  const handleSaveProfession = useCallback(async (professionId) => {
+    try {
+      await editProfession(professionId, editedData[professionId]);
+      setEditingProfessionId(null);
+      const updatedProfessions = await getProfessions();
+      setProfessions(updatedProfessions);
+    } catch (error) {
+    }
   }, [editedData]);
 
   const handleCancelEdit = useCallback(() => {
@@ -41,13 +44,14 @@ const ManageProfession = () => {
     setEditedData({});
   }, []);
 
-  const handleDeleteProfession = useCallback((professionId) => {
-    axios.delete('https://clinica-oftalmologica.onrender.com/profesiones/eliminar', { data: { id: professionId } })
-      .then(() => {
-        console.log(`Simulación de eliminación de la profesión con ID ${professionId}`);
-        setProfessions(prevProfessions => prevProfessions.filter(prof => prof.id !== professionId));
-      })
-      .catch(error => console.error('Error al eliminar la profesión:', error));
+  const handleDeleteProfession = useCallback(async (professionId) => {
+    try {
+      await deleteProfession(professionId);
+      console.log(`Simulación de eliminación de la profesión con ID ${professionId}`);
+      setProfessions(prevProfessions => prevProfessions.filter(prof => prof.id !== professionId));
+    } catch (error) {
+      console.error('Error al eliminar la profesión:', error);
+    }
   }, []);
 
   const handleInputChange = useCallback((value, professionId, field) => {
@@ -115,7 +119,6 @@ const ManageProfession = () => {
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Profesiones</Title>
-
       <div className="flex justify-end mb-6">
         <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
           .then(response => setProfessions(response.data))

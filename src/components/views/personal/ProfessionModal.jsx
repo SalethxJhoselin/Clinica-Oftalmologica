@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
-import axios from 'axios';
+import { createProfession } from '../../../api/apiService';
 import { PlusOutlined } from '@ant-design/icons';
 
 const ProfessionModal = ({ getDatos }) => {
@@ -13,14 +13,12 @@ const ProfessionModal = ({ getDatos }) => {
             messageApi.error('El nombre de la profesión es requerido');
             return;
         }
-
-        // Enviar datos al backend
-        axios.post('https://clinica-oftalmologica.onrender.com/profesiones/crear', { nombre: professionName })
+        createProfession({ nombre: professionName })
             .then(() => {
                 messageApi.success('Profesión guardada exitosamente');
                 setProfessionName('');
                 setIsModalOpen(false);
-                getDatos(); // Actualiza la lista de profesiones
+                getDatos();
             })
             .catch(error => {
                 console.error('Error al crear la profesión:', error);

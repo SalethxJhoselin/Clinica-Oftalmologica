@@ -30,10 +30,12 @@ export const registerRequest = async (userData) => {
 //==========USERS====================================
 export const getUserByCI = async (ciUser) => {
     try {
-        const ciUserA = { ci: String(ciUser) };
+        const ciUserA = { ci: ciUser };
         console.log("ci")
         console.log(ciUserA)
         const response = await api.get(`/usuarios/obtenerUsuario`, ciUserA);
+        console.log("response")
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error al obtener los datos del empleado:', error);
