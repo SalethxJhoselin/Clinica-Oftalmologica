@@ -45,3 +45,23 @@ export const createRole = async (roleName) => {
         throw new Error('Error al crear el rol');
     }
 };
+export const fetchPermissions = async () => {
+    try {
+        const response = await api.get('/permisos/listar');
+        return response.data;
+    } catch (error) {
+        throw new Error('Error al obtener permisos');
+    }
+};
+export const fetchRolePermissions = async () => {
+    try {
+        const response = await api.get(`/roles/permisos`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error al obtener roles con permisos');
+    }
+};
+export const updateRolePermissions = async (roleId, permissionsData) => {
+    const response = await api.put(`/roles/${roleId}/permissions`, permissionsData);
+    return response.data;
+};

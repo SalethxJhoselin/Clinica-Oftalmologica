@@ -39,7 +39,7 @@ const RoleModal = ({ getDatos }) => {
                 onClick={() => setIsModalOpen(true)}
             >
                 <PlusOutlined />
-                <span>Nuevo</span>
+                <span>Crear Rol</span>
             </Button>
             <Modal
                 title="Agregar Rol"

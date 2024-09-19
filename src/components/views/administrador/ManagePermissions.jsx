@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Select, Checkbox, Button, Typography } from 'antd';
-
-// Datos simulados
-const simulatedRoles = [
-    { id: 1, name: 'Administrador', permissions: [{ id: 1, name: 'Crear usuario' }, { id: 2, name: 'Eliminar usuario' }] },
-    { id: 2, name: 'Usuario', permissions: [{ id: 3, name: 'Ver contenido' }] }
-];
-
-const simulatedPermissions = [
-    { id: 1, name: 'Crear usuario' },
-    { id: 2, name: 'Eliminar usuario' },
-    { id: 3, name: 'Ver contenido' },
-    { id: 4, name: 'Editar contenido' }
-];
+import { fetchRolePermissions, fetchPermissions, updateRolePermissions } from '../../../api/rolesApi';
 
 const { Title } = Typography;
 
@@ -22,16 +10,32 @@ const ManagePermissions = () => {
     const [roles, setRoles] = useState([]);
     const [permissions, setPermissions] = useState([]);
 
+    const loadRolesAndPermissions = async () => {
+        try {
+            const rolesData = await fetchRolePermissions();
+            console.log("roles y permisos")
+            console.log(rolesData)
+            const permissionsData = await fetchPermissions(); // Obtener permisos desde la API
+            console.log("permissionsData")
+            console.log(permissionsData)
+            setRoles(rolesData);
+            setPermissions(permissionsData);
+        } catch (error) {
+            notification.error({ message: 'Error al obtener roles o permisos', description: error.message });
+        }
+    };
     useEffect(() => {
-        // Simulación de la obtención de datos
-        setRoles(simulatedRoles);
-        setPermissions(simulatedPermissions);
+        loadRolesAndPermissions();
     }, []);
 
     const handleRoleChange = (value) => {
         setSelectedRoleId(value);
         const selectedRole = roles.find(role => role.id === value);
-        setRolePermissions(selectedRole ? selectedRole.permissions.map(permission => permission.id) : []);
+        if (selectedRole) {
+            setRolePermissions(selectedRole.permisos.map(permission => permission.id));
+        } else {
+            setRolePermissions([]);
+        }
     };
 
     const handlePermissionChange = (permissionId) => {
@@ -42,14 +46,18 @@ const ManagePermissions = () => {
         );
     };
 
-    const handleSavePermissions = () => {
+    const handleSavePermissions = async () => {
         const updatedRolePermissions = {
-            permissions: rolePermissions.map(id => ({ id }))
+            permissions: rolePermissions
         };
-        console.log(`Simulación de envío de permisos para el rol con ID ${selectedRoleId}:`, updatedRolePermissions);
-        setTimeout(() => {
-            // Simula un retraso en la respuesta
-        }, 1000);
+        try {
+            console.log('updatedRolePermissions')
+            console.log(updatedRolePermissions)
+            await updateRolePermissions(selectedRoleId, updatedRolePermissions);
+            notification.success({ message: 'Permisos actualizados correctamente' });
+        } catch (error) {
+            notification.error({ message: 'Error al actualizar permisos', description: error.message });
+        }
     };
 
     return (
@@ -67,7 +75,7 @@ const ManagePermissions = () => {
                     {roles.length > 0 ? (
                         roles.map(role => (
                             <Select.Option key={role.id} value={role.id}>
-                                {role.name}
+                                {role.nombre}
                             </Select.Option>
                         ))
                     ) : (
@@ -86,7 +94,7 @@ const ManagePermissions = () => {
                                     checked={rolePermissions.includes(permission.id)}
                                     onChange={() => handlePermissionChange(permission.id)}
                                 >
-                                    {permission.name}
+                                    {permission.nombre}
                                 </Checkbox>
                             </div>
                         ))
