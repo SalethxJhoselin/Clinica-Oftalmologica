@@ -46,9 +46,8 @@ const MyRoutes = () => {
                 <Route path="/personnel/manageEmployees" element={<ManageEmployees />} />
                 <Route path="/admin/specialties" element={<ManageEspeciality/>} />
                 <Route path="/medical-care/patient-registry" element={<ManagePatient/>} />
-   
-            </Route>
 
+            </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
         </Routes>
