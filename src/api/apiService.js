@@ -27,6 +27,20 @@ export const registerRequest = async (userData) => {
         throw new Error('Error al ingresar');
     }
 };
+//==========USERS====================================
+export const getUserByCI = async (ciUser) => {
+    try {
+        const ciUserA = { ci: String(ciUser) };
+        console.log("ci")
+        console.log(ciUserA)
+        const response = await api.get(`/usuarios/obtenerUsuario`, ciUserA);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener los datos del empleado:', error);
+        throw error;
+    }
+};
+
 //==========ROLES====================================
 export const fetchRoles = async () => {
     try {
@@ -75,11 +89,6 @@ export const fetchRolePermissions = async () => {
         throw new Error('Error al obtener roles con permisos');
     }
 };
-export const updateRolePermissions = async (roleId, permissionsData) => {
-    const response = await api.put(`/roles/${roleId}/permissions`, permissionsData);
-    return response.data;
-};
-
 //==========PERMISSIONS====================================
 export const fetchPermissions = async () => {
     try {
@@ -87,5 +96,56 @@ export const fetchPermissions = async () => {
         return response.data;
     } catch (error) {
         throw new Error('Error al obtener permisos');
+    }
+};
+
+//////no quiere hacer put :( 
+export const updateRolePermissions = async (roleId, permissionsData) => {
+    try {
+        const payload = {
+            idRol: String(roleId),
+            permisos: permissionsData.permissions.map(permission => ({ id: Number(permission) }))
+        };
+        console.log("payload");
+        console.log(payload);
+        const response = await api.post(`/roles/agregar-permisos`, payload);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error al obtener permisos');
+    }
+};
+//==========PROFESSIONS====================================
+export const getProfessions = async () => {
+    try {
+        const response = await api.get('/profesiones');
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener las profesiones:', error);
+        throw error;
+    }
+};
+export const editProfession = async (professionId, updatedData) => {
+    try {
+        const response = await api.post(`/profesiones/editar`, { id: professionId, ...updatedData });
+        return response.data;
+    } catch (error) {
+        console.error('Error al editar la profesión:', error);
+        throw error;
+    }
+};
+export const deleteProfession = async (professionId) => {
+    try {
+        const response = await api.delete(`/profesiones/eliminar`, { data: { id: professionId } });
+        return response.data;
+    } catch (error) {
+        console.error('Error al eliminar la profesión:', error);
+        throw error;
+    }
+}; export const createProfession = (professionData) => {
+    try {
+        return api.post(`/profesiones/crear`, professionData);
+    } catch (error) {
+        console.error('Error al crear la profesión:', error);
+        throw error;
     }
 };
