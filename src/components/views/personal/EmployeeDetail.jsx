@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, DatePicker, Space } from 'antd';
+import { Modal, Button, Input, DatePicker, Space,Select } from 'antd';
 import dayjs from 'dayjs';
+const { Option } = Select;
 
 const EmployeeDetail = ({ visible, onClose, user }) => {
     user = {
@@ -16,6 +17,7 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
         "genero": null,
         "direccion": "adc",
         "fecha_contratacion": "2024-09-18T00:00:00.000Z",
+        "rol": "Empleado", // Añadido para este ejemplo, decirle a jhoel que lo agregue
         "profesion": "Optometrista",
         "estadoo": true
     }
@@ -30,6 +32,8 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
     const [direccion, setDireccion] = useState(user ? user.direccion : '');
     const [fechaContratacion, setFechaContratacion] = useState(user ? dayjs(user.fecha_contratacion) : null);
     const [profesion, setProfesion] = useState(user ? user.profesion : '');
+    const [estado, setEstado] = useState(user ? user.estado : true);
+    const [rol, setRol] = useState(user ? user.rol : '');
 
     useEffect(() => {
         if (user) {
@@ -43,6 +47,8 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
             setDireccion(user.direccion);
             setFechaContratacion(dayjs(user.fecha_contratacion));
             setProfesion(user.profesion);
+            setEstado(user.estado);
+            setRol(user.rol);
         }
     }, [user]);
 
@@ -66,6 +72,8 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
             direccion,
             fecha_contratacion: formattedFechaContratacion,
             profesion,
+            estado,
+            rol,
         };
         console.log("Datos guardados:", updatedEmployee);
         setIsEditing(false);
@@ -84,6 +92,8 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
             setDireccion(user.direccion);
             setFechaContratacion(dayjs(user.fecha_contratacion));
             setProfesion(user.profesion);
+            setEstado(user.estado);
+            setRol(user.rol);
         }
     };
 
@@ -108,6 +118,8 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
                     <p><strong>Dirección:</strong> {user.direccion}</p>
                     <p><strong>Fecha de Contratación:</strong> {dayjs(user.fecha_contratacion).format('YYYY-MM-DD')}</p>
                     <p><strong>Profesión:</strong> {user.profesion}</p>
+                    <p><strong>Estado:</strong> {user.estado ? 'Activo' : 'Inactivo'}</p>
+                    <p><strong>Rol:</strong> {user.rol}</p>
                     <Button type="primary" onClick={handleEditClick}>Editar</Button>
                 </>
             ) : (
@@ -150,7 +162,25 @@ const EmployeeDetail = ({ visible, onClose, user }) => {
                     </div>
                     <div className="flex items-center mb-1">
                         <p className="mr-3"><strong>Profesión:</strong></p>
-                        <Input value={profesion} onChange={(e) => setProfesion(e.target.value)} />
+                        <Select value={profesion} onChange={setProfesion}>
+                            <Option value="Optometrista">Optometrista</Option>
+                            <Option value="Oftalmólogo">Oftalmólogo</Option>
+                            <Option value="Asistente">Asistente</Option>
+                        </Select>
+                    </div>
+                    <div className="flex items-center mb-1">
+                        <p className="mr-3"><strong>Estado:</strong></p>
+                        <Select value={estado ? 'Activo' : 'Inactivo'} onChange={(value) => setEstado(value === 'Activo')}>
+                            <Option value="Activo">Activo</Option>
+                            <Option value="Inactivo">Inactivo</Option>
+                        </Select>
+                    </div>
+                    <div className="flex items-center mb-1">
+                        <p className="mr-3"><strong>Rol:</strong></p>
+                        <Select value={rol} onChange={setRol}>
+                            <Option value="Empleado">Empleado</Option>
+                            <Option value="Administrador">Administrador</Option>
+                        </Select>
                     </div>
                     <Space className="flex justify-end">
                         <Button type="primary" onClick={handleSaveClick}>Guardar</Button>
