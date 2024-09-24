@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import ProfessionModal from './ProfessionModal'; // Asegúrate de tener este componente para agregar profesiones
-
-// Datos simulados para profesiones
-const simulatedProfessions = [
-  { id: 1, name: 'Oftalmólogo' },
-  { id: 2, name: 'Optometrista' }
-];
+import { getProfessions, editProfession, deleteProfession } from '../../../api/apiService';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const ManageProfession = () => {
@@ -14,20 +10,33 @@ const ManageProfession = () => {
   const [editedData, setEditedData] = useState({});
   const [professions, setProfessions] = useState([]);
 
-  // Obtener datos
+  const fetchProfessions = async () => {
+    try {
+      const data = await getProfessions();
+      setProfessions(data);
+    } catch (error) {
+      console.error('Error al obtener las profesiones:', error);
+    }
+  };
+
   useEffect(() => {
-    setProfessions(simulatedProfessions);
+    fetchProfessions();
   }, []);
 
   const handleEditProfession = useCallback((professionId) => {
     setEditingProfessionId(professionId);
     const profession = professions.find(prof => prof.id === professionId);
-    setEditedData({ [professionId]: { name: profession.name } });
+    setEditedData({ [professionId]: { nombre: profession.nombre } });
   }, [professions]);
 
-  const handleSaveProfession = useCallback((professionId) => {
-    console.log("Datos modificados:", editedData[professionId]);
-    setEditingProfessionId(null);
+  const handleSaveProfession = useCallback(async (professionId) => {
+    try {
+      await editProfession(professionId, editedData[professionId]);
+      setEditingProfessionId(null);
+      const updatedProfessions = await getProfessions();
+      setProfessions(updatedProfessions);
+    } catch (error) {
+    }
   }, [editedData]);
 
   const handleCancelEdit = useCallback(() => {
@@ -35,9 +44,14 @@ const ManageProfession = () => {
     setEditedData({});
   }, []);
 
-  const handleDeleteProfession = useCallback((professionId) => {
-    console.log(`Simulación de eliminación de la profesión con ID ${professionId}`);
-    setProfessions(prevProfessions => prevProfessions.filter(prof => prof.id !== professionId));
+  const handleDeleteProfession = useCallback(async (professionId) => {
+    try {
+      await deleteProfession(professionId);
+      console.log(`Simulación de eliminación de la profesión con ID ${professionId}`);
+      setProfessions(prevProfessions => prevProfessions.filter(prof => prof.id !== professionId));
+    } catch (error) {
+      console.error('Error al eliminar la profesión:', error);
+    }
   }, []);
 
   const handleInputChange = useCallback((value, professionId, field) => {
@@ -51,7 +65,7 @@ const ManageProfession = () => {
   }, []);
 
   const renderEditableInput = useCallback((text, record, dataIndex) => {
-    if (record.id === editingProfessionId && dataIndex === 'name') {
+    if (record.id === editingProfessionId && dataIndex === 'nombre') {
       return (
         <Input
           value={editedData[record.id]?.[dataIndex] || text}
@@ -71,9 +85,9 @@ const ManageProfession = () => {
     },
     {
       title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => renderEditableInput(text, record, 'name'),
+      dataIndex: 'nombre',
+      key: 'nombre',
+      render: (text, record) => renderEditableInput(text, record, 'nombre'),
     },
     {
       title: 'Acción',
@@ -87,8 +101,14 @@ const ManageProfession = () => {
             </>
           ) : (
             <>
-              <Button type="text" onClick={() => handleEditProfession(record.id)}>Editar</Button>
-              <Button onClick={() => handleDeleteProfession(record.id)}>Eliminar</Button>
+              <Button type="primary" onClick={() => handleEditProfession(record.id)}><EditOutlined /></Button>
+              <Button style={{
+                backgroundColor: '#F44336',
+                color: '#fff',
+                borderRadius: '10px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+              }}
+                onClick={() => handleDeleteProfession(record.id)}><DeleteOutlined /></Button>
             </>
           )}
         </Space>
@@ -99,6 +119,12 @@ const ManageProfession = () => {
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Profesiones</Title>
+      <div className="flex justify-end mb-6">
+        <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
+          .then(response => setProfessions(response.data))
+          .catch(error => console.error('Error al obtener las profesiones:', error))}
+        />
+      </div>
       <Table
         columns={columns}
         dataSource={professions}
@@ -106,9 +132,6 @@ const ManageProfession = () => {
         pagination={{ pageSize: 5, size: 'small' }}
         bordered
       />
-      <div className="add-profession-button">
-        <ProfessionModal getDatos={() => setProfessions(simulatedProfessions)} />
-      </div>
     </div>
   );
 };

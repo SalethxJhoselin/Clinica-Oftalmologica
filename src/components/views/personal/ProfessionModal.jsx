@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
+import { createProfession } from '../../../api/apiService';
+import { PlusOutlined } from '@ant-design/icons';
 
 const ProfessionModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -7,12 +9,21 @@ const ProfessionModal = ({ getDatos }) => {
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleOk = () => {
-        // Simulación de creación de la profesión
-        console.log(`Simulación de creación de la profesión con nombre: ${professionName}`);
-        getDatos();
-        setProfessionName('');
-        messageApi.success('Profesión guardada exitosamente');
-        setIsModalOpen(false);
+        if (!professionName) {
+            messageApi.error('El nombre de la profesión es requerido');
+            return;
+        }
+        createProfession({ nombre: professionName })
+            .then(() => {
+                messageApi.success('Profesión guardada exitosamente');
+                setProfessionName('');
+                setIsModalOpen(false);
+                getDatos();
+            })
+            .catch(error => {
+                console.error('Error al crear la profesión:', error);
+                messageApi.error('Error al guardar la profesión');
+            });
     };
 
     const handleCancel = () => {
@@ -22,8 +33,15 @@ const ProfessionModal = ({ getDatos }) => {
 
     return (
         <>
-            <Button className="w-full font-bold" onClick={() => setIsModalOpen(true)}>
-                Agregar Profesión
+            <Button style={{
+                backgroundColor: '#4CAF50', // Color de fondo
+                color: '#fff', // Color del texto
+                borderRadius: '15px', // Bordes redondeados
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' // Sombra
+            }}
+                onClick={() => setIsModalOpen(true)}>
+                <PlusOutlined />
+                <span>Nuevo</span>
             </Button>
             <Modal
                 title="Agregar Profesión"

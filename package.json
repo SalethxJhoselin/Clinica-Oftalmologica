@@ -16,10 +16,13 @@
     "@gsap/react": "^2.1.1",
     "antd": "^5.20.2",
     "axios": "^1.7.7",
+    "dayjs": "^1.11.13",
     "gsap": "^3.12.5",
+    "jwt-decode": "^4.0.0",
     "oftalmologica": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-highlight-words": "^0.20.0",
     "react-router-dom": "^6.26.1",
     "styled-components": "^6.1.12"
   },

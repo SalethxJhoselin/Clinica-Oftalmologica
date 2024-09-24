@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography } from 'antd';
 import RoleModal from './RoleModal';
-
-// Datos simulados
-const simulatedRoles = [ //aqui
-  { id: 1, name: 'Administrador', permissions: [{ id: 1, name: 'Crear usuario' }, { id: 2, name: 'Eliminar usuario' }] },
-  { id: 2, name: 'Usuario', permissions: [{ id: 3, name: 'Ver contenido' }] }
-];
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { fetchRoles, updateRole, deleteRole } from '../../../api/apiService';
 
 const { Title } = Typography;
 const ManageRoles = () => {
@@ -15,19 +11,36 @@ const ManageRoles = () => {
   const [roles, setRoles] = useState([]);
 
   // Obtener datos
+  const fetchData = async () => {
+    try {
+      const rolesData = await fetchRoles();
+      setRoles(rolesData);
+    } catch (error) {
+      notification.error({ message: 'Error al obtener roles', description: error.message });
+    }
+  };
+
   useEffect(() => {
-    setRoles(simulatedRoles);
+    fetchData();
   }, []);
+
+  console.log(roles)
 
   const handleEditRole = useCallback((roleId) => {
     setEditingRoleId(roleId);
     const role = roles.find(role => role.id === roleId);
-    setEditedData({ [roleId]: { name: role.name } });
+    setEditedData({ [roleId]: { nombre: role.nombre } });
   }, [roles]);
 
-  const handleSaveRole = useCallback((roleId) => {
-    console.log("Datos modificados:", editedData[roleId]);
-    setEditingRoleId(null);
+  const handleSaveRole = useCallback(async (roleId) => {
+    try {
+      console.log("el usuario edito el rol")
+      await updateRole(roleId, editedData[roleId]);
+      setRoles(prevRoles => prevRoles.map(role => role.id === roleId ? { ...role, ...editedData[roleId] } : role));
+      setEditingRoleId(null);
+    } catch (error) {
+      notification.error({ message: 'Error al guardar el rol', description: error.message });
+    }
   }, [editedData]);
 
   const handleCancelEdit = useCallback(() => {
@@ -35,9 +48,15 @@ const ManageRoles = () => {
     setEditedData({});
   }, []);
 
-  const handleDeleteRole = useCallback((roleId) => {
-    console.log(`Simulación de eliminación del rol con ID ${roleId}`);
-    setRoles(prevRoles => prevRoles.filter(role => role.id !== roleId));
+  const handleDeleteRole = useCallback(async (roleName) => {
+    try {
+      await deleteRole(roleName);
+      console.log("el usuario elimino el rol")
+      setRoles(prevRoles => prevRoles.filter(role => role.nombre !== roleName));
+
+    } catch (error) {
+      notification.error({ message: 'Error al eliminar el rol', description: error.message });
+    }
   }, []);
 
   const handleInputChange = useCallback((value, roleId, field) => {
@@ -51,7 +70,7 @@ const ManageRoles = () => {
   }, []);
 
   const renderEditableInput = useCallback((text, record, dataIndex) => {
-    if (record.id === editingRoleId && dataIndex === 'name') {
+    if (record.id === editingRoleId && dataIndex === 'nombre') {
       return (
         <Input
           value={editedData[record.id]?.[dataIndex] || text}
@@ -71,15 +90,9 @@ const ManageRoles = () => {
     },
     {
       title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => renderEditableInput(text, record, 'name'),
-    },
-    {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => renderEditableInput(text, record, 'name'),
+      dataIndex: 'nombre',
+      key: 'nombre',
+      render: (text, record) => renderEditableInput(text, record, 'nombre'),
     },
     {
       title: 'Acción',
@@ -93,8 +106,14 @@ const ManageRoles = () => {
             </>
           ) : (
             <>
-              <Button type="text" onClick={() => handleEditRole(record.id)}>Editar</Button>
-              <Button onClick={() => handleDeleteRole(record.id)}>Eliminar</Button>
+              <Button type="primary" onClick={() => handleEditRole(record.id)}><EditOutlined /></Button>
+              <Button style={{
+                backgroundColor: '#F44336',
+                color: '#fff',
+                borderRadius: '10px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+              }}
+                onClick={() => handleDeleteRole(record.nombre)}><DeleteOutlined /></Button>
             </>
           )}
         </Space>
@@ -105,6 +124,9 @@ const ManageRoles = () => {
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Roles</Title>
+      <div className="flex justify-end mb-6">
+        <RoleModal getDatos={fetchData} />
+      </div>
       <Table
         columns={columns}
         dataSource={roles}
@@ -112,9 +134,6 @@ const ManageRoles = () => {
         pagination={{ pageSize: 5, size: 'small' }}
         bordered
       />
-      <div className="add-role-button">
-        <RoleModal getDatos={() => setRoles(simulatedRoles)} />
-      </div>
     </div>
   );
 };

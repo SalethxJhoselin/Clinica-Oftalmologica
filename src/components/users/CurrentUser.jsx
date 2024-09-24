@@ -1,6 +1,6 @@
 import {Popover, Button} from  'antd'
 import CustomAvatar from './CustomAvatar'
-import {user} from '../../../utils/test'
+import {user} from '../../utils/test'
 
 
 const CurrentUser = () => {

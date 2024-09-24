@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { createRole } from '../../../api/apiService';
 
 const RoleModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [roleName, setRoleName] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
 
-    const handleOk = () => {
-        // Simulación de creación del rol
-        console.log(`Simulación de creación del rol con nombre: ${roleName}`);
-        getDatos();
-        setRoleName('');
-        messageApi.success('Rol guardado exitosamente');
-        setIsModalOpen(false);
+    const handleOk = async () => {
+        try {
+            await createRole(roleName);
+            console.log(`el usuario x creo el rol: ${roleName}`);
+            setIsModalOpen(false);
+            setRoleName('');
+            getDatos();
+            messageApi.success('Rol guardado exitosamente');
+        } catch (error) {
+            console.error('Error al crear el rooool:', error);
+            messageApi.success('Error al guardar el rol');
+        }
     };
 
     const handleCancel = () => {
@@ -22,8 +29,17 @@ const RoleModal = ({ getDatos }) => {
 
     return (
         <>
-            <Button className="w-full font-bold" onClick={() => setIsModalOpen(true)}>
-                Agregar Rol
+            <Button
+                style={{
+                    backgroundColor: '#4CAF50', // Color de fondo
+                    color: '#fff', // Color del texto
+                    borderRadius: '15px', // Bordes redondeados
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' // Sombra
+                }}
+                onClick={() => setIsModalOpen(true)}
+            >
+                <PlusOutlined />
+                <span>Crear Rol</span>
             </Button>
             <Modal
                 title="Agregar Rol"
