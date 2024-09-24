@@ -1,4 +1,5 @@
 import eyeImg from './../../public/assets/images/eye.svg';
+import eye from './../../public/assets/images/eye.png';
 import auth from './../../public/assets/images/p5.jpg';
 import img1 from './../../public/assets/images/p1.jpg';
 import img2 from './../../public/assets/images/p2.jpg';
@@ -9,6 +10,7 @@ import img6 from './../../public/assets/images/p6.jpg';
 // Exportación por defecto de un objeto con todas las imágenes y el video
 const assets = {
   eyeImg,
+  eye,
   auth,
   img1,
   img2,

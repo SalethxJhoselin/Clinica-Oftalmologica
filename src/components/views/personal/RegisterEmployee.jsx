@@ -76,7 +76,7 @@ const RegisterEmployee = () => {
         try {
             console.log("ciValue")
             console.log(ciValue)
-            const user = employe; {/*await getUserByCI(ciValue);*/ }
+            const user = await getUserByCI(ciValue);
             console.log("user")
             console.log(user)
             setUserData(user);

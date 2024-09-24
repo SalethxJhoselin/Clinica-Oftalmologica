@@ -4,6 +4,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import EmployeeDetail from './EmployeeDetail';
 import RegisterEmploye from './RegisterEmployee';
 import { getAllEmployees } from '../../../api/apiService'; // Ajusta la importación según la ubicación de tu archivo de API
+//import EgressNoteDetail from './EgressNoteDetail';
 
 const { Title } = Typography;
 
@@ -28,6 +29,7 @@ const ManageEmployees = () => {
     }, []);
 
     const handleShowDetail = (record) => {
+        console.log("desde afuera una vez mas tratando de ver los datos", record)
         setSelectedEmployee(record);
         setIsDetailModalVisible(true);
     };
@@ -37,10 +39,14 @@ const ManageEmployees = () => {
         setSelectedEmployee(null);
     };
 
-    const handleDeleteConfirm = () => {
-        setEmployees(employees.filter((employee) => employee.empleado_id !== employeeToDelete.empleado_id));
+    const handleDeleteConfirm = async () => {
+        try { 
+            
         setDeleteModalVisible(false);
         message.success('Empleado eliminado exitosamente');
+        } catch(error) {
+            
+         }
     };
 
     const handleDeleteCancel = () => {
@@ -111,11 +117,11 @@ const ManageEmployees = () => {
             >
                 <p>¿Está seguro que desea eliminar a este empleado?</p>
             </Modal>
-            {selectedEmployee && (
+            {isDetailModalVisible && selectedEmployee && (
                 <EmployeeDetail
                     visible={isDetailModalVisible}
                     onClose={handleDetailModalClose}
-                    employee={selectedEmployee ? console.log(selectedEmployee) : console.log("nada joven")}
+                    user={selectedEmployee}
                 />
             )}
         </div>

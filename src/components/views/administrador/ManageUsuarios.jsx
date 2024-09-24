@@ -1,44 +1,43 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Space, Table, Input, Typography } from 'antd';
-
-// Datos simulados para usuarios
-const simulatedUsers = [
-  { id: 1, name: 'Juan', apellidoPaterno: 'Pérez', apellidoMaterno: 'López', correo: 'juan.perez@example.com', ci: '12345678' },
-  { id: 2, name: 'María', apellidoPaterno: 'Gómez', apellidoMaterno: 'Martínez', correo: 'maria.gomez@example.com', ci: '87654321' }
-];
+import React, { useEffect, useState } from 'react';
+import { Table, Typography, Input } from 'antd';
+import { getAllUsers } from '../../../api/apiService';
 
 const { Title } = Typography;
+
 const ManageUsuarios = () => {
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [editedData, setEditedData] = useState({});
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
-  // Obtener datos
-  useEffect(() => {
-    setUsers(simulatedUsers);
-  }, []);
-
-  const handleInputChange = useCallback((value, userId, field) => {
-    setEditedData(prevState => ({
-      ...prevState,
-      [userId]: {
-        ...prevState[userId],
-        [field]: value
-      }
-    }));
-  }, []);
-
-  const renderEditableInput = useCallback((text, record, dataIndex) => {
-    if (record.id === editingUserId) {
-      return (
-        <Input
-          value={editedData[record.id]?.[dataIndex] || text}
-          onChange={(e) => handleInputChange(e.target.value, record.id, dataIndex)}
-        />
-      );
+  const obtenerUsuarios = async () => {
+    try {
+      const response = await getAllUsers();
+      setUsers(response.data || []);
+      setFilteredUsers(response.data || []); // Inicialmente, todos los usuarios están filtrados
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
     }
-    return text;
-  }, [editingUserId, editedData, handleInputChange]);
+  };
+
+  useEffect(() => {
+    obtenerUsuarios();
+  }, []);
+
+  // Manejar cambios en el input de búsqueda
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    // Filtrar usuarios basados en el término de búsqueda
+    const filtered = users.filter(user =>
+      user.nombre.toLowerCase().includes(value) ||
+      user.ci.toLowerCase().includes(value) ||
+      user.apellido_paterno.toLowerCase().includes(value) ||
+      user.apellido_materno.toLowerCase().includes(value)
+    );
+
+    setFilteredUsers(filtered);
+  };
 
   const columns = [
     {
@@ -47,43 +46,68 @@ const ManageUsuarios = () => {
       key: 'id',
     },
     {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => renderEditableInput(text, record, 'name'),
-    },
-    {
-      title: 'Apellido Paterno',
-      dataIndex: 'apellidoPaterno',
-      key: 'apellidoPaterno',
-      render: (text, record) => renderEditableInput(text, record, 'apellidoPaterno'),
-    },
-    {
-      title: 'Apellido Materno',
-      dataIndex: 'apellidoMaterno',
-      key: 'apellidoMaterno',
-      render: (text, record) => renderEditableInput(text, record, 'apellidoMaterno'),
-    },
-    {
-      title: 'Correo',
-      dataIndex: 'correo',
-      key: 'correo',
-      render: (text, record) => renderEditableInput(text, record, 'correo'),
-    },
-    {
       title: 'CI',
       dataIndex: 'ci',
       key: 'ci',
-      render: (text, record) => renderEditableInput(text, record, 'ci'),
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'nombre',
+      key: 'nombre',
+    },
+    {
+      title: 'Apellido Paterno',
+      dataIndex: 'apellido_paterno',
+      key: 'apellido_paterno',
+    },
+    {
+      title: 'Apellido Materno',
+      dataIndex: 'apellido_materno',
+      key: 'apellido_materno',
+    },
+    {
+      title: 'Fecha de Nacimiento',
+      dataIndex: 'fecha_nacimiento',
+      key: 'fecha_nacimiento',
+      render: (text) => new Date(text).toLocaleDateString(), // Formatear fecha
+    },
+    {
+      title: 'Correo',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Teléfono',
+      dataIndex: 'telefono',
+      key: 'telefono',
+      render: (text) => text || 'No disponible', // Manejo de valores nulos
+    },
+    {
+      title: 'Género',
+      dataIndex: 'genero',
+      key: 'genero',
+      render: (text) => text || 'No especificado', // Manejo de valores nulos
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'estado',
+      key: 'estado',
+      render: (text) => (text ? 'Activo' : 'Inactivo'), // Mostrar estado como texto
     },
   ];
 
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
-      <Title level={3} className="text-center">Gestionar Usuarios</Title>
+      <Title level={3} className="text-center">Administrar Usuarios</Title>
+      <Input
+        placeholder="Buscar por nombre, CI, apellido..."
+        value={searchTerm}
+        onChange={handleSearch}
+        style={{ marginBottom: 20 }}
+      />
       <Table
         columns={columns}
-        dataSource={users}
+        dataSource={filteredUsers}
         rowKey="id"
         pagination={{ pageSize: 5, size: 'small' }}
         bordered

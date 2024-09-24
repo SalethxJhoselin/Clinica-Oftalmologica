@@ -33,6 +33,7 @@ const MyRoutes = () => {
                     <Route path="/forgotPassword" element={<Navigate to="/home" />} />
                 </>
             )}
+            <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             {/*Protected Routes */}
             <Route element={<ProtectedRoute />}>

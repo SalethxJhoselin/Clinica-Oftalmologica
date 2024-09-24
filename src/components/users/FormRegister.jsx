@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, DatePicker } from 'antd';
 import assets from '../../utils';
 import { registerRequest } from '../../api/apiService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const FormRegister = () => {
@@ -19,6 +19,8 @@ const FormRegister = () => {
             const response = await registerRequest(rest);
             console.log('Registro exitoso desde la IP:', response.data);
             login();
+            const { token } = response;
+            localStorage.setItem('token', token);
             navigate('/home');
         } catch (error) {
             console.error('Error al registrar:', error.response.data);
@@ -124,7 +126,7 @@ const FormRegister = () => {
                         <Button block type="primary" htmlType="submit">
                             Registrarse
                         </Button>
-                        <h1>Ya tienes una cuenta? <a href="/login">Inicia sesión!</a></h1>
+                        <h1>Ya tienes una cuenta? <Link to="/login">Inicia sesión!</Link></h1>
                     </Form.Item>
                 </Form>
             </div>

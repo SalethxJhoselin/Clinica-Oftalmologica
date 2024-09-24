@@ -1,7 +1,7 @@
 import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import assets from '../../utils';
 import { loginRequest } from '../../api/apiService';
@@ -59,7 +59,7 @@ const FormLogin = () => {
                     <Form.Item>
                         <Button block type="primary" htmlType="submit">Ingresar</Button>
                     </Form.Item>
-                    <h1>Aún no tienes una cuenta? <a href="/register">¡Regístrate!</a></h1>
+                    <h1>Aún no tienes una cuenta? <Link to="/register">¡Regístrate!</Link></h1>
                 </Form>
             </div>
         </div>

@@ -108,7 +108,7 @@ const ManageProfession = () => {
                 borderRadius: '10px',
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
               }}
-                nClick={() => handleDeleteProfession(record.id)}><DeleteOutlined /></Button>
+                onClick={() => handleDeleteProfession(record.id)}><DeleteOutlined /></Button>
             </>
           )}
         </Space>

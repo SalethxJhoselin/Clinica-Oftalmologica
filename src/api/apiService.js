@@ -5,7 +5,7 @@ const API_BASE_URL = 'https://clinica-oftalmologica.onrender.com';
 const api = axios.create({
     baseURL: API_BASE_URL,
 });
-
+export default api;
 //==========LOGIN====================================
 export const loginRequest = async (ci, password) => {
     try {
@@ -27,22 +27,30 @@ export const registerRequest = async (userData) => {
         throw new Error('Error al ingresar');
     }
 };
-//==========USERS====================================
+//==========USERS====================================//AYUDA!!!!!
 export const getUserByCI = async (ciUser) => {
+    //otro con el quedeberia de funcionar: /empleado/buscar
     try {
-        const ciUserA = { ci: ciUser };
-        console.log("ci")
-        console.log(ciUserA)
-        const response = await api.get(`/usuarios/obtenerUsuario`, ciUserA);
+        console.log("ci dentroooooooo")
+        console.log({ci:ciUser})
+        const response = await api.get(`/usuarios/obtenerUsuario`, {ci:ciUser});
         console.log("response")
-        console.log(response)
+        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error('Error al obtener los datos del usaurio:', error);
         throw error;
     }
 };
-
+export const getAllUsers = async () => {
+    try {
+        const response = await api.get(`/usuarios/obtenerUsuarios`);
+        return response;
+    } catch (error) {
+        console.error('Error al obtener los datos de usaurios:', error);
+        throw error;
+    }
+};
 //==========ROLES====================================
 export const fetchRoles = async () => {
     try {
@@ -173,10 +181,28 @@ export const createEmployee = (employeeData) => {
 };
 export const updateEmployee = async (professionId, updatedData) => {
     try {
-        const response = await api.post(`/profesiones/editar`, { id: professionId, ...updatedData });
+        const data={
+                id:professionId,
+                direccion: updatedData.direccion,
+                fecha_contratacion: updatedData.fecha_contratacion,
+                estadoo: updatedData.estadoo,
+                ci: updatedData.ci,
+                nombre: updatedData.nombre,
+                apellido_paterno: updatedData.apellidoPaterno,
+                apellido_materno: updatedData.apellidoMaterno,
+                fecha_nacimiento: updatedData.fecha_nacimiento,
+                email: updatedData.email,
+                telefono: updatedData.telefono,//que se actualice
+                rol_id: updatedData.rol,//que se actualice
+                genero: updatedData.genero,//que se actualice
+                profesiones_id:updatedData.profesiones_id
+        }
+        console.log("data Dentrooooo")
+        console.log(data)
+        const response = await api.post(`/empledo/editar`, data);
         return response.data;
     } catch (error) {
-        console.error('Error al editar la profesión:', error);
+        console.error('Error al editar empleado:', error);
         throw error;
     }
 };

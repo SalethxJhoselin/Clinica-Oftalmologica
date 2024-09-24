@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import { LeftOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import CurrentUser from '../users/CurrentUser';
 import SidebarLinks from './SidebarLinks';
@@ -22,6 +22,26 @@ const Sidebar = () => {
     setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
   };
 
+  // Map the `linksArray` to the new `items` structure
+  const menuItems = linksArray.map(({ icon, label, to, subMenu }) => (
+    subMenu
+      ? {
+        key: label,
+        icon,
+        label,
+        children: subMenu.map(({ label, to }) => ({
+          key: to,
+          label: <NavLink to={to}>{label}</NavLink>,
+        })),
+        expandIcon: ({ isOpen }) => (isOpen ? <DownOutlined /> : <RightOutlined />),
+      }
+      : {
+        key: to,
+        icon,
+        label: <NavLink to={to}>{label}</NavLink>,
+      }
+  ));
+
   return (
     <Sider
       width={256}
@@ -34,8 +54,10 @@ const Sidebar = () => {
       <div className="flex flex-col justify-between h-full">
         <div>
           <div className="flex flex-col items-center justify-center space-y-2 mt-8">
-            <CurrentUser />
-            {sidebarOpen && <h2 className="text-gray-700">Administrador</h2>}
+            <Link to="/perfil">
+              <CurrentUser />
+            </Link>
+            {sidebarOpen && <h2 className="text-gray-700">Bienvenido</h2>}
           </div>
           <div
             className="w-8 h-8 rounded-full bg-gray-50 shadow-lg flex items-center justify-center cursor-pointer transform transition-transform duration-300 mt-3 ml-auto mr-5"
@@ -49,28 +71,8 @@ const Sidebar = () => {
           mode="inline"
           openKeys={openKeys}
           onOpenChange={onOpenChange}
-        >
-          {linksArray.map(({ icon, label, to, subMenu }) => (
-            subMenu ? (
-              <Menu.SubMenu
-                key={label}
-                icon={icon}
-                title={label}
-                expandIcon={({ isOpen }) => isOpen ? <DownOutlined /> : <RightOutlined />}
-              >
-                {subMenu.map(({ label, to }) => (
-                  <Menu.Item key={to}>
-                    <NavLink to={to}>{label}</NavLink>
-                  </Menu.Item>
-                ))}
-              </Menu.SubMenu>
-            ) : (
-              <Menu.Item key={to} icon={icon}>
-                <NavLink to={to}>{label}</NavLink>
-              </Menu.Item>
-            )
-          ))}
-        </Menu>
+          items={menuItems} // Use the `items` prop here
+        />
       </div>
     </Sider>
   );
