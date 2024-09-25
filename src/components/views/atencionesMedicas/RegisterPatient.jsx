@@ -41,6 +41,7 @@ const RegisterPatient = () => {
                 apellidoPaterno: values.apellidoPaterno,
                 apellidoMaterno: values.apellidoMaterno,
                 fecha_nacimiento: values.fechaNacimiento.format('YYYY-MM-DD'),
+                usuario_id: userData?.id || null,
                 telefono: values.telefono,
                 email: values.email,
                 tipo_sangre: values.tipoSangre,  // Campo específico para pacientes
@@ -126,13 +127,13 @@ const RegisterPatient = () => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         name="tipoSangre"
                         label="Tipo de Sangre"
                        
                     >
                          <Input />
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item
                         name="telefono"
                         label="Teléfono"

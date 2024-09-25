@@ -55,7 +55,7 @@ const ManagePatients = () => {
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'id',
+            dataIndex: 'paciente_id',
             key: 'id',
         },
         {
@@ -63,11 +63,11 @@ const ManagePatients = () => {
             key: 'nombre_completo',
             render: (text, record) => `${record.nombre} ${record.apellido_paterno} ${record.apellido_materno}`,
         },
-        {
-            title: 'Tipo de Sangre',
-            dataIndex: 'tipo_sangre',
-            key: 'tipo_sangre',
-        },
+        // {
+        //     title: 'Tipo de Sangre',
+        //     dataIndex: 'tipo_sangre',
+        //     key: 'tipo_sangre',
+        // },
         {
             title: 'Estado',
             dataIndex: 'estado',
@@ -80,7 +80,7 @@ const ManagePatients = () => {
             render: (_, record) => (
                 <Space>
                     <Button type="primary" onClick={() => handleShowDetail(record)}><EditOutlined /></Button>
-                    <Button
+                    {/* <Button
                         style={{
                             backgroundColor: '#F44336',
                             color: '#fff',
@@ -90,7 +90,7 @@ const ManagePatients = () => {
                         onClick={() => { setPatientToDelete(record); setDeleteModalVisible(true); }}
                     >
                         <DeleteOutlined />
-                    </Button>
+                    </Button> */}
                 </Space>
             ),
         }

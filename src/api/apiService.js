@@ -249,8 +249,8 @@ export const updatePatient = async (patientId, updatedData) => {
             estado: updatedData.estado, // Cambiado de estadoo a estado
             ci: updatedData.ci,
             nombre: updatedData.nombre,
-            apellido_paterno: updatedData.apellidoPaterno,
-            apellido_materno: updatedData.apellidoMaterno,
+            apellido_paterno: updatedData.apellido_paterno,
+            apellido_materno: updatedData.apellido_materno,
             fecha_nacimiento: updatedData.fecha_nacimiento,
             email: updatedData.email,
             telefono: updatedData.telefono,
