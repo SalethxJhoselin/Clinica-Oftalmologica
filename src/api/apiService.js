@@ -21,7 +21,15 @@ export const loginRequest = async (ci, password) => {
 //==========REGISTER====================================
 export const registerRequest = async (userData) => {
     try {
-        const response = await api.post(`/usuarios/registrarse`, userData);
+        const formattedUserData = {
+            ...userData,
+            fecha_nacimiento: userData.fecha_nacimiento.format('YYYY-MM-DD'), // Asegúrate de usar el formato correcto
+        };
+        console.log("usuaformattedUserDatario")
+        console.log(formattedUserData)
+        const response = await api.post('/usuarios/registrarse', formattedUserData);
+        console.log("response registro")
+        console.log(response.data)
         return response.data;
     } catch (error) {
         throw new Error('Error al ingresar');
@@ -29,16 +37,15 @@ export const registerRequest = async (userData) => {
 };
 //==========USERS====================================//AYUDA!!!!!
 export const getUserByCI = async (ciUser) => {
-    //otro con el quedeberia de funcionar: /empleado/buscar
     try {
-        console.log("ci dentroooooooo")
-        console.log({ci:ciUser})
-        const response = await api.get(`/usuarios/obtenerUsuario`, {ci:ciUser});
-        console.log("response")
-        console.log(response.data)
+        console.log({ ci: ciUser });
+        const response = await api.get(`/usuarios/obtenerUsuario`, {
+            params: { ci: ciUser },
+        });
+        console.log(response.data);
         return response.data;
     } catch (error) {
-        console.error('Error al obtener los datos del usaurio:', error);
+        console.error('Error al obtener los datos del usuario:', error);
         throw error;
     }
 };
@@ -181,11 +188,14 @@ export const createEmployee = (employeeData) => {
 };
 export const updateEmployee = async (professionId, updatedData) => {
     try {
+        console.log("data prueba dentro")
+        console.log(updatedData)
+
         const data={
                 id:professionId,
                 direccion: updatedData.direccion,
                 fecha_contratacion: updatedData.fecha_contratacion,
-                estadoo: updatedData.estadoo,
+                estadoo: updatedData.estado,
                 ci: updatedData.ci,
                 nombre: updatedData.nombre,
                 apellido_paterno: updatedData.apellidoPaterno,
@@ -193,13 +203,15 @@ export const updateEmployee = async (professionId, updatedData) => {
                 fecha_nacimiento: updatedData.fecha_nacimiento,
                 email: updatedData.email,
                 telefono: updatedData.telefono,//que se actualice
-                rol_id: updatedData.rol,//que se actualice
+                roles_id: updatedData.rol,//que se actualice
                 genero: updatedData.genero,//que se actualice
-                profesiones_id:updatedData.profesiones_id
+                profesiones_id:updatedData.profesion
         }
         console.log("data Dentrooooo")
         console.log(data)
         const response = await api.post(`/empledo/editar`, data);
+        console.log("response se edito pero sigue dentro")
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error al editar empleado:', error);

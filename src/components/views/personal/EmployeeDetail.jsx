@@ -4,11 +4,13 @@ import dayjs from 'dayjs';
 import { getProfessions, fetchRoles, updateEmployee } from '../../../api/apiService';
 
 const { Option } = Select;
+
 const employeeReducer = (state, action) => {
     switch (action.type) {
         case 'SET_EMPLOYEE':
             return { ...state, ...action.payload };
         case 'UPDATE_FIELD':
+            console.log(`Updating field: ${action.field} with value: ${action.value}`);
             return { ...state, [action.field]: action.value };
         case 'RESET':
             return action.payload;
@@ -54,10 +56,10 @@ const EmployeeDetail = React.memo(({ visible, onClose, user }) => {
                     telefono: user.telefono,
                     direccion: user.direccion,
                     fechaContratacion: dayjs(user.fecha_contratacion),
-                    profesion: user.profesion,
-                    genero: user.genero,
-                    estado: user.estado,
-                    rol: user.rol
+                    profesion: user.profesion || '',
+                    genero: user.genero || '',
+                    estado: user.estado != null ? user.estado : true,
+                    rol: user.rol || ''
                 }
             });
         }
@@ -91,30 +93,32 @@ const EmployeeDetail = React.memo(({ visible, onClose, user }) => {
 
     // Función para manejar la actualización de campos individuales
     const handleFieldChange = useCallback((field, value) => {
+        console.log("vamos a ver que muestra",value)
         dispatch({ type: 'UPDATE_FIELD', field, value });
     }, []);
+
     // Guardar cambios
     const handleSaveClick = useCallback(async () => {
         const formattedFechaNacimiento = employeeState.fechaNacimiento ? employeeState.fechaNacimiento.format('YYYY-MM-DD') : null;
         const formattedFechaContratacion = employeeState.fechaContratacion ? employeeState.fechaContratacion.format('YYYY-MM-DD') : null;
-
         const updatedEmployeeData = {
             empleado_id: user.empleado_id,
             ...employeeState,
             fecha_nacimiento: formattedFechaNacimiento,
-            fecha_contratacion: formattedFechaContratacion
+            fecha_contratacion: formattedFechaContratacion,
+            profesion: employeeState.profesion || user.profesion, // Verifica si no ha cambiado
+            estado: employeeState.estado != null ? employeeState.estado : user.estado // Asegura que el estado no sea nulo
         };
+
+            console.log("user.empleado_id, updatedEmployeeData no se ve ni esto como es posible!!!!!",updatedEmployeeData);
         try {
-            await updateEmployee(user.empleado_id, updatedEmployeeData); // Llama a la función de actualización
-            message.success('Empleado actualizado con éxito'); // Muestra un mensaje de éxito
+            await updateEmployee(user.empleado_id, updatedEmployeeData);
             setIsEditing(false);
         } catch (error) {
-            message.error('Error al actualizar empleado'); // Manejo de errores
             console.error("Error al actualizar empleado:", error);
         }
-    }, [employeeState, user.empleado_id]);
+    }, [employeeState, user.empleado_id, user.profesion, user.estado]);
 
-    // Cancelar edición
     const handleCancelClick = useCallback(() => {
         setIsEditing(false);
         if (user) {
