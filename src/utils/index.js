@@ -11,7 +11,7 @@ import img6 from './../../public/assets/images/p6.jpg';
 const assets = {
   eyeImg,
   eye,
-  auth,
+  auth, 
   img1,
   img2,
   img3,

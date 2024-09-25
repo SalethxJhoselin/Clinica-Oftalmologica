@@ -206,3 +206,52 @@ export const updateEmployee = async (professionId, updatedData) => {
         throw error;
     }
 };
+
+export const getAllPatients = async () => {
+    try {
+        const response = await api.get('/paciente/listar');
+        return response;
+    } catch (error) {
+        console.error('Error al obtener lista de pacientes:', error);
+        throw error;
+    }
+};
+
+export const createPatient = (patientData) => {
+    try {
+        console.log("patientData")
+        console.log(patientData)
+        return api.post(`/paciente/crear`, patientData);
+    } catch (error) {
+        console.error('Error al registrar al paciente:', error);
+        throw error;
+    }
+};
+
+export const updatePatient = async (patientId, updatedData) => {
+    try {
+        const data = {
+            id: patientId,
+            direccion: updatedData.direccion,
+            fecha_ingreso: updatedData.fecha_ingreso, // Cambiado de fecha_contratacion a fecha_ingreso
+            estado: updatedData.estado, // Cambiado de estadoo a estado
+            ci: updatedData.ci,
+            nombre: updatedData.nombre,
+            apellido_paterno: updatedData.apellidoPaterno,
+            apellido_materno: updatedData.apellidoMaterno,
+            fecha_nacimiento: updatedData.fecha_nacimiento,
+            email: updatedData.email,
+            telefono: updatedData.telefono,
+            rol_id: updatedData.rol,
+            genero: updatedData.genero,
+            profesiones_id: updatedData.profesiones_id // Este campo puede que no sea necesario para pacientes
+        };
+        console.log("data dentro")
+        console.log(data)
+        const response = await api.post(`/paciente/editar`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al editar paciente:', error);
+        throw error;
+    }
+};

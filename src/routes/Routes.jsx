@@ -12,7 +12,8 @@ import ManageProfession from '../components/views/personal/ManageProfession';
 import ManageUsuarios from '../components/views/administrador/ManageUsuarios';
 import Home from '../components/pages/Home';
 import ManageEspeciality from '../components/views/registro/ManageEspeciality';
-import ManagePatient from '../components/views/atencionesMedicas/ManagePatient';
+//import ManagePatient from '../components/views/atencionesMedicas/ManagePatient';
+import ManagePatients from '../components/views/atencionesMedicas/ManagePatients';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -46,7 +47,7 @@ const MyRoutes = () => {
                 <Route path="/personnel/professions-registry" element={<ManageProfession />} />
                 <Route path="/personnel/manageEmployees" element={<ManageEmployees />} />
                 <Route path="/admin/specialties" element={<ManageEspeciality/>} />
-                <Route path="/medical-care/patient-registry" element={<ManagePatient/>} />
+                <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
