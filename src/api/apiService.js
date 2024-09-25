@@ -188,11 +188,14 @@ export const createEmployee = (employeeData) => {
 };
 export const updateEmployee = async (professionId, updatedData) => {
     try {
+        console.log("data prueba dentro")
+        console.log(updatedData)
+
         const data={
                 id:professionId,
                 direccion: updatedData.direccion,
                 fecha_contratacion: updatedData.fecha_contratacion,
-                estadoo: updatedData.estadoo,
+                estadoo: updatedData.estado,
                 ci: updatedData.ci,
                 nombre: updatedData.nombre,
                 apellido_paterno: updatedData.apellidoPaterno,
@@ -200,9 +203,9 @@ export const updateEmployee = async (professionId, updatedData) => {
                 fecha_nacimiento: updatedData.fecha_nacimiento,
                 email: updatedData.email,
                 telefono: updatedData.telefono,//que se actualice
-                rol_id: updatedData.rol,//que se actualice
+                roles_id: updatedData.rol,//que se actualice
                 genero: updatedData.genero,//que se actualice
-                profesiones_id:updatedData.profesiones_id
+                profesiones_id:updatedData.profesion
         }
         console.log("data Dentrooooo")
         console.log(data)
