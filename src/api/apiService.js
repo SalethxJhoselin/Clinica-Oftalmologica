@@ -21,7 +21,15 @@ export const loginRequest = async (ci, password) => {
 //==========REGISTER====================================
 export const registerRequest = async (userData) => {
     try {
-        const response = await api.post(`/usuarios/registrarse`, userData);
+        const formattedUserData = {
+            ...userData,
+            fecha_nacimiento: userData.fecha_nacimiento.format('YYYY-MM-DD'), // Asegúrate de usar el formato correcto
+        };
+        console.log("usuaformattedUserDatario")
+        console.log(formattedUserData)
+        const response = await api.post('/usuarios/registrarse', formattedUserData);
+        console.log("response registro")
+        console.log(response.data)
         return response.data;
     } catch (error) {
         throw new Error('Error al ingresar');
@@ -29,16 +37,15 @@ export const registerRequest = async (userData) => {
 };
 //==========USERS====================================//AYUDA!!!!!
 export const getUserByCI = async (ciUser) => {
-    //otro con el quedeberia de funcionar: /empleado/buscar
     try {
-        console.log("ci dentroooooooo")
-        console.log({ci:ciUser})
-        const response = await api.get(`/usuarios/obtenerUsuario`, {ci:ciUser});
-        console.log("response")
-        console.log(response.data)
+        console.log({ ci: ciUser });
+        const response = await api.get(`/usuarios/obtenerUsuario`, {
+            params: { ci: ciUser },
+        });
+        console.log(response.data);
         return response.data;
     } catch (error) {
-        console.error('Error al obtener los datos del usaurio:', error);
+        console.error('Error al obtener los datos del usuario:', error);
         throw error;
     }
 };
@@ -200,6 +207,8 @@ export const updateEmployee = async (professionId, updatedData) => {
         console.log("data Dentrooooo")
         console.log(data)
         const response = await api.post(`/empledo/editar`, data);
+        console.log("response se edito pero sigue dentro")
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error al editar empleado:', error);

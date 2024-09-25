@@ -105,16 +105,15 @@ const EmployeeDetail = React.memo(({ visible, onClose, user }) => {
             fecha_contratacion: formattedFechaContratacion
         };
         try {
-            await updateEmployee(user.empleado_id, updatedEmployeeData); // Llama a la función de actualización
-            message.success('Empleado actualizado con éxito'); // Muestra un mensaje de éxito
+            const response=await updateEmployee(user.empleado_id, updatedEmployeeData);
+            console.log("empleado salio de edicioooooon, pero se elimina misteriosamente y en postman si funca")
+            console.log(response)
             setIsEditing(false);
         } catch (error) {
-            message.error('Error al actualizar empleado'); // Manejo de errores
             console.error("Error al actualizar empleado:", error);
         }
     }, [employeeState, user.empleado_id]);
 
-    // Cancelar edición
     const handleCancelClick = useCallback(() => {
         setIsEditing(false);
         if (user) {
