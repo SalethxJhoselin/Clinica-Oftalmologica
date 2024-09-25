@@ -3,11 +3,13 @@ import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import assets from '../../utils';
-import { getUserByCI, loginRequest } from '../../api/apiService';
+import { loginRequest } from '../../api/apiService';
+import { useUser } from '../../context/UserContext';
 
 const FormLogin = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
+    const { userCi, userRol, userPermisos } = useUser(); 
 
     const onFinish = async (values) => {
         const { username, password } = values;
@@ -15,6 +17,10 @@ const FormLogin = () => {
             const data = await loginRequest(username, password);
             const { token } = data;
             localStorage.setItem('token', token);
+            console.log(userCi)
+            console.log(userRol)
+            console.log(userPermisos)
+            
             login();
             navigate('/home');
         } catch (error) {

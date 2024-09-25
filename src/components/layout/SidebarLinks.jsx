@@ -1,7 +1,8 @@
 import {AimOutlined, SolutionOutlined, SettingOutlined, FileAddOutlined, TeamOutlined } from '@ant-design/icons';
 
-const SidebarLinks = () => [
-  {
+
+const SidebarLinks = (userRol) => [
+  userRol === 'Administrador'&&{
     label: "Administrador",
     icon: <AimOutlined />,
     subMenu: [

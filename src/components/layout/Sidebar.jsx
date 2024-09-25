@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Layout, Menu } from 'antd';
 import { LeftOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import CurrentUser from '../users/CurrentUser';
 import SidebarLinks from './SidebarLinks';
+import { useUser } from '../../context/UserContext';
 
 const { Sider } = Layout;
 
 const Sidebar = () => {
-  const { sidebarOpen, setSidebarOpen, userRole } = useAuth();
+  const { sidebarOpen, setSidebarOpen} = useAuth();
   const [openKeys, setOpenKeys] = useState([]);
-  const linksArray = SidebarLinks(userRole);
+  const {userRol} = useUser()
+  const linksArray = SidebarLinks(userRol);
+  
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
