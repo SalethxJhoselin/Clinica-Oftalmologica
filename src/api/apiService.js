@@ -206,6 +206,7 @@ export const updateEmployee = async (professionId, updatedData) => {
                 roles_id: updatedData.rol,//que se actualice
                 genero: updatedData.genero,//que se actualice
                 profesiones_id:updatedData.profesion
+
         }
         console.log("data Dentrooooo")
         console.log(data)

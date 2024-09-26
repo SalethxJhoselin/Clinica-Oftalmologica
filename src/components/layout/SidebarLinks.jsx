@@ -1,7 +1,12 @@
-import {AimOutlined, SolutionOutlined, SettingOutlined, FileAddOutlined, TeamOutlined } from '@ant-design/icons';
+import { AimOutlined, SolutionOutlined, SettingOutlined, FileAddOutlined, TeamOutlined } from '@ant-design/icons';
 
-const SidebarLinks = () => [
-  {
+// Función que verifica si el usuario tiene un permiso específico
+const hasPermission = (userPermisos, permissionLabel) => {
+  return userPermisos.includes(permissionLabel);
+};
+
+const SidebarLinks = (userRol, userPermisos) => [
+  userRol === 'Administrador' && {
     label: "Administrador",
     icon: <AimOutlined />,
     subMenu: [
@@ -15,11 +20,11 @@ const SidebarLinks = () => [
       },
       {
         label: "Administrar Usuarios",
-        to: "/admin/users", 
+        to: "/admin/users",
       },
       {
         label: "Administrar Accesos (Bitácora)",
-        to: "/admin/access-log", 
+        to: "/admin/access-log",
       }
     ],
   },
@@ -27,41 +32,41 @@ const SidebarLinks = () => [
     label: "Registros",
     icon: <FileAddOutlined />,
     subMenu: [
-      {
+      hasPermission(userPermisos, "Tipos de Atenciones") && {
         label: "Tipos de Atenciones",
-        to: "/admin/service-types", 
+        to: "/admin/service-types",
       },
-      {
+      hasPermission(userPermisos, "Departamentos") && {
         label: "Departamentos",
         to: "/admin/departments",
       },
-      {
+      hasPermission(userPermisos, "Especialidades") && {
         label: "Especialidades",
-        to: "/admin/specialties", 
+        to: "/admin/specialties",
       },
-      {
+      hasPermission(userPermisos, "Servicios") && {
         label: "Servicios",
-        to: "/admin/services", 
+        to: "/admin/services",
       }
-    ],
+    ].filter(Boolean), // Filtra elementos falsos
   },
   {
     label: "Personal",
     icon: <TeamOutlined />,
     subMenu: [
-      {
+      hasPermission(userPermisos, "Administrar Empleados") && {
         label: "Administrar Empleados",
         to: "/personnel/manageEmployees",
       },
-      {
+      hasPermission(userPermisos, "Registro de Profesiones") && {
         label: "Registro de Profesiones",
         to: "/personnel/professions-registry",
       },
-      {
+      hasPermission(userPermisos, "Registro de Profesionales de la Salud") && {
         label: "Registro de Profesionales de la Salud",
         to: "/personnel/healthcare-professionals-registry",
       }
-    ],
+    ].filter(Boolean), // Filtra elementos falsos
   },
   {
     label: "Configuración",
