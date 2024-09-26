@@ -18,14 +18,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = () => {
     setIsLoggedIn(true);
-    localStorage.setItem('loggedIn', 'true');
-    startInactivityTimer(); // Iniciar temporizador de inactividad al iniciar sesión
-  };
+    localStorage.setItem('loggedIn', 'true'); // Guardar estado de sesión
+    startInactivityTimer(); // Iniciar temporizador de inactividad
+};
 
   const logout = () => {
+    localStorage.clear(); 
     setIsLoggedIn(false);
-    localStorage.setItem('loggedIn', 'false');
-    localStorage.removeItem('token');
     navigate('/'); // Redirigir al login al cerrar sesión
   };
   // Función para iniciar el temporizador de inactividad

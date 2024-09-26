@@ -12,27 +12,22 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            const decodedToken = jwtDecode(token);
-            console.log(decodedToken);
-
-            // Almacena solo el CI en el estado
-            setUserCi(decodedToken.ci);
-
-            // Extrae el nombre del rol del objeto 'rol'
-            if (decodedToken.rol && decodedToken.rol.nombre) {
-                setUserRol(decodedToken.rol.nombre);
+            try {
+                const decodedToken = jwtDecode(token);
+                console.log(decodedToken);
+    
+                setUserCi(decodedToken.ci);
+                setUserRol(decodedToken.rol?.nombre || null);
+                setUserPermisos(decodedToken.permisos?.map(permiso => permiso.nombre) || []);
+            } catch (error) {
+                console.error('Error decoding token:', error);
             }
-
-            // Extrae los nombres de los permisos del array 'permisos'
-            if (decodedToken.permisos && Array.isArray(decodedToken.permisos)) {
-                const permisosNombres = decodedToken.permisos.map(permiso => permiso.nombre);
-                setUserPermisos(permisosNombres);
-            }
-        }
+        } 
     }, []);
+    
 
     return (
-        <UserContext.Provider value={{ userCi, userRol, userPermisos }}>
+        <UserContext.Provider value={{ userCi, userRol, userPermisos, setUserCi, setUserRol, setUserPermisos }}>
             {children}
         </UserContext.Provider>
     );

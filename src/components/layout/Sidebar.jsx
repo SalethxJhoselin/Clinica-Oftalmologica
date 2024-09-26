@@ -12,8 +12,8 @@ const { Sider } = Layout;
 const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen} = useAuth();
   const [openKeys, setOpenKeys] = useState([]);
-  const {userRol} = useUser()
-  const linksArray = SidebarLinks(userRol);
+  const {userRol, userPermisos} = useUser()
+  const linksArray = SidebarLinks(userRol, userPermisos);
   
 
   const toggleSidebar = () => {

@@ -1,26 +1,34 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import assets from '../../utils';
 import { loginRequest } from '../../api/apiService';
 import { useUser } from '../../context/UserContext';
+import { jwtDecode } from 'jwt-decode';
 
 const FormLogin = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const { userCi, userRol, userPermisos } = useUser(); 
+    const { userCi, userRol, userPermisos } = useUser();
+    const {setUserCi, setUserRol, setUserPermisos} = useUser()
 
     const onFinish = async (values) => {
         const { username, password } = values;
         try {
             const data = await loginRequest(username, password);
             const { token } = data;
+            const decodedToken = jwtDecode(token);
+            console.log(decodedToken);
             localStorage.setItem('token', token);
+
+            setUserCi(decodedToken.ci);
+            setUserRol(decodedToken.rol?.nombre || null);
+            setUserPermisos(decodedToken.permisos?.map(permiso => permiso.nombre) || []);
             console.log(userCi)
             console.log(userRol)
             console.log(userPermisos)
-            
+
             login();
             navigate('/home');
         } catch (error) {
