@@ -19,6 +19,7 @@ const AppContent = () => {
         <div className="flex-1 flex flex-col overflow-x-hidden">
           <Navbar />
           <div className="pt-16">
+            <h1>conecto?</h1>
             <MyRoutes />
           </div>
         </div>
