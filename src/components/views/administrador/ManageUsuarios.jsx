@@ -105,13 +105,16 @@ const ManageUsuarios = () => {
         onChange={handleSearch}
         style={{ marginBottom: 20 }}
       />
-      <Table
-        columns={columns}
-        dataSource={filteredUsers}
-        rowKey="id"
-        pagination={{ pageSize: 5, size: 'small' }}
-        bordered
-      />
+      {/* Contenedor con scroll horizontal */}
+      <div style={{ overflowX: 'auto' }}>
+        <Table
+          columns={columns}
+          dataSource={filteredUsers}
+          rowKey="id"
+          pagination={{ pageSize: 5, size: 'small' }}
+          bordered
+        />
+      </div>
     </div>
   );
 };
