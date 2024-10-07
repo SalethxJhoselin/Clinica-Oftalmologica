@@ -14,6 +14,8 @@ import Home from '../components/pages/Home';
 import ManageEspeciality from '../components/views/registro/ManageEspeciality';
 //import ManagePatient from '../components/views/atencionesMedicas/ManagePatient';
 import ManagePatients from '../components/views/atencionesMedicas/ManagePatients';
+import BookAppoimtment from '../components/views/atencionesMedicas/BookAppoimtment';
+import ManageSpecialists from '../components/views/personal/ManageSpecialists';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -36,6 +38,7 @@ const MyRoutes = () => {
             )}
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/reservarCita" element={<BookAppoimtment />} />
             {/*Protected Routes */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/perfil" element={<Perfil />} />
@@ -48,7 +51,8 @@ const MyRoutes = () => {
                 <Route path="/personnel/manageEmployees" element={<ManageEmployees />} />
                 <Route path="/admin/specialties" element={<ManageEspeciality/>} />
                 <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
-
+                <Route path="/personnel/manageSpecialists" element={<ManageSpecialists/>} />
+                
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />

@@ -10,21 +10,7 @@ const RegisterEmployee = () => {
     const [roles, setRoles] = useState([]);
     const [professions, setProfessions] = useState([]);
     const [userData, setUserData] = useState(null);
-    const employe =
-    {
-        "id": 15,
-        "ci": "121212",
-        "nombre": "marcelo",
-        "apellido_paterno": "camacho",
-        "apellido_materno": "gutierrez",
-        "fecha_nacimiento": "2002-10-24T00:00:00.000Z",
-        "email": "marcelo@gmail.com",
-        "password": "$2a$10$/8JMgjhXoaRZHvAIa3JsoO/7c24YmWvRyp.LP/cSTS806YpJhamrG",
-        "rol_id": 2,
-        "estado": true,
-        "telefono": null,
-        "genero": null
-    }
+    
     useEffect(() => {
         const fetchData = async () => {
             try {

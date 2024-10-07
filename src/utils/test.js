@@ -90,3 +90,26 @@ export const employeeData = [{
     },
     "estado": "activo"
 }];
+
+const servicios = [
+    {
+      id: 1,
+      titulo: 'Cirugía LASIK',
+      descripcion: 'Corrección visual mediante cirugía láser avanzada.',
+      imagen: 'https://example.com/img/cirugia-lasik.jpg',
+    },
+    {
+      id: 2,
+      titulo: 'Diagnóstico completo',
+      descripcion: 'Exámenes de visión precisos y personalizados para ti.',
+      imagen: 'https://example.com/img/diagnostico-completo.jpg',
+    },
+    {
+      id: 3,
+      titulo: 'Tratamiento de cataratas',
+      descripcion: 'Recupera tu visión con nuestras técnicas quirúrgicas.',
+      imagen: 'https://example.com/img/tratamiento-cataratas.jpg',
+    },
+  ];
+  
+  export default servicios;

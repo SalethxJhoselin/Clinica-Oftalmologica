@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   // Definir el tiempo de inactividad permitido (ejemplo: 15 minutos)
-  const SESSION_TIMEOUT = 150 * 60 * 1000; // 15 minutos en milisegundos
+  const SESSION_TIMEOUT = 300 * 60 * 1000; // 15 minutos en milisegundos
   let timeoutId;
 
   const login = () => {

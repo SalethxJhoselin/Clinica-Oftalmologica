@@ -117,22 +117,7 @@ body {
     padding: 14px 25px; /* Ajusta el tamaño de los botones para pantallas grandes */
   }
 }
-@media (max-width: 768px) {
-  .ant-layout-sider {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh; /* Ocupa toda la altura de la pantalla */
-    width: 100%; /* Ocupa toda la anchura de la pantalla */
-    z-index: 1000; /* Asegúrate de que esté por encima del contenido */
-  }
-  
-  .ant-layout-content {
-    margin-left: 0; /* Elimina el margen izquierdo */
-    padding: 16px; /* Ajusta el padding si es necesario */
-    margin-top: 64px; /* Ajusta este valor si necesitas espacio para el header */
-  }
-}
+
 .scroll-container::-webkit-scrollbar {
   height: 8px; /* Altura del scrollbar */
 }

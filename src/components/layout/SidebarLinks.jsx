@@ -64,7 +64,7 @@ const SidebarLinks = (userRol, userPermisos) => [
       },
       hasPermission(userPermisos, "Registro de Profesionales de la Salud") && {
         label: "Registro de Profesionales de la Salud",
-        to: "/personnel/healthcare-professionals-registry",
+        to: "/personnel/manageSpecialists",
       }
     ].filter(Boolean), // Filtra elementos falsos
   },
