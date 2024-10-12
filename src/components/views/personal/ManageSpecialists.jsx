@@ -11,20 +11,19 @@ const { Search } = Input;
 
 const ManageSpecialists = () => {
     const [specialists, setSpecialists] = useState([]);
-    const [filteredSpecialists, setFilteredSpecialists] = useState([]); // Para mostrar los resultados filtrados
-    const [searchTerm, setSearchTerm] = useState(""); // Para el valor de búsqueda
+    const [filteredSpecialists, setFilteredSpecialists] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedSpecialist, setSelectedSpecialist] = useState(null);
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
     const [isAddSpecialtiesModalVisible, setIsAddSpecialtiesModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [specialistToDelete, setSpecialistToDelete] = useState(null);
-    const [modalType, setModalType] = useState('add');
 
     const fetchSpecialists = async () => {
         try {
             const response = await getAllSpecialists();
             setSpecialists(response);
-            setFilteredSpecialists(response); // Inicializar con todos los especialistas
+            setFilteredSpecialists(response);
         } catch (error) {
             console.error("Error al obtener especialistas", error);
         }
@@ -34,11 +33,10 @@ const ManageSpecialists = () => {
         fetchSpecialists();
     }, []);
 
-    // Función para manejar la búsqueda
     const handleSearch = (value) => {
-        setSearchTerm(value); // Actualizar el valor de búsqueda
+        setSearchTerm(value);
         if (value === "") {
-            setFilteredSpecialists(specialists); // Si no hay búsqueda, mostrar todos los especialistas
+            setFilteredSpecialists(specialists);
         } else {
             const filtered = specialists.filter((specialist) => {
                 const fullName = `${specialist.usuario.nombre} ${specialist.usuario.apellido_paterno} ${specialist.usuario.apellido_materno}`.toLowerCase();
@@ -51,7 +49,7 @@ const ManageSpecialists = () => {
                     state.includes(value.toLowerCase())
                 );
             });
-            setFilteredSpecialists(filtered); // Actualizar la lista filtrada
+            setFilteredSpecialists(filtered);
         }
     };
 
@@ -68,7 +66,9 @@ const ManageSpecialists = () => {
     const handleDeleteConfirm = async () => {
         try {
             await deleteSpecialist(specialistToDelete.id);
-            await fetchSpecialists();
+            setTimeout(async () => {
+                await fetchSpecialists();
+            }, 500);
             setDeleteModalVisible(false);
             setSpecialistToDelete(null);
         } catch (error) {
@@ -143,18 +143,16 @@ const ManageSpecialists = () => {
     return (
         <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
             <Title level={3} className="text-center">Administrar Especialistas</Title>
-            
+
             {/* Buscador */}
-            <div className="mb-4">
+            <div className="mb-4 w-full flex justify-between items-center">
                 <Search
                     placeholder="Buscar por ID, nombre, apellidos, especialidades o estado"
                     onSearch={handleSearch}
-                    onChange={(e) => handleSearch(e.target.value)} // Para búsqueda en tiempo real
+                    onChange={(e) => handleSearch(e.target.value)}
                     style={{ width: 300 }}
                 />
-            </div>
 
-            <div className="flex justify-end mb-6">
                 <Button
                     style={{
                         backgroundColor: '#4CAF50',
