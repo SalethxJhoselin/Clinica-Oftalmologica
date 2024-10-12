@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importación necesaria para el calendario
 import { Table, Input, Button } from 'antd'; // Importaciones necesarias de Ant Design
-import { especialistas } from '../../../utils/test'; // Importación de la lista de especialistas
 import ProgramacionModal from './ProgramacionModal'; // Importar el componente de modal
+import { getAllSpecialists } from '../../../api/apiService';
 
 const ProgrammingCalendar = () => {
+  const [specialists, setSpecialists] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState(null); // Guarda el especialista seleccionado
   const [programacion, setProgramacion] = useState([]); // Programación de fechas con ids de especialista
   const [selectedProgramming, setSelectedProgramming] = useState({ id: null, fechas: [] }); // ID y fechas seleccionadas del especialista actual
@@ -13,11 +14,26 @@ const ProgrammingCalendar = () => {
   const [search, setSearch] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false); // Estado para mostrar/ocultar el modal
 
+  const fetchSpecialists = async () => {
+    try {
+      const response = await getAllSpecialists();
+      console.log("response dentro de canlenadario",response);
+      setSpecialists(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchSpecialists();
+  }, []);
+
   // Maneja la selección de un especialista.
   const handleSelectPerson = (person) => {
     setSelectedPerson(person);
-    setSelectedProgramming({ id: person.especialista_id, fechas: [] }); // Reinicia las fechas seleccionadas al cambiar de especialista
+    setSelectedProgramming({ id: person.id, fechas: [] }); 
   };
+
 
   // Clase personalizada para resaltar las fechas con eventos programados.
   const tileClassName = ({ date, view }) => {
@@ -56,10 +72,10 @@ const ProgrammingCalendar = () => {
   };
 
   // Filtros para la búsqueda en la lista de especialistas.
-  const filteredEspecialistas = especialistas.filter((especialista) =>
-    especialista.nombre.toLowerCase().includes(search.toLowerCase()) ||
-    especialista.apellido_paterno.toLowerCase().includes(search.toLowerCase()) ||
-    especialista.apellido_materno.toLowerCase().includes(search.toLowerCase())
+  const filteredEspecialistas = specialists.filter((especialista) =>
+    especialista.usuario.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    especialista.usuario.apellido_paterno.toLowerCase().includes(search.toLowerCase()) ||
+    especialista.usuario.apellido_materno.toLowerCase().includes(search.toLowerCase())
   );
 
   // Configuración de columnas para la tabla de especialistas.
@@ -68,7 +84,7 @@ const ProgrammingCalendar = () => {
       title: 'Nombre Completo',
       dataIndex: 'nombreCompleto',
       key: 'nombreCompleto',
-      render: (text, record) => `${record.nombre} ${record.apellido_paterno} ${record.apellido_materno}`,
+      render: (text, record) => `${record.usuario.nombre} ${record.usuario.apellido_paterno} ${record.usuario.apellido_materno}`,
     },
   ];
 
@@ -83,7 +99,7 @@ const ProgrammingCalendar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen max-w-screen-lg mx-auto">
+    <div className="flex flex-col items-center p-6 min-h-screen max-w-screen-lg mx-auto">
       <div className="flex flex-row w-full">
         {/* Barra lateral izquierda con lista de especialistas */}
         <div className="w-1/4 bg-white shadow-lg rounded-lg p-4 mr-4">
@@ -105,7 +121,7 @@ const ProgrammingCalendar = () => {
             columns={columns}
             pagination={false}
             rowClassName={(record) =>
-              selectedPerson?.especialista_id === record.especialista_id ? 'bg-green-100' : ''
+              selectedPerson?.id === record.id ? 'bg-green-100' : ''
             }
             onRow={(record) => ({
               onClick: () => handleSelectPerson(record),

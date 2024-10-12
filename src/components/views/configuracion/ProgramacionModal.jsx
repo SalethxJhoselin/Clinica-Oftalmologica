@@ -6,13 +6,17 @@ const { Option } = Select;
 const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, selectedProgramming }) => {
   const [form] = Form.useForm(); // Para manejar el formulario
 
-  // Manejador para enviar la información del formulario
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      console.log('Datos del formulario:', values);
-      form.resetFields(); // Reinicia el formulario
-      onCancel(); // Cierra el modal
-    });
+  const handleOk = async () => {
+    const values = await form.validateFields();
+    console.log(selectedProgramming);
+    console.log("selectedProgramming antes snjv");
+    const dataToSend = {
+      programming: selectedProgramming,
+      formData: values,
+    };
+    console.log('Datos estructurados para enviar al backend:', dataToSend);
+    form.resetFields();
+    onCancel();
   };
 
   return (
