@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { message } from 'antd';
 
 const API_BASE_URL = 'https://clinica-oftalmologica.onrender.com';
 
@@ -158,7 +159,8 @@ export const deleteProfession = async (professionId) => {
         console.error('Error al eliminar la profesión:', error);
         throw error;
     }
-}; export const createProfession = (professionData) => {
+};
+export const createProfession = (professionData) => {
     try {
         return api.post(`/profesiones/crear`, professionData);
     } catch (error) {
@@ -172,7 +174,7 @@ export const getAllEmployees = async () => {
         const response = await api.get('/empleado/listar');
         return response;
     } catch (error) {
-        console.error('Error al obtener lista de empleados:', error);
+        message.error('Error al obtener lista de empleados:');
         throw error;
     }
 };
@@ -191,21 +193,21 @@ export const updateEmployee = async (professionId, updatedData) => {
         console.log("data prueba dentro")
         console.log(updatedData)
 
-        const data={
-                id:professionId,
-                direccion: updatedData.direccion,
-                fecha_contratacion: updatedData.fecha_contratacion,
-                estadoo: updatedData.estado,
-                ci: updatedData.ci,
-                nombre: updatedData.nombre,
-                apellido_paterno: updatedData.apellidoPaterno,
-                apellido_materno: updatedData.apellidoMaterno,
-                fecha_nacimiento: updatedData.fecha_nacimiento,
-                email: updatedData.email,
-                telefono: updatedData.telefono,//que se actualice
-                roles_id: updatedData.rol,//que se actualice
-                genero: updatedData.genero,//que se actualice
-                profesiones_id:updatedData.profesion
+        const data = {
+            id: professionId,
+            direccion: updatedData.direccion,
+            fecha_contratacion: updatedData.fecha_contratacion,
+            estadoo: updatedData.estado,
+            ci: updatedData.ci,
+            nombre: updatedData.nombre,
+            apellido_paterno: updatedData.apellidoPaterno,
+            apellido_materno: updatedData.apellidoMaterno,
+            fecha_nacimiento: updatedData.fecha_nacimiento,
+            email: updatedData.email,
+            telefono: updatedData.telefono,//que se actualice
+            roles_id: updatedData.rol,//que se actualice
+            genero: updatedData.genero,//que se actualice
+            profesiones_id: updatedData.profesion
 
         }
         console.log("data Dentrooooo")
@@ -220,6 +222,7 @@ export const updateEmployee = async (professionId, updatedData) => {
     }
 };
 
+//==========PACIENTES====================================
 export const getAllPatients = async () => {
     try {
         const response = await api.get('/paciente/listar');
@@ -265,6 +268,52 @@ export const updatePatient = async (patientId, updatedData) => {
         return response.data;
     } catch (error) {
         console.error('Error al editar paciente:', error);
+        throw error;
+    }
+};
+
+//==========ESPECIALIDADES====================================
+export const getAllSpecialties = async () => {
+    try {
+        const response = await api.get('/especialidades/listar');
+        return response.data;
+    } catch (error) {
+        message.error('Error al obtener lista de especialidades:');
+        throw error;
+    }
+};
+//==========ESPECIALISTAS====================================
+export const getAllSpecialists = async () => {
+    try {
+        const response = await api.get('/especialistas/listar');
+        console.log("response.data");
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener lista de empleados:', error);
+        throw error;
+    }
+};
+export const createSpecialist = (specialistData) => {
+    try {
+        const response = api.post(`especialistas/crear`, specialistData);
+        message.success("especialista gistrado exitosamente");
+        return response;
+    } catch (error) {
+        message.error('Error al registrar especialista:');
+        throw error;
+    }
+};
+export const deleteSpecialist = async (id) => {
+    try {
+        console.log("id");
+        console.log(id);
+        api.delete('/especialistas/eliminar', {
+            data: { empleado_id: id }
+        });
+        message.success("especialista eliminado exitosamente");
+    } catch (error) {
+        message.error('Error al eliminar especialista:');
         throw error;
     }
 };

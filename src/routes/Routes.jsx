@@ -12,10 +12,10 @@ import ManageProfession from '../components/views/personal/ManageProfession';
 import ManageUsuarios from '../components/views/administrador/ManageUsuarios';
 import Home from '../components/pages/Home';
 import ManageEspeciality from '../components/views/registro/ManageEspeciality';
-//import ManagePatient from '../components/views/atencionesMedicas/ManagePatient';
 import ManagePatients from '../components/views/atencionesMedicas/ManagePatients';
 import BookAppoimtment from '../components/views/atencionesMedicas/BookAppoimtment';
 import ManageSpecialists from '../components/views/personal/ManageSpecialists';
+import ProgrammingCalendar from '../components/views/configuracion/ProgrammingCalendar';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -52,6 +52,7 @@ const MyRoutes = () => {
                 <Route path="/admin/specialties" element={<ManageEspeciality/>} />
                 <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
                 <Route path="/personnel/manageSpecialists" element={<ManageSpecialists/>} />
+                <Route path="/settings/programmingCalendar" element={<ProgrammingCalendar/>} />
                 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}

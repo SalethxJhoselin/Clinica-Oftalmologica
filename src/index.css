@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/*@import 'antd/dist/antd.css';*/
 * {
   margin: 0;
   padding: 0;
@@ -133,4 +133,16 @@ body {
 
 .scroll-container::-webkit-scrollbar-track {
   background: #f1f1f1; /* Color del fondo del scrollbar */
+}
+/*--------calendario----------*/
+.highlight-yellow .react-calendar__tile {
+  background: #ffffcc;
+}
+
+.highlight-lightblue .react-calendar__tile {
+  background: #cceeff;
+}
+
+.highlight-green .react-calendar__tile {
+  background: #ccffcc;
 }

@@ -74,7 +74,7 @@ const SidebarLinks = (userRol, userPermisos) => [
     subMenu: [
       {
         label: "Programación de Médicos",
-        to: "/settings/doctor-scheduling",
+        to: "/settings/programmingCalendar",
       }
     ],
   },

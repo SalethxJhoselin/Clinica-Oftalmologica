@@ -1,64 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { Space, Table, Button, Modal, message, Typography } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Space, Table, Button, Modal, Typography, Input } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import PersonDetail from './PersonDetail';
-import RegisterEmployee from './RegisterStaff';
-import { getAllEmployees } from '../../../api/apiService'; // solo para prueba hasta que este lo de especialitas
+import { PlusOutlined } from '@ant-design/icons';
+import { getAllSpecialists, deleteSpecialist } from '../../../api/apiService';
+import AddSpecialties from './AddSpecialties';
+
 const { Title } = Typography;
+const { Search } = Input;
 
 const ManageSpecialists = () => {
-    const [employees, setEmployees] = useState([]);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [specialists, setSpecialists] = useState([]);
+    const [filteredSpecialists, setFilteredSpecialists] = useState([]); // Para mostrar los resultados filtrados
+    const [searchTerm, setSearchTerm] = useState(""); // Para el valor de búsqueda
+    const [selectedSpecialist, setSelectedSpecialist] = useState(null);
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+    const [isAddSpecialtiesModalVisible, setIsAddSpecialtiesModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [employeeToDelete, setEmployeeToDelete] = useState(null);
+    const [specialistToDelete, setSpecialistToDelete] = useState(null);
+    const [modalType, setModalType] = useState('add');
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-
-    // Función para manejar la apertura del modal
-    const handleOpenModal = () => setIsModalVisible(true);
-
-    // Función para manejar el cierre del modal
-    const handleCloseModal = () => setIsModalVisible(false);
-
-    // Función para recibir los datos del formulario
-    const handleSaveEmployee = (employeeData) => {
-        console.log("Datos del empleado:", employeeData);
-        // Aquí puedes hacer alguna acción con los datos, como enviarlos a una API o almacenarlos en el estado global
-        setIsModalVisible(false); // Cerrar el modal después de guardar
+    const fetchSpecialists = async () => {
+        try {
+            const response = await getAllSpecialists();
+            setSpecialists(response);
+            setFilteredSpecialists(response); // Inicializar con todos los especialistas
+        } catch (error) {
+            console.error("Error al obtener especialistas", error);
+        }
     };
 
     useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                const response = await getAllEmployees();
-                setEmployees(response.data);
-            } catch (error) {
-                message.error('Error al obtener empleados');
-            }
-        };
-
-        fetchEmployees();
+        fetchSpecialists();
     }, []);
 
+    // Función para manejar la búsqueda
+    const handleSearch = (value) => {
+        setSearchTerm(value); // Actualizar el valor de búsqueda
+        if (value === "") {
+            setFilteredSpecialists(specialists); // Si no hay búsqueda, mostrar todos los especialistas
+        } else {
+            const filtered = specialists.filter((specialist) => {
+                const fullName = `${specialist.usuario.nombre} ${specialist.usuario.apellido_paterno} ${specialist.usuario.apellido_materno}`.toLowerCase();
+                const specialties = specialist.especialidades.map(e => e.nombre).join(", ").toLowerCase();
+                const state = specialist.estadoo ? "activo" : "inactivo";
+                return (
+                    fullName.includes(value.toLowerCase()) ||
+                    specialties.includes(value.toLowerCase()) ||
+                    specialist.id.toString().includes(value) ||
+                    state.includes(value.toLowerCase())
+                );
+            });
+            setFilteredSpecialists(filtered); // Actualizar la lista filtrada
+        }
+    };
+
     const handleShowDetail = (record) => {
-        console.log("desde afuera una vez mas tratando de ver los datos", record)
-        setSelectedEmployee(record);
+        setSelectedSpecialist(record);
         setIsDetailModalVisible(true);
     };
 
     const handleDetailModalClose = () => {
         setIsDetailModalVisible(false);
-        setSelectedEmployee(null);
+        setSelectedSpecialist(null);
     };
 
     const handleDeleteConfirm = async () => {
         try {
-
+            await deleteSpecialist(specialistToDelete.id);
+            await fetchSpecialists();
             setDeleteModalVisible(false);
-            message.success('Empleado eliminado exitosamente');
+            setSpecialistToDelete(null);
         } catch (error) {
-
+            console.error("Error al eliminar especialista", error);
         }
     };
 
@@ -66,26 +80,42 @@ const ManageSpecialists = () => {
         setDeleteModalVisible(false);
     };
 
+    const handleAddSpecialtiesModalClose = async () => {
+        setIsAddSpecialtiesModalVisible(false);
+        await fetchSpecialists();
+    };
+
+    const showModal = () => {
+        setIsAddSpecialtiesModalVisible(true);
+    };
+
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'empleado_id',
-            key: 'empleado_id',
+            dataIndex: 'id',
+            key: 'id',
         },
         {
             title: 'Nombre Completo',
             key: 'nombre_completo',
-            render: (text, record) => `${record.nombre} ${record.apellido_paterno} ${record.apellido_materno}`,
+            render: (text, record) => `${record.usuario.nombre} ${record.usuario.apellido_paterno} ${record.usuario.apellido_materno}`,
         },
         {
-            title: 'Profesión',
-            dataIndex: 'profesion',
-            key: 'profesion',
+            title: 'Especialidades',
+            dataIndex: 'especialidades',
+            key: 'especialidades',
+            render: (especialidades) => (
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                    {especialidades.map(especialidad => (
+                        <li key={especialidad.id}>{especialidad.nombre}</li>
+                    ))}
+                </ul>
+            ),
         },
         {
             title: 'Estado',
-            dataIndex: 'estado',
-            key: 'estado',
+            dataIndex: 'estadoo',
+            key: 'estadoo',
             render: (text) => (text ? 'Activo' : 'Inactivo'),
         },
         {
@@ -99,9 +129,9 @@ const ManageSpecialists = () => {
                             backgroundColor: '#F44336',
                             color: '#fff',
                             borderRadius: '10px',
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                         }}
-                        onClick={() => { setEmployeeToDelete(record); setDeleteModalVisible(true); }}
+                        onClick={() => { setSpecialistToDelete(record); setDeleteModalVisible(true); }}
                     >
                         <DeleteOutlined />
                     </Button>
@@ -113,45 +143,57 @@ const ManageSpecialists = () => {
     return (
         <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
             <Title level={3} className="text-center">Administrar Especialistas</Title>
-            <div>
-                <div className="flex justify-end mb-6">
-                    <Button
-                        style={{
-                            backgroundColor: '#4CAF50',
-                            color: '#fff',
-                            borderRadius: '15px',
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-                        }} onClick={handleOpenModal}>
-                        <PlusOutlined />
-                        <span>Registrar Especialista</span>
-                    </Button>
-                </div>
-                <RegisterEmployee
-                    visible={isModalVisible}
-                    onClose={handleCloseModal}
-                    onSave={handleSaveEmployee}  // Enviar datos al padre al guardar
-                    name={"specialists"}
+            
+            {/* Buscador */}
+            <div className="mb-4">
+                <Search
+                    placeholder="Buscar por ID, nombre, apellidos, especialidades o estado"
+                    onSearch={handleSearch}
+                    onChange={(e) => handleSearch(e.target.value)} // Para búsqueda en tiempo real
+                    style={{ width: 300 }}
+                />
+            </div>
+
+            <div className="flex justify-end mb-6">
+                <Button
+                    style={{
+                        backgroundColor: '#4CAF50',
+                        color: '#fff',
+                        borderRadius: '15px',
+                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    }}
+                    onClick={showModal}
+                >
+                    <PlusOutlined />
+                    <span>Registrar Especialista</span>
+                </Button>
+                <AddSpecialties
+                    visible={isAddSpecialtiesModalVisible}
+                    onClose={handleAddSpecialtiesModalClose}
+                    type={"create"}
+                    initialData={selectedSpecialist}
                 />
             </div>
             <Table
                 columns={columns}
-                dataSource={employees}
-                rowKey="empleado_id"
+                dataSource={filteredSpecialists} // Usar los datos filtrados
+                rowKey="especialista_id"
                 pagination={{ pageSize: 4, size: 'small' }}
             />
             <Modal
-                title="Eliminar Empleado"
+                title="Eliminar Especialista"
                 visible={deleteModalVisible}
                 onOk={handleDeleteConfirm}
                 onCancel={handleDeleteCancel}
             >
-                <p>¿Está seguro que desea eliminar a este empleado?</p>
+                <p>¿Está seguro que desea eliminar a este especialista?</p>
             </Modal>
-            {isDetailModalVisible && selectedEmployee && (
+            {isDetailModalVisible && selectedSpecialist && (
                 <PersonDetail
                     visible={isDetailModalVisible}
                     onClose={handleDetailModalClose}
-                    user={selectedEmployee}
+                    user={selectedSpecialist}
+                    type={'specialist'}
                 />
             )}
         </div>

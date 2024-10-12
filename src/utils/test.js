@@ -93,23 +93,72 @@ export const employeeData = [{
 
 const servicios = [
     {
-      id: 1,
-      titulo: 'Cirugía LASIK',
-      descripcion: 'Corrección visual mediante cirugía láser avanzada.',
-      imagen: 'https://example.com/img/cirugia-lasik.jpg',
+        id: 1,
+        titulo: 'Cirugía LASIK',
+        descripcion: 'Corrección visual mediante cirugía láser avanzada.',
+        imagen: 'https://example.com/img/cirugia-lasik.jpg',
     },
     {
-      id: 2,
-      titulo: 'Diagnóstico completo',
-      descripcion: 'Exámenes de visión precisos y personalizados para ti.',
-      imagen: 'https://example.com/img/diagnostico-completo.jpg',
+        id: 2,
+        titulo: 'Diagnóstico completo',
+        descripcion: 'Exámenes de visión precisos y personalizados para ti.',
+        imagen: 'https://example.com/img/diagnostico-completo.jpg',
     },
     {
-      id: 3,
-      titulo: 'Tratamiento de cataratas',
-      descripcion: 'Recupera tu visión con nuestras técnicas quirúrgicas.',
-      imagen: 'https://example.com/img/tratamiento-cataratas.jpg',
+        id: 3,
+        titulo: 'Tratamiento de cataratas',
+        descripcion: 'Recupera tu visión con nuestras técnicas quirúrgicas.',
+        imagen: 'https://example.com/img/tratamiento-cataratas.jpg',
     },
-  ];
-  
-  export default servicios;
+];
+
+export default servicios;
+
+//-----------------DATOS SIMULADOS 2do spint----------------------------
+export const especialistas = [
+    {
+        "especialista_id": "1",
+        "apellido_materno": "Martínez",
+        "apellido_paterno": "García",
+        "ci": "12345678",
+        "direccion": "Av. Siempre Viva 123",
+        "email": "martinez.garcia@example.com",
+        "especialidades": [
+            { "id": 1, "nombre": "Cardiología" },
+            { "id": 3, "nombre": "Neurología" }
+        ],
+        "estado": true,
+        "fecha_contratacion": "2023-05-10",
+        "fecha_nacimiento": "1985-08-15",
+        "genero": "masculino",
+        "nombre": "Juan Carlos",
+        "profesion": { "id": 1, "nombre": "Oftalmólogo" },
+        "rol": { "id": 23, "nombre": "Paciente" },
+        "telefono": "789456123"
+    },
+    {
+        "especialista_id": "2",
+        "apellido_materno": "Addac",
+        "apellido_paterno": "Dad",
+        "ci": "ad",
+        "direccion": "Dscds",
+        "email": "adc@gmail.com",
+        "especialidades": [
+            { "id": 4, "nombre": "Pediatría" }
+        ],
+        "estado": true,
+        "fecha_contratacion": "2024-10-07",
+        "fecha_nacimiento": "2024-10-06",
+        "genero": "femenino",
+        "nombre": "Wdc",
+        "profesion": { "id": 4, "nombre": "Recepcionista" },
+        "rol": { "id": 10, "nombre": "Empleado" },
+        "telefono": "123"
+    }
+];
+export const getAllEspecialidades = [
+    { id: 1, nombre: 'Cardiología', tiempo_estimado: '20' },
+    { id: 2, nombre: 'Dermatología', tiempo_estimado: '20' },
+    { id: 3, nombre: 'Neurología', tiempo_estimado: '20' },
+    { id: 4, nombre: 'Pediatría', tiempo_estimado: '20' }
+];
