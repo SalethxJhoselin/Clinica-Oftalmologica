@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../components/Styles/SeleccionarPago.css'; // Importar el archivo CSS
+
 
 const SeleccionarPago = () => {
   const navigate = useNavigate();
