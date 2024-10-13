@@ -16,6 +16,7 @@ import ManageEspeciality from '../components/views/registro/ManageEspeciality';
 import ManagePatients from '../components/views/atencionesMedicas/ManagePatients';
 import BookAppoimtment from '../components/views/atencionesMedicas/BookAppoimtment';
 import ManageSpecialists from '../components/views/personal/ManageSpecialists';
+import ManageBitacoraData from '../components/views/administrador/ManageBitacoraData';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -52,6 +53,7 @@ const MyRoutes = () => {
                 <Route path="/admin/specialties" element={<ManageEspeciality/>} />
                 <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
                 <Route path="/personnel/manageSpecialists" element={<ManageSpecialists/>} />
+                <Route path="/admin/access-log" element={<ManageBitacoraData/>} />
                 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}

@@ -268,3 +268,51 @@ export const updatePatient = async (patientId, updatedData) => {
         throw error;
     }
 };
+
+
+const obtenerIP = async () => {
+    try {
+      const respuesta = await fetch('https://api.ipify.org?format=json');
+      const data = await respuesta.json();
+      return data.ip;
+    } catch (error) {
+      console.error("Error al obtener la IP:", error);
+      return null;
+    }
+  };
+
+  export const registrarVisita = async (usuarioId, pagina, accion, rol) => {
+    try {
+      const ip = await obtenerIP();  // Aquí obtienes la IP desde otra función
+      const fecha = new Date().toISOString();  // Formato estándar de fecha
+      const hora = new Date().toLocaleTimeString(); // Obtiene la hora actual en formato legible
+  
+      const bitacora = {
+        usuarioId,     // ID del usuario actual
+        pagina,        // Página visitada
+        ipOrigen: ip,  // IP desde la que se hace la solicitud
+        accion,        // Acción realizada por el usuario (ej. "Visitó la página de usuarios")
+        rol,           // Rol del usuario (ej. "Administrador")
+        fecha,         // Fecha actual
+        hora           // Hora actual
+      };
+  
+      await api.post('/bitacora/registrar-visita', bitacora);  // Hacer la solicitud al backend para registrar la visita
+      console.log('Visita registrada en la bitácora');
+    } catch (error) {
+      console.error('Error al registrar la visita en la bitácora:', error);
+    }
+  };
+  
+  export const getBitacoraData = async () => {
+    try {
+      const response = await api.get('/bitacora/listar');
+      return response.data;  // Aquí debería devolver los registros con los campos adecuados
+    } catch (error) {
+      console.error('Error al obtener los datos de la bitácora:', error);
+      throw error;
+    }
+  };
+
+
+  
