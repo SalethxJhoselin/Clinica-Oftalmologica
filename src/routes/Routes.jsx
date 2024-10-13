@@ -13,9 +13,10 @@ import ManageUsuarios from '../components/views/administrador/ManageUsuarios';
 import Home from '../components/pages/Home';
 import ManageEspeciality from '../components/views/registro/ManageEspeciality';
 import ManagePatients from '../components/views/atencionesMedicas/ManagePatients';
-import BookAppoimtment from '../components/views/atencionesMedicas/BookAppoimtment';
 import ManageSpecialists from '../components/views/personal/ManageSpecialists';
 import ProgrammingCalendar from '../components/views/configuracion/ProgrammingCalendar';
+import BookAppointmentsAdm from '../components/views/atencionesMedicas/BookAppointmentsAdm';
+
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -38,7 +39,6 @@ const MyRoutes = () => {
             )}
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/reservarCita" element={<BookAppoimtment />} />
             {/*Protected Routes */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/perfil" element={<Perfil />} />
@@ -53,6 +53,7 @@ const MyRoutes = () => {
                 <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
                 <Route path="/personnel/manageSpecialists" element={<ManageSpecialists/>} />
                 <Route path="/settings/programmingCalendar" element={<ProgrammingCalendar/>} />
+                <Route path="/medical-care/bookAppointmentsAdm" element={<BookAppointmentsAdm/>} />
                 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}

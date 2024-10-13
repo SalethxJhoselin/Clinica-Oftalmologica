@@ -1,52 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // Importación necesaria para el calendario
-import { Table, Input, Button } from 'antd'; // Importaciones necesarias de Ant Design
-import ProgramacionModal from './ProgramacionModal'; // Importar el componente de modal
+import { Table, Input, Button } from 'antd';
+import ProgramacionModal from './ProgramacionModal';
 import { getAllSpecialists } from '../../../api/apiService';
+import CustomCalendar from './CustomCalemdar';
+import { specialistsSchedule } from '../../../utils/test';
+
 
 const ProgrammingCalendar = () => {
   const [specialists, setSpecialists] = useState([]);
-  const [selectedPerson, setSelectedPerson] = useState(null); // Guarda el especialista seleccionado
-  const [programacion, setProgramacion] = useState([]); // Programación de fechas con ids de especialista
-  const [selectedProgramming, setSelectedProgramming] = useState({ id: null, fechas: [] }); // ID y fechas seleccionadas del especialista actual
+  const [specialistSchedule, setSpecialistSchedule] = useState(specialistsSchedule );
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [programacion, setProgramacion] = useState([]);
+  const [selectedProgramming, setSelectedProgramming] = useState({ id: null, fechas: [] });
   const [value, setValue] = useState(new Date());
   const [search, setSearch] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para mostrar/ocultar el modal
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fetchSpecialists = async () => {
     try {
       const response = await getAllSpecialists();
-      console.log("response dentro de canlenadario",response);
       setSpecialists(response);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchSpecialists();
   }, []);
 
-  // Maneja la selección de un especialista.
   const handleSelectPerson = (person) => {
     setSelectedPerson(person);
-    setSelectedProgramming({ id: person.id, fechas: [] }); 
+  
+    // Encuentra las fechas del especialista seleccionado
+    const schedule = specialistSchedule.find(s => s.id === person.id);
+  
+    // Si se encuentran las fechas, las asignamos, si no, las dejamos vacías
+    setSelectedProgramming({
+      id: person.id,
+      fechas: schedule ? schedule.fechas.map(f => new Date(f)) : []
+    });
   };
 
-
-  // Clase personalizada para resaltar las fechas con eventos programados.
   const tileClassName = ({ date, view }) => {
     if (view === 'month') {
-      const isSelected = selectedProgramming.fechas.find(
+      const isSelected = selectedProgramming.fechas.some(
         (selectedDate) => selectedDate.toDateString() === date.toDateString()
       );
-
-      return isSelected ? 'highlight-selected' : ''; // Resaltar las fechas seleccionadas
+      return isSelected
+        ? 'bg-blue-50  text-black-900 rounded-full' // Clases de Tailwind para el estilo seleccionado
+        : '';
     }
   };
 
-  // Manejador para seleccionar múltiples días.
   const handleDayClick = (date) => {
     const isAlreadySelected = selectedProgramming.fechas.find(
       (selectedDate) => selectedDate.toDateString() === date.toDateString()
@@ -71,14 +77,12 @@ const ProgrammingCalendar = () => {
     console.log('Programación Seleccionada:', { id: selectedProgramming.id, fechas: updatedFechas });
   };
 
-  // Filtros para la búsqueda en la lista de especialistas.
   const filteredEspecialistas = specialists.filter((especialista) =>
     especialista.usuario.nombre.toLowerCase().includes(search.toLowerCase()) ||
     especialista.usuario.apellido_paterno.toLowerCase().includes(search.toLowerCase()) ||
     especialista.usuario.apellido_materno.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Configuración de columnas para la tabla de especialistas.
   const columns = [
     {
       title: 'Nombre Completo',
@@ -88,12 +92,10 @@ const ProgrammingCalendar = () => {
     },
   ];
 
-  // Manejador para mostrar el modal.
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  // Manejador para ocultar el modal.
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -101,12 +103,11 @@ const ProgrammingCalendar = () => {
   return (
     <div className="flex flex-col items-center p-6 min-h-screen max-w-screen-lg mx-auto">
       <div className="flex flex-row w-full">
-        {/* Barra lateral izquierda con lista de especialistas */}
         <div className="w-1/4 bg-white shadow-lg rounded-lg p-4 mr-4">
           <Button
             type="primary"
             className="w-full mb-3"
-            onClick={showModal} // Muestra el modal cuando se hace clic en el botón
+            onClick={showModal}
           >
             + Agregar Programación
           </Button>
@@ -121,7 +122,7 @@ const ProgrammingCalendar = () => {
             columns={columns}
             pagination={false}
             rowClassName={(record) =>
-              selectedPerson?.id === record.id ? 'bg-green-100' : ''
+              selectedPerson?.id === record.id ? 'bg-green' : ''
             }
             onRow={(record) => ({
               onClick: () => handleSelectPerson(record),
@@ -130,16 +131,13 @@ const ProgrammingCalendar = () => {
           />
         </div>
 
-        {/* Calendario */}
+        {/* Componente de calendario */}
         <div className="w-3/4 bg-white shadow-lg rounded-lg p-4">
-          <h3 className="text-center mb-4 text-xl font-bold">{`${value.toLocaleString('default', {
-            month: 'long',
-          })} de ${value.getFullYear()}`}</h3>
-          <Calendar
-            onChange={setValue}
+          <CustomCalendar
             value={value}
+            onChange={setValue}
             tileClassName={tileClassName}
-            onClickDay={handleDayClick} // Manejador del clic en un día.
+            onClickDay={handleDayClick}
           />
         </div>
       </div>
