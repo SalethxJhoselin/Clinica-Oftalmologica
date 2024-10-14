@@ -241,6 +241,7 @@ export const specialistsSchedules = [
             "id": 1,
             "nombre": "Consulta General",
             "descripcion": "Consulta médica general",
+            "precio": "30", // Precio agregado
             "especialidad": {
               "id": 4,
               "nombre": "Medicina General",
@@ -248,8 +249,8 @@ export const specialistsSchedules = [
             }
           },
           "fechas": [
-            "2024-10-13",
-            "2024-10-14"
+            "2024-10-15",
+            "2024-10-16"
           ]
         },
         {
@@ -259,6 +260,7 @@ export const specialistsSchedules = [
             "id": 2,
             "nombre": "Medida de Lentes",
             "descripcion": "Evaluación para lentes",
+            "precio": "50", // Precio agregado
             "especialidad": {
               "id": 5,
               "nombre": "Optometría",
@@ -286,6 +288,7 @@ export const specialistsSchedules = [
             "id": 3,
             "nombre": "Consulta Pediátrica",
             "descripcion": "Consulta médica para niños",
+            "precio": "40", // Precio agregado
             "especialidad": {
               "id": 6,
               "nombre": "Pediatría",
@@ -303,6 +306,7 @@ export const specialistsSchedules = [
             "id": 4,
             "nombre": "Control de Crecimiento",
             "descripcion": "Control del crecimiento del niño",
+            "precio": "35", // Precio agregado
             "especialidad": {
               "id": 6,
               "nombre": "Pediatría",
@@ -329,6 +333,7 @@ export const specialistsSchedules = [
             "id": 5,
             "nombre": "Limpieza Dental",
             "descripcion": "Limpieza profunda dental",
+            "precio": "50", // Precio agregado
             "especialidad": {
               "id": 7,
               "nombre": "Odontología",
@@ -346,6 +351,7 @@ export const specialistsSchedules = [
             "id": 6,
             "nombre": "Extracción Dental",
             "descripcion": "Extracción de piezas dentales",
+            "precio": "100", // Precio agregado
             "especialidad": {
               "id": 7,
               "nombre": "Odontología",
@@ -360,3 +366,47 @@ export const specialistsSchedules = [
     }
   ];
   
+
+  ///-----estructura de cupos para guardar en la base de datos(aun no la estoy usando)---------------------------------------
+  export const simulatedSlots = [
+    {
+      key: "08:00", // Hora de inicio
+      numero: 1, // Número del cupo
+      paciente: "", // Nombre del paciente (vacío al no haber sido reservado)
+      estado: "Disponible", // Estado inicial del cupo
+      horaInicio: "08:00", // Hora de inicio del cupo
+      horaFinal: "08:30", // Hora final del cupo (depende del tiempo estimado)
+      accion: "Reservar", // Texto del botón
+      isReserved: false // Indicador de si está reservado
+    },
+    {
+      key: "08:30", // Hora de inicio del segundo cupo
+      numero: 2,
+      paciente: "",
+      estado: "Disponible",
+      horaInicio: "08:30",
+      horaFinal: "09:00",
+      accion: "Reservar",
+      isReserved: false
+    },
+    {
+      key: "09:00", // Hora de inicio del tercer cupo
+      numero: 3,
+      paciente: "",
+      estado: "Disponible",
+      horaInicio: "09:00",
+      horaFinal: "09:30",
+      accion: "Reservar",
+      isReserved: false
+    },
+    {
+      key: "09:30", // Hora de inicio del cuarto cupo
+      numero: 4,
+      paciente: "",
+      estado: "Disponible",
+      horaInicio: "09:30",
+      horaFinal: "10:00",
+      accion: "Reservar",
+      isReserved: false
+    }
+  ];
