@@ -18,6 +18,8 @@ import BookAppoimtment from '../components/views/atencionesMedicas/BookAppoimtme
 import ManageSpecialists from '../components/views/personal/ManageSpecialists';
 import ManageBitacoraData from '../components/views/administrador/ManageBitacoraData';
 
+import PagoQR from '../components/views/pagos/PagoQR';
+import PagoStripe from '../components/views/pagos/PagoStripe';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -54,6 +56,9 @@ const MyRoutes = () => {
                 <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
                 <Route path="/personnel/manageSpecialists" element={<ManageSpecialists/>} />
                 <Route path="/admin/access-log" element={<ManageBitacoraData/>} />
+
+                <Route path="/pago-qr" element={<PagoQR />} />
+                <Route path="/pago-stripe" element={<PagoStripe />} />
                 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
