@@ -146,3 +146,74 @@ body {
 .highlight-green .react-calendar__tile {
   background: #ccffcc;
 }
+/* Estilo base de las celdas del calendario */
+.react-calendar__tile {
+  padding: 1.25rem 1.5rem; /* Tamaño base */
+  font-size: 1.25rem; /* Texto base */
+  border-radius: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  /* Reducir tamaño de celdas en pantallas medianas */
+  .react-calendar__tile {
+    padding: 1rem 1.25rem;
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Reducir aún más en pantallas pequeñas */
+  .react-calendar__tile {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Tamaño más pequeño en pantallas móviles */
+  .react-calendar__tile {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Personalizar el calendario en sí para que se reduzca en pantallas pequeñas */
+.custom-calendar {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+/* Estilos personalizados para el calendario */
+
+.specialist-date .react-calendar__tile {
+  font-size: 0.75rem; /* Reducir el tamaño de la fecha */
+  color: #1e3a8a; /* Color azul más oscuro */
+}
+
+.specialist-date .react-calendar__tile .text-xs {
+  background-color: #e0f7fa; /* Fondo suave para el texto de las horas */
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.specialist-date {
+  position: relative;
+}
+
+.specialist-date .react-calendar__tile-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.specialist-date .react-calendar__tile-content span {
+  font-size: 0.8rem; /* Reducir el tamaño del texto de las horas */
+  color: #333; /* Color más agradable para el texto */
+  background-color: #f0f9ff; /* Fondo suave para los horarios */
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}

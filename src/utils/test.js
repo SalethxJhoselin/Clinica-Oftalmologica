@@ -162,251 +162,167 @@ export const getAllEspecialidades = [
     { id: 3, nombre: 'Neurología', tiempo_estimado: '20' },
     { id: 4, nombre: 'Pediatría', tiempo_estimado: '20' }
 ];
-//----------No se si lo estoy ocupando en algun componente----------------------
-export const specialistsSchedule = [
+
+export const specialistsSchedules = [
     {
         "id": 14,
-        "detalle": "ad",
-        "horaFinal": {
-            "locale": "en",
-            "date": "Sat Oct 12 2024 14:00:00 GMT-0600 (hora estándar central)",
-            "year": 2024,
-            "month": 9,
-            "day": 12,
-            "hour": 14,
-            "minute": 0,
-            "second": 0
-        },
-        "horaInicio": {
-            "locale": "en",
-            "date": "Sat Oct 12 2024 04:00:00 GMT-0600 (hora estándar central)",
-            "year": 2024,
-            "month": 9,
-            "day": 12,
-            "hour": 4,
-            "minute": 0,
-            "second": 0
-        },
-        "servicio": "tratamiento",
-        "fechas": [
-            "Wed Oct 23 2024 00:00:00 GMT-0600 (hora estándar central)",
-            "Thu Oct 24 2024 00:00:00 GMT-0600 (hora estándar central)",
-            "Fri Oct 25 2024 00:00:00 GMT-0600 (hora estándar central)"
+        "nombre": "Salethsita",
+        "apellido_paterno": "Mamani",
+        "apellido_materno": "Huanca",
+        "detalle": "adadbvdnhv",
+        "horarios": [
+            {
+                "horaInicio": "04:00:00",
+                "horaFinal": "18:00:00",
+                "servicio": {
+                    "id": 1,
+                    "nombre": "Consulta General",
+                    "descripcion": "Consulta médica general",
+                    "precio": "30", 
+                    "especialidad": {
+                        "id": 4,
+                        "nombre": "Medicina General",
+                        "tiempo_estimado": "30"
+                    }
+                },
+                "fechas": [
+                    "2024-10-13",
+                    "2024-10-15",
+                    "2024-10-16"
+                ]
+            },
+            {
+                "horaInicio": "24:00:00",
+                "horaFinal": "06:00:00",
+                "servicio": {
+                    "id": 1,
+                    "nombre": "Consulta General",
+                    "descripcion": "Consulta médica general",
+                    "precio": "30", 
+                    "especialidad": {
+                        "id": 4,
+                        "nombre": "Medicina General",
+                        "tiempo_estimado": "30"
+                    }
+                },
+                "fechas": [
+                    "2024-10-13",
+                    "2024-10-15",
+                    "2024-10-16"
+                ]
+            },
+            {
+                "horaInicio": "18:00:00",
+                "horaFinal": "22:00:00",
+                "servicio": {
+                    "id": 2,
+                    "nombre": "Medida de Lentes",
+                    "descripcion": "Evaluación para lentes",
+                    "precio": "50", 
+                    "especialidad": {
+                        "id": 5,
+                        "nombre": "Optometría",
+                        "tiempo_estimado": "45"
+                    }
+                },
+                "fechas": [
+                    "2024-10-13",
+                    "2024-10-20"
+                ]
+            }
         ]
     },
     {
         "id": 16,
-        "detalle": "ad",
-        "horaFinal": {
-            "locale": "en",
-            "date": "Sat Oct 12 2024 18:00:00 GMT-0600 (hora estándar central)",
-            "year": 2024,
-            "month": 9,
-            "day": 12,
-            "hour": 14,
-            "minute": 0,
-            "second": 0
-        },
-        "horaInicio": {
-            "locale": "en",
-            "date": "Sat Oct 12 2024 20:00:00 GMT-0600 (hora estándar central)",
-            "year": 2024,
-            "month": 9,
-            "day": 12,
-            "hour": 4,
-            "minute": 0,
-            "second": 0
-        },
-        "servicio": "dad",
-        "fechas": [
-            "Thu Oct 24 2024 00:00:00 GMT-0600 (hora estándar central)",
-            "Fri Oct 25 2024 00:00:00 GMT-0600 (hora estándar central)"
+        "nombre": "lupita",
+        "apellido_paterno": "sanchez",
+        "apellido_materno": "mendez",
+        "detalle": "consulta pediátrica",
+        "horarios": [
+            {
+                "horaInicio": "09:00:00",
+                "horaFinal": "12:00:00",
+                "servicio": {
+                    "id": 3,
+                    "nombre": "Consulta Pediátrica",
+                    "descripcion": "Consulta médica para niños",
+                    "precio": "40", // Precio agregado
+                    "especialidad": {
+                        "id": 6,
+                        "nombre": "Pediatría",
+                        "tiempo_estimado": "40"
+                    }
+                },
+                "fechas": [
+                    "2024-10-13"
+                ]
+            },
+            {
+                "horaInicio": "14:00:00",
+                "horaFinal": "18:00:00",
+                "servicio": {
+                    "id": 4,
+                    "nombre": "Control de Crecimiento",
+                    "descripcion": "Control del crecimiento del niño",
+                    "precio": "35", // Precio agregado
+                    "especialidad": {
+                        "id": 6,
+                        "nombre": "Pediatría",
+                        "tiempo_estimado": "35"
+                    }
+                },
+                "fechas": [
+                    "2024-10-14",
+                    "2024-10-15",
+                    "2024-10-16",
+                    "2024-10-17"
+                ]
+            }
         ]
     }
+];
 
-]
 
-export const specialistsSchedules = [
+///-----estructura de cupos para guardar en la base de datos(aun no la estoy usando)---------------------------------------
+export const simulatedSlots = [
     {
-      "id": 16,
-      "nombre": "Juanito",
-      "apellido_paterno": "Castro",
-      "apellido_materno": "Vargas",
-      "detalle": "adadbvdnhv",
-      "horarios": [
-        {
-          "horaInicio": "04:00:00",
-          "horaFinal": "18:00:00",
-          "servicio": {
-            "id": 1,
-            "nombre": "Consulta General",
-            "descripcion": "Consulta médica general",
-            "precio": "30", // Precio agregado
-            "especialidad": {
-              "id": 4,
-              "nombre": "Medicina General",
-              "tiempo_estimado": "30"
-            }
-          },
-          "fechas": [
-            "2024-10-15",
-            "2024-10-16"
-          ]
-        },
-        {
-          "horaInicio": "18:00:00",
-          "horaFinal": "22:00:00",
-          "servicio": {
-            "id": 2,
-            "nombre": "Medida de Lentes",
-            "descripcion": "Evaluación para lentes",
-            "precio": "50", // Precio agregado
-            "especialidad": {
-              "id": 5,
-              "nombre": "Optometría",
-              "tiempo_estimado": "45"
-            }
-          },
-          "fechas": [
-            "2024-10-13",
-            "2024-10-20"
-          ]
-        }
-      ]
+        key: "08:00", // Hora de inicio
+        numero: 1, // Número del cupo
+        paciente: "", // Nombre del paciente (vacío al no haber sido reservado)
+        estado: "Disponible", // Estado inicial del cupo
+        horaInicio: "08:00", // Hora de inicio del cupo
+        horaFinal: "08:30", // Hora final del cupo (depende del tiempo estimado)
+        accion: "Reservar", // Texto del botón
+        isReserved: false // Indicador de si está reservado
     },
     {
-      "id": 17,
-      "nombre": "Lucia",
-      "apellido_paterno": "Pérez",
-      "apellido_materno": "Martínez",
-      "detalle": "consulta pediátrica",
-      "horarios": [
-        {
-          "horaInicio": "09:00:00",
-          "horaFinal": "12:00:00",
-          "servicio": {
-            "id": 3,
-            "nombre": "Consulta Pediátrica",
-            "descripcion": "Consulta médica para niños",
-            "precio": "40", // Precio agregado
-            "especialidad": {
-              "id": 6,
-              "nombre": "Pediatría",
-              "tiempo_estimado": "40"
-            }
-          },
-          "fechas": [
-            "2024-10-13"
-          ]
-        },
-        {
-          "horaInicio": "14:00:00",
-          "horaFinal": "18:00:00",
-          "servicio": {
-            "id": 4,
-            "nombre": "Control de Crecimiento",
-            "descripcion": "Control del crecimiento del niño",
-            "precio": "35", // Precio agregado
-            "especialidad": {
-              "id": 6,
-              "nombre": "Pediatría",
-              "tiempo_estimado": "35"
-            }
-          },
-          "fechas": [
-            "2024-10-14"
-          ]
-        }
-      ]
+        key: "08:30", // Hora de inicio del segundo cupo
+        numero: 2,
+        paciente: "",
+        estado: "Disponible",
+        horaInicio: "08:30",
+        horaFinal: "09:00",
+        accion: "Reservar",
+        isReserved: false
     },
     {
-      "id": 18,
-      "nombre": "Carlos",
-      "apellido_paterno": "Rodríguez",
-      "apellido_materno": "López",
-      "detalle": "consulta odontológica",
-      "horarios": [
-        {
-          "horaInicio": "08:00:00",
-          "horaFinal": "11:00:00",
-          "servicio": {
-            "id": 5,
-            "nombre": "Limpieza Dental",
-            "descripcion": "Limpieza profunda dental",
-            "precio": "50", // Precio agregado
-            "especialidad": {
-              "id": 7,
-              "nombre": "Odontología",
-              "tiempo_estimado": "60"
-            }
-          },
-          "fechas": [
-            "2024-10-15"
-          ]
-        },
-        {
-          "horaInicio": "15:00:00",
-          "horaFinal": "17:00:00",
-          "servicio": {
-            "id": 6,
-            "nombre": "Extracción Dental",
-            "descripcion": "Extracción de piezas dentales",
-            "precio": "100", // Precio agregado
-            "especialidad": {
-              "id": 7,
-              "nombre": "Odontología",
-              "tiempo_estimado": "90"
-            }
-          },
-          "fechas": [
-            "2024-10-16"
-          ]
-        }
-      ]
+        key: "09:00", // Hora de inicio del tercer cupo
+        numero: 3,
+        paciente: "",
+        estado: "Disponible",
+        horaInicio: "09:00",
+        horaFinal: "09:30",
+        accion: "Reservar",
+        isReserved: false
+    },
+    {
+        key: "09:30", // Hora de inicio del cuarto cupo
+        numero: 4,
+        paciente: "",
+        estado: "Disponible",
+        horaInicio: "09:30",
+        horaFinal: "10:00",
+        accion: "Reservar",
+        isReserved: false
     }
-  ];
-  
-
-  ///-----estructura de cupos para guardar en la base de datos(aun no la estoy usando)---------------------------------------
-  export const simulatedSlots = [
-    {
-      key: "08:00", // Hora de inicio
-      numero: 1, // Número del cupo
-      paciente: "", // Nombre del paciente (vacío al no haber sido reservado)
-      estado: "Disponible", // Estado inicial del cupo
-      horaInicio: "08:00", // Hora de inicio del cupo
-      horaFinal: "08:30", // Hora final del cupo (depende del tiempo estimado)
-      accion: "Reservar", // Texto del botón
-      isReserved: false // Indicador de si está reservado
-    },
-    {
-      key: "08:30", // Hora de inicio del segundo cupo
-      numero: 2,
-      paciente: "",
-      estado: "Disponible",
-      horaInicio: "08:30",
-      horaFinal: "09:00",
-      accion: "Reservar",
-      isReserved: false
-    },
-    {
-      key: "09:00", // Hora de inicio del tercer cupo
-      numero: 3,
-      paciente: "",
-      estado: "Disponible",
-      horaInicio: "09:00",
-      horaFinal: "09:30",
-      accion: "Reservar",
-      isReserved: false
-    },
-    {
-      key: "09:30", // Hora de inicio del cuarto cupo
-      numero: 4,
-      paciente: "",
-      estado: "Disponible",
-      horaInicio: "09:30",
-      horaFinal: "10:00",
-      accion: "Reservar",
-      isReserved: false
-    }
-  ];
+];

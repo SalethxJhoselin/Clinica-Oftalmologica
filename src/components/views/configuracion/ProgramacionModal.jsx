@@ -1,22 +1,49 @@
-import React from 'react';
-import { Modal, Select, TimePicker, Input, Form, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Modal, Select, TimePicker, Input, Form, Button, message } from 'antd';
+import dayjs from 'dayjs';
+import { getAllServices, createSpecialistProgramming } from '../../../api/apiService';
 
 const { Option } = Select;
 
-const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, selectedProgramming }) => {
-  const [form] = Form.useForm(); // Para manejar el formulario
+const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, additionalSelectedDates }) => {
+  const [form] = Form.useForm(); 
+  const [services, setServices] = useState([]); 
+ 
+  const fetchServices = async () => {
+    try {
+      const response = await getAllServices();
+      setServices(response); 
+    } catch (error) {
+      console.error('Error al obtener los servicios:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices(); 
+  }, []);
 
   const handleOk = async () => {
-    const values = await form.validateFields();
-    console.log(selectedProgramming);
-    console.log("selectedProgramming antes snjv");
-    const dataToSend = {
-      programming: selectedProgramming,
-      formData: values,
-    };
-    console.log('Datos estructurados para enviar al backend:', dataToSend);
-    form.resetFields();
-    onCancel();
+    try {
+      const values = await form.validateFields();
+      const selectedService = services.find(service => service.id === values.servicio);
+      const horaInicioFormatted = values.horaInicio.format('HH:mm:ss');
+      const horaFinFormatted = values.horaFinal.format('HH:mm:ss');
+      const dataToSend = {
+        empleado_id: selectedPerson.id,
+        fechas: additionalSelectedDates,
+        hora_inicio: horaInicioFormatted,
+        hora_fin: horaFinFormatted,
+        servicio_id: values.servicio,
+        especialidad_id: selectedService ? selectedService.id_especialidad : null, // Agregamos especialidad_id
+      };
+
+      const response = await createSpecialistProgramming(dataToSend);
+      form.resetFields();
+      onCancel();
+      console.log('Datos enviados al backend:', dataToSend, 'Respuesta:', response);
+    } catch (error) {
+      console.error('Error al enviar la programación:', error);
+    }
   };
 
   return (
@@ -40,12 +67,13 @@ const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, selectedProgra
           rules={[{ required: true, message: 'Por favor seleccione un servicio' }]}
         >
           <Select placeholder="Seleccione un servicio">
-            <Option value="consulta">Consulta</Option>
-            <Option value="tratamiento">Tratamiento</Option>
-            <Option value="cirugia">Cirugía</Option>
+            {services.map(service => (
+              <Option key={service.id} value={service.id}>
+                {service.nombre}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
-
         <Form.Item
           name="horaInicio"
           label="Hora Inicio"
@@ -53,21 +81,12 @@ const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, selectedProgra
         >
           <TimePicker format="HH:mm" style={{ width: '100%' }} />
         </Form.Item>
-
         <Form.Item
           name="horaFinal"
           label="Hora Final"
           rules={[{ required: true, message: 'Por favor seleccione la hora final' }]}
         >
           <TimePicker format="HH:mm" style={{ width: '100%' }} />
-        </Form.Item>
-
-        <Form.Item
-          name="detalle"
-          label="Detalle"
-          rules={[{ required: true, message: 'Por favor ingrese un detalle' }]}
-        >
-          <Input.TextArea rows={4} placeholder="Ingrese detalles adicionales de la programación" />
         </Form.Item>
       </Form>
     </Modal>

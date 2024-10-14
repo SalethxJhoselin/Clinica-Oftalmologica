@@ -1,96 +1,112 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, Button } from 'antd';
+import { Button } from 'antd';
 import ProgramacionModal from './ProgramacionModal';
-import { getAllSpecialists } from '../../../api/apiService';
-import CustomCalendar from './CustomCalemdar';
-import { specialistsSchedule } from '../../../utils/test';
+import CustomCalendar from './CustomCalendar';
+import { specialistsSchedules } from '../../../utils/test';
+import SpecialistTableSearch from './SpecialistTableSearch'; 
 
+const formatDate = (date) => {
+  return date.toISOString().split('T')[0];
+};
+
+const formatTime = (time) => {
+  return time.slice(0, 5); 
+};
 
 const ProgrammingCalendar = () => {
-  const [specialists, setSpecialists] = useState([]);
-  const [specialistSchedule, setSpecialistSchedule] = useState(specialistsSchedule );
+  const [specialistSchedule, setSpecialistSchedule] = useState(specialistsSchedules);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [programacion, setProgramacion] = useState([]);
   const [selectedProgramming, setSelectedProgramming] = useState({ id: null, fechas: [] });
+  const [allDatesWithTimes, setAllDatesWithTimes] = useState([]); // Guardar fechas con horas
+  const [additionalSelectedDates, setAdditionalSelectedDates] = useState([]); // Guardar nuevas fechas seleccionadas
   const [value, setValue] = useState(new Date());
-  const [search, setSearch] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const fetchSpecialists = async () => {
-    try {
-      const response = await getAllSpecialists();
-      setSpecialists(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSpecialists();
-  }, []);
 
   const handleSelectPerson = (person) => {
     setSelectedPerson(person);
-  
-    // Encuentra las fechas del especialista seleccionado
+    setAdditionalSelectedDates([]);
     const schedule = specialistSchedule.find(s => s.id === person.id);
-  
-    // Si se encuentran las fechas, las asignamos, si no, las dejamos vacías
-    setSelectedProgramming({
-      id: person.id,
-      fechas: schedule ? schedule.fechas.map(f => new Date(f)) : []
-    });
-  };
-
-  const tileClassName = ({ date, view }) => {
-    if (view === 'month') {
-      const isSelected = selectedProgramming.fechas.some(
-        (selectedDate) => selectedDate.toDateString() === date.toDateString()
-      );
-      return isSelected
-        ? 'bg-blue-50  text-black-900 rounded-full' // Clases de Tailwind para el estilo seleccionado
-        : '';
+    if (schedule) {
+      const datesWithTimes = {};
+      schedule.horarios.forEach(horario => {
+        horario.fechas.forEach(fecha => {
+          if (!datesWithTimes[fecha]) {
+            datesWithTimes[fecha] = [];
+          }
+          datesWithTimes[fecha].push({
+            horaInicio: formatTime(horario.horaInicio),
+            horaFinal: formatTime(horario.horaFinal) 
+          });
+        });
+      });
+      const datesWithTimesArray = Object.entries(datesWithTimes).map(([fecha, horarios]) => ({
+        fecha,
+        horarios
+      }));
+      console.log('Fechas y horarios del especialista seleccionado:', datesWithTimesArray);
+      setAllDatesWithTimes(datesWithTimesArray); 
+      setSelectedProgramming({
+        id: person.id,
+        fechas: datesWithTimesArray.map(item => item.fecha) 
+      });
+    } else {
+      console.log('No se encontró la programación para el especialista seleccionado.');
+      setSelectedProgramming({
+        id: person.id,
+        fechas: []
+      });
+      setAllDatesWithTimes([]); 
     }
   };
 
   const handleDayClick = (date) => {
-    const isAlreadySelected = selectedProgramming.fechas.find(
-      (selectedDate) => selectedDate.toDateString() === date.toDateString()
-    );
-
-    let updatedFechas;
+    const formattedDate = formatDate(date);
+    const isAlreadySelected = additionalSelectedDates.includes(formattedDate);
+    let updatedDates;
     if (isAlreadySelected) {
-      updatedFechas = selectedProgramming.fechas.filter(
-        (selectedDate) => selectedDate.toDateString() !== date.toDateString()
-      );
+      updatedDates = additionalSelectedDates.filter(selectedDate => selectedDate !== formattedDate);
     } else {
-      updatedFechas = [...selectedProgramming.fechas, date];
+      updatedDates = [...additionalSelectedDates, formattedDate];
     }
-
-    setSelectedProgramming({ ...selectedProgramming, fechas: updatedFechas });
-
-    const updatedProgramacion = programacion.filter(
-      (p) => p.id !== selectedProgramming.id
-    );
-    setProgramacion([...updatedProgramacion, { id: selectedProgramming.id, fechas: updatedFechas }]);
-
-    console.log('Programación Seleccionada:', { id: selectedProgramming.id, fechas: updatedFechas });
+    setAdditionalSelectedDates(updatedDates);
+    console.log('Fechas adicionales seleccionadas:', updatedDates);
   };
 
-  const filteredEspecialistas = specialists.filter((especialista) =>
-    especialista.usuario.nombre.toLowerCase().includes(search.toLowerCase()) ||
-    especialista.usuario.apellido_paterno.toLowerCase().includes(search.toLowerCase()) ||
-    especialista.usuario.apellido_materno.toLowerCase().includes(search.toLowerCase())
-  );
+  const tileClassName = ({ date, view }) => {
+    if (view === 'month') {
+      const formattedDate = formatDate(date);
+      const isSpecialistSelected = selectedProgramming.fechas.includes(formattedDate);
+      const isAdditionalSelected = additionalSelectedDates.includes(formattedDate);
+      if (isSpecialistSelected && isAdditionalSelected) {
+        return 'bg-green-500 text-black-900 rounded-full';
+      } else if (isSpecialistSelected) {
+        return 'bg-blue-50 text-black-900 rounded-full specialist-date'; // Aplicamos clase personalizada
+      } else if (isAdditionalSelected) {
+        return 'bg-green-200 text-black-900 rounded-full';
+      } else {
+        return ''; 
+      }
+    }
+  };
 
-  const columns = [
-    {
-      title: 'Nombre Completo',
-      dataIndex: 'nombreCompleto',
-      key: 'nombreCompleto',
-      render: (text, record) => `${record.usuario.nombre} ${record.usuario.apellido_paterno} ${record.usuario.apellido_materno}`,
-    },
-  ];
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      const formattedDate = formatDate(date);
+      const dateWithTime = allDatesWithTimes.find(item => item.fecha === formattedDate);
+      if (dateWithTime) {
+        return (
+          <div className="flex flex-col justify-center items-center h-full">
+            {dateWithTime.horarios.map((horario, index) => (
+              <span key={index} className="text-xs text-gray-500 font-bold">
+                {horario.horaInicio}-{horario.horaFinal}
+              </span>
+            ))}
+          </div>
+        );
+      }
+    }
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -102,52 +118,40 @@ const ProgrammingCalendar = () => {
 
   return (
     <div className="flex flex-col items-center p-6 min-h-screen max-w-screen-lg mx-auto">
-      <div className="flex flex-row w-full">
-        <div className="w-1/4 bg-white shadow-lg rounded-lg p-4 mr-4">
+      <div className="flex flex-col lg:flex-row w-full space-y-6 lg:space-y-0 lg:space-x-6">
+        <div className="w-full lg:w-1/4 bg-white shadow-lg rounded-xl p-6 mr-0 lg:mr-1 mb-4 lg:mb-0 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
           <Button
+            style={{
+              backgroundColor: '#4CAF50', 
+              color: '#fff', 
+              borderRadius: '15px', 
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' 
+            }}
             type="primary"
-            className="w-full mb-3"
+            className="w-full"
             onClick={showModal}
           >
-            + Agregar Programación
+            + Programar Horario
           </Button>
-          <Input
-            placeholder="Buscar especialista"
-            className="mb-3 mt-4"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <Table
-            dataSource={filteredEspecialistas}
-            columns={columns}
-            pagination={false}
-            rowClassName={(record) =>
-              selectedPerson?.id === record.id ? 'bg-green' : ''
-            }
-            onRow={(record) => ({
-              onClick: () => handleSelectPerson(record),
-            })}
-            rowKey="especialista_id"
+          <SpecialistTableSearch
+            onSelectSpecialist={handleSelectPerson} 
           />
         </div>
-
-        {/* Componente de calendario */}
-        <div className="w-3/4 bg-white shadow-lg rounded-lg p-4">
+        <div className=" bg-white shadow-lg rounded-xl p-6 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
           <CustomCalendar
             value={value}
             onChange={setValue}
             tileClassName={tileClassName}
+            tileContent={tileContent} 
             onClickDay={handleDayClick}
           />
         </div>
       </div>
-
-      {/* Modal para Confirmar Programación */}
       <ProgramacionModal
         isVisible={isModalVisible}
         onCancel={handleCancel}
         selectedPerson={selectedPerson}
-        selectedProgramming={selectedProgramming}
+        additionalSelectedDates={additionalSelectedDates} 
       />
     </div>
   );

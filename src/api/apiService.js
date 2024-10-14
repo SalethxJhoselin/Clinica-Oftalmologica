@@ -282,6 +282,40 @@ export const getAllSpecialties = async () => {
         throw error;
     }
 };
+
+//==========GESTIONAR SERVICIOS====================================
+export const getAllServices = async () => {
+    try {
+        const response = await api.get('/servicios/listar');
+        return response.data;
+    } catch (error) {
+        message.error('Error al obtener lista de servicios:');
+        throw error;
+    }
+};
+//==========GESTIONAR PROGRAMACION DE DIAS Y HORARIOS DE ATENCION POR MEDICO====================================
+export const createSpecialistProgramming = (specialistData) => {
+    try {
+        const response = api.post(`/programaciones_medical/crear`, specialistData);
+        message.success("Programacion de medico gistrado exitosamente");
+        return response;
+    } catch (error) {
+        message.error('Error al registrar la programacion');
+        throw error;
+    }
+};
+export const getAllSpecialistProgramming = async () => {
+    try {
+        const response = await api.get('/programaciones_medical/listar');
+        console.log("response.data");
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener lista de programaciones:', error);
+        throw error;
+    }
+};
+
 //==========ESPECIALISTAS====================================
 export const getAllSpecialists = async () => {
     try {
@@ -305,6 +339,43 @@ export const createSpecialist = (specialistData) => {
     }
 };
 export const deleteSpecialist = async (id) => {
+    try {
+        console.log("id");
+        console.log(id);
+        api.delete('/especialistas/eliminar', {
+            data: { empleado_id: id }
+        });
+        message.success("especialista eliminado exitosamente");
+    } catch (error) {
+        message.error('Error al eliminar especialista:');
+        throw error;
+    }
+};
+
+//==========GESTIONAR CITAS====================================
+export const getAllBookingAppointments = async () => {
+    try {
+        const response = await api.get('/especialistas/listar');
+        console.log("response.data");
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener lista de empleados:', error);
+        throw error;
+    }
+};
+export const createBookingAppointment = (specialistData) => {
+    try {
+        console.log("specialistData",specialistData);
+        const response = api.post(`citas/crear`, specialistData);
+        message.success("especialista gistrado exitosamente");
+        return response;
+    } catch (error) {
+        message.error('Error al registrar especialista:');
+        throw error;
+    }
+};
+export const deleteBookingAppointment = async (id) => {
     try {
         console.log("id");
         console.log(id);
