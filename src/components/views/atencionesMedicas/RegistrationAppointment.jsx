@@ -9,11 +9,18 @@ const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, 
     const [user, setUser] = useState(null);
     const [localTime, setLocalTime] = useState(null);
 
+    const resetForm = () => {
+        setComentario('');
+        setCi('');
+        setUser(null);
+        setLocalTime(null);
+    };
+
     const fetchLocalTime = async (lat, lon) => {
         try {
             const response = await fetch(`http://worldtimeapi.org/api/timezone/Etc/GMT`);
             const data = await response.json();
-            const currentTime = data.datetime;
+            const currentTime = dayjs(data.datetime).format('YYYY-MM-DD HH:mm');
             setLocalTime(currentTime);
         } catch (error) {
             console.error("Error obteniendo la hora local:", error);
@@ -24,7 +31,7 @@ const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
-                fetchLocalTime(latitude, longitude); // Obtener la hora local utilizando la ubicación
+                fetchLocalTime(latitude, longitude);
             }, (error) => {
                 console.error("Error obteniendo la geolocalización:", error);
             });
@@ -40,14 +47,12 @@ const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, 
     const getByCI = async () => {
         try {
             const response = await getUserByCI(ci);
-            console.log("response", response);
             setUser(response);
         } catch (error) {
             console.error("No se pudo obtener los datos", error);
         }
     };
 
-    // Función para manejar el envío de datos al componente padre
     const handleSubmit = () => {
         const appointmentData = {
             usuario_id: user?.id,
@@ -58,15 +63,9 @@ const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, 
             comentario: comentario,
             fecha_hora_actual: localTime
         };
-
         console.log('Datos enviados al backend:', JSON.stringify(appointmentData, null, 2));
-
-        // Enviar los datos al componente padre mediante la prop onAppointmentConfirmed
         onAppointmentConfirmed(appointmentData);
-        console.log("appointmentData", appointmentData)
-
-
-        // Cerrar el modal
+        resetForm();
         handleCancel();
     };
 
@@ -79,19 +78,21 @@ const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, 
         <Modal
             title="Confirmar Cita"
             visible={isModalVisible}
-            onCancel={handleCancel}
+            onCancel={() => {
+                handleCancel();
+                resetForm();
+            }}
             footer={null}
             width={700}
             className="p-4 bg-white rounded-lg shadow-md"
         >
             <div className="mb-4">
-                <p className="text-lg font-bold text-gray-700 mb-2"><strong>Medico:</strong> {selectedSpecialist.nombreCompleto}</p>
+                <p className="text-lg font-bold text-gray-700 mb-2"><strong>Médico:</strong> {selectedSpecialist.nombreCompleto}</p>
                 <p className="text-base text-gray-600 mb-1"><strong>Servicio:</strong> {selectedSpecialist.servicio}</p>
                 <p className="text-base text-gray-600 mb-1"><strong>Precio:</strong> {selectedSpecialist.precio} USD</p>
                 <p className="text-base text-gray-600 mb-1"><strong>Fecha:</strong> {selectedDate.format('YYYY-MM-DD')}</p>
                 <p className="text-base text-gray-600 mb-4"><strong>Hora de Reserva:</strong> {startTime}</p>
             </div>
-
             {user && (
                 <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">Datos del Paciente</h3>
@@ -138,7 +139,10 @@ const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, 
                         Confirmar Cita
                     </Button>
                     <Button
-                        onClick={handleCancel}
+                        onClick={() => {
+                            handleCancel();
+                            resetForm();
+                        }}
                         className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                         Cancelar
