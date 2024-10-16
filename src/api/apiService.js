@@ -297,7 +297,7 @@ const obtenerIP = async () => {
         hora           // Hora actual
       };
   
-      await api.post('/bitacora/registrar-visita', bitacora);  // Hacer la solicitud al backend para registrar la visita
+      await api.post('/bitacora/insertar', bitacora);  // Hacer la solicitud al backend para registrar la visita
       console.log('Visita registrada en la bitácora');
     } catch (error) {
       console.error('Error al registrar la visita en la bitácora:', error);
