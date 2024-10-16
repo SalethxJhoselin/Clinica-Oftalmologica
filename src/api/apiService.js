@@ -385,3 +385,14 @@ const getUserIdFromToken = () => {
     }
   };
   
+  // Obtener todos los pagos
+  export const getAllPagos = async () => {
+    try {
+      const response = await api.get('/pagos/listar'); // Asegúrate de que la URL sea correcta
+      console.log("Respuesta del servidor:", response); // Verifica si los datos llegan correctamente
+      return response; // Retorna la respuesta para ser usada en el frontend
+    } catch (error) {
+      console.error('Error al obtener los pagos:', error);
+      throw error;
+    }
+  };

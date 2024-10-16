@@ -20,6 +20,7 @@ import ManageBitacoraData from '../components/views/administrador/ManageBitacora
 
 import PagoQR from '../components/views/pagos/PagoQR';
 import PagoStripe from '../components/views/pagos/PagoStripe';
+import ManagePagos from '../components/views/registro/ManagePagos';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -59,6 +60,7 @@ const MyRoutes = () => {
 
                 <Route path="/pago-qr" element={<PagoQR />} />
                 <Route path="/pago-stripe" element={<PagoStripe />} />
+                <Route path="/admin/pagosrealizados" element={<ManagePagos />} />
                 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}

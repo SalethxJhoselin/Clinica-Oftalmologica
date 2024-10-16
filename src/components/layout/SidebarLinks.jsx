@@ -47,6 +47,10 @@ const SidebarLinks = (userRol, userPermisos) => [
       hasPermission(userPermisos, "Servicios") && {
         label: "Servicios",
         to: "/admin/services",
+      },
+      {
+        label: "Pagos",
+        to: "/admin/pagosrealizados",
       }
     ].filter(Boolean), // Filtra elementos falsos
   },

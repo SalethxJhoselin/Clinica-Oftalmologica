@@ -25,7 +25,7 @@ const AppContent = () => {
       const tablaAfectada = getTablaAfectada(pagina); // Determina la tabla afectada de manera automática
 
       // Llama a la función para registrar la visita en la bitácora
-      registrarVisita(pagina, accion, tablaAfectada); // Enviamos la tabla afectada
+      //registrarVisita(pagina, accion, tablaAfectada); // Enviamos la tabla afectada
     }
   }, [location.pathname, isLoggedIn]); // Ejecuta el efecto cada vez que cambie la ruta o el estado de sesión
 
