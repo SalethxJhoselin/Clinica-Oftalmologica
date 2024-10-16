@@ -1,4 +1,5 @@
 import axios from 'axios'
+//import * as jwt_decode from 'jwt-decode'; 
 
 const API_BASE_URL = 'https://clinica-oftalmologica.onrender.com';
 
@@ -269,50 +270,118 @@ export const updatePatient = async (patientId, updatedData) => {
     }
 };
 
-
-const obtenerIP = async () => {
+//==========ESPECIALIDADES====================================
+// Obtener todas las especialidades
+export const getAllSpecialties = async () => {
     try {
-      const respuesta = await fetch('https://api.ipify.org?format=json');
-      const data = await respuesta.json();
-      return data.ip;
+        const response = await api.get('/especialidades/listar');
+        return response.data;
     } catch (error) {
-      console.error("Error al obtener la IP:", error);
-      return null;
+        console.error('Error al obtener las especialidades:', error);
+        throw error;
+    }
+};
+
+// Crear una nueva especialidad
+export const createSpecialty = async (specialtyData) => {
+    try {
+        const response = await api.post('/especialidades/crear', specialtyData);
+        return response.data;
+    } catch (error) {
+        console.error('Error al crear la especialidad:', error);
+        throw error;
+    }
+};
+
+// Editar una especialidad existente
+export const editSpecialty = async (specialtyId, updatedData) => {
+    try {
+        const data = { id: specialtyId, ...updatedData };
+        const response = await api.post('/especialidades/editar', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al editar la especialidad:', error);
+        throw error;
+    }
+};
+
+// Eliminar una especialidad
+export const deleteSpecialty = async (specialtyId) => {
+    try {
+        console.log("ID enviado para eliminar:", specialtyId);  // Confirmar el ID enviado
+        const response = await api.delete('/especialidades/eliminar', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { id: specialtyId }  // Asegurarte de pasar el id dentro de data
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error al eliminar la especialidad:', error);
+        throw error;
+    }
+};//const response = await api.delete(`/profesiones/eliminar`, { data: { id: professionId } });
+// Función para obtener la IP del cliente
+// Función para obtener el userId desde el token
+const getUserIdFromToken = () => {
+    const token = localStorage.getItem('token');  // Obtiene el token del localStorage
+    if (token) {
+      const decodedToken = jwt_decode(token);  // Decodifica el token
+      return decodedToken.userId || decodedToken.id;  // Ajusta según el nombre de tu campo userId o id en el token
+    }
+    return null;  // Devuelve null si no hay token
+  };
+  
+  // Función para obtener la IP del cliente
+  const obtenerIP = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');  // Usa un servicio público de IP
+      const data = await response.json();
+      return data.ip;  // Retorna la IP obtenida
+    } catch (error) {
+      console.error('Error al obtener la IP:', error);
+      return '255.255.255.255';  // Retorna una IP por defecto si no se puede obtener la real
     }
   };
-
-  export const registrarVisita = async (usuarioId, pagina, accion, rol) => {
-    try {
-      const ip = await obtenerIP();  // Aquí obtienes la IP desde otra función
-      const fecha = new Date().toISOString();  // Formato estándar de fecha
-      const hora = new Date().toLocaleTimeString(); // Obtiene la hora actual en formato legible
   
-      const bitacora = {
-        usuarioId,     // ID del usuario actual
-        pagina,        // Página visitada
-        ipOrigen: ip,  // IP desde la que se hace la solicitud
-        accion,        // Acción realizada por el usuario (ej. "Visitó la página de usuarios")
-        rol,           // Rol del usuario (ej. "Administrador")
-        fecha,         // Fecha actual
-        hora           // Hora actual
+  // Función para registrar una visita en la bitácora
+  
+
+  // Función para registrar una visita en la bitácora
+  export const registrarVisita = async (pagina, accion, tablaAfectada) => {
+    try {
+      const ip = await obtenerIP();  // Obtener la IP del cliente
+      const fecha = new Date().toISOString().split('T')[0];  // Formato YYYY-MM-DD
+      const hora = new Date().toLocaleTimeString('en-GB');   // Obtener la hora actual en formato HH:MM:SS
+      const userId = localStorage.getItem('userId');  // Obtiene el userId almacenado en localStorage
+  
+      const bitacoraEntry = {
+        ip,               // IP obtenida
+        ci: userId,       // CI del usuario (utiliza el userId como CI)
+        fecha,            // Fecha en formato YYYY-MM-DD
+        hora,             // Hora actual
+        accion,           // Acción realizada (ejemplo: "Accedió a la página /home")
+        tabla_afectada: tablaAfectada,  // Tabla afectada
       };
   
-      await api.post('/bitacora/insertar', bitacora);  // Hacer la solicitud al backend para registrar la visita
-      console.log('Visita registrada en la bitácora');
+      console.log('Datos enviados a la bitácora:', bitacoraEntry);
+  
+      // Envía la solicitud POST para registrar la visita en la bitácora
+      const response = await api.post('/bitacora/insertar', bitacoraEntry);
+      console.log('Respuesta del servidor:', response.data);
     } catch (error) {
       console.error('Error al registrar la visita en la bitácora:', error);
     }
   };
   
+  // Función para obtener los datos de la bitácora
   export const getBitacoraData = async () => {
     try {
-      const response = await api.get('/bitacora/listar');
-      return response.data;  // Aquí debería devolver los registros con los campos adecuados
+      const response = await api.get('/bitacora/listar'); // Llama a la API de listar
+      return response.data;  // Devuelve los datos de la bitácora
     } catch (error) {
       console.error('Error al obtener los datos de la bitácora:', error);
       throw error;
     }
   };
-
-
   

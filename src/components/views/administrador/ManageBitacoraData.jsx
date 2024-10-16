@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Input, Typography } from 'antd';
-import { getBitacoraData } from '../../../api/apiService'; // Asegúrate de tener esta función en tu apiService
+import { getBitacoraData } from '../../../api/apiService'; 
 
 const { Title } = Typography;
 
@@ -30,29 +30,14 @@ const ManageBitacoraData = () => {
       key: 'id',
     },
     {
-      title: 'ID Usuario',
-      dataIndex: 'usuarioId',
-      key: 'usuarioId',
+      title: 'IP',
+      dataIndex: 'ip',
+      key: 'ip',
     },
     {
-      title: 'Rol',
-      dataIndex: 'rol',
-      key: 'rol',
-    },
-    {
-      title: 'Página Visitada',
-      dataIndex: 'pagina',
-      key: 'pagina',
-    },
-    {
-      title: 'Acción',
-      dataIndex: 'accion',
-      key: 'accion',
-    },
-    {
-      title: 'IP de Origen',
-      dataIndex: 'ipOrigen',
-      key: 'ipOrigen',
+      title: 'CI',
+      dataIndex: 'ci',
+      key: 'ci',
     },
     {
       title: 'Fecha',
@@ -66,22 +51,31 @@ const ManageBitacoraData = () => {
       key: 'hora',
       render: (hora) => hora, // Puedes modificarlo según el formato de la hora en la base de datos
     },
+    {
+      title: 'Acción',
+      dataIndex: 'accion',
+      key: 'accion',
+    },
+    {
+      title: 'Tabla Afectada',
+      dataIndex: 'tabla_afectada',
+      key: 'tabla_afectada',
+    },
   ];
 
   // Filtrar los registros según el texto de búsqueda
   const filteredData = bitacoraData.filter(item => 
-    item.usuarioId.toString().includes(searchText) || 
-    item.pagina.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.ipOrigen.includes(searchText) ||
-    item.rol.toLowerCase().includes(searchText.toLowerCase()) || 
-    item.accion.toLowerCase().includes(searchText.toLowerCase())
+    item.ci.toString().includes(searchText) || 
+    item.accion.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.ip.includes(searchText) ||
+    item.tabla_afectada.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Administrar Bitácora</Title>
       <Input 
-        placeholder="Buscar por ID de Usuario, Rol, Página, Acción, IP..."
+        placeholder="Buscar por CI, IP, Acción, Tabla Afectada..."
         value={searchText}
         onChange={e => setSearchText(e.target.value)}
         className="mb-4"
