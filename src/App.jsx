@@ -21,7 +21,7 @@ const AppContent = () => {
   useEffect(() => {
     if (isLoggedIn) { // Verifica que el usuario esté logueado
       const pagina = location.pathname; // Página actual
-      const accion = `Accedió a la página ${pagina}`; // Definir la acción realizada
+      const accion = `Accion en la página ${pagina}`; // Definir la acción realizada
       const tablaAfectada = getTablaAfectada(pagina); // Determina la tabla afectada de manera automática
 
       // Llama a la función para registrar la visita en la bitácora
