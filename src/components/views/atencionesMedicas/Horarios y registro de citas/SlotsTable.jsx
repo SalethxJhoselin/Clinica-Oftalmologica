@@ -14,6 +14,7 @@ const SlotsTable = ({ selectedSpecialist, selectedDate }) => {
         const endTime = dayjs(`${selectedDate.format('YYYY-MM-DD')}T${horaFinal}`);
 
         let index = 1;
+        console.log("selectedSpecialist",selectedSpecialist)
         while (currentTime.isBefore(endTime)) {
             const slotEndTime = currentTime.add(tiempoEstimado, 'minute');
             if (slotEndTime.isAfter(endTime)) break;

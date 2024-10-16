@@ -62,25 +62,26 @@ const BookAppointmentsAdm = () => {
   }, [selectedDate, specialistsSchedules]); // Añadir specialistsSchedules como dependencia
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-center text-2xl font-bold mb-4">Horarios y Registro de Citas</h2>
+    <div className="flex flex-col items-center p-6 min-h-screen max-w-screen-lg mx-auto">
+      <h2 className="text-center text-2xl font-bold mb-6 text-gray-900">Horarios y Registro de Citas</h2>
 
-      <div className="mb-4 flex justify-center">
+      <div className="mb-6 w-full flex justify-center">
         <DatePicker
           value={selectedDate}
           onChange={handleDateChange}
           format="YYYY-MM-DD"
-          className="w-full max-w-xs"
+          className="w-full max-w-xs bg-white shadow-lg rounded-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105"
           allowClear={false} // No permite limpiar la fecha
           disabledDate={disabledDate} // No permite seleccionar fechas pasadas
         />
       </div>
 
-      <div className="flex">
-        <div className="w-1/2">
+      {/* Ajustamos el layout para que sea responsive */}
+      <div className="flex flex-col lg:flex-row w-full space-y-6 lg:space-y-0 lg:space-x-4">
+        <div className="w-full lg:w-1/2 bg-white shadow-lg rounded-lg p-6 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
           <SpecialistTable data={data} onSelectSpecialist={setSelectedSpecialist} />
         </div>
-        <div className="w-1/2 ml-4">
+        <div className="w-full lg:w-1/2 bg-white shadow-lg rounded-lg p-6 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
           {selectedSpecialist && <SlotsTable selectedSpecialist={selectedSpecialist} selectedDate={selectedDate} />}
         </div>
       </div>

@@ -12,7 +12,7 @@ const Home = () => {
           <h1 className="text-5xl font-bold mb-4">Bienvenido a la Clínica Oftalmológica “OPTIVISION”</h1>
           <p className="text-xl mb-6">Cuidamos tu salud visual con la mejor tecnología y especialistas</p>
           {/* Botón de reserva con el enlace */}
-          <Link to="/reservarCita">
+          <Link to="/medical-care/bookAppointmentsAdm">
             <button className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 transition">
               Reserva tu cita
             </button>

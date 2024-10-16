@@ -131,6 +131,7 @@ const ProgrammingCalendar = () => {
 
   return (
     <div className="flex flex-col items-center p-6 min-h-screen max-w-screen-lg mx-auto">
+      <h2 className="text-center text-2xl font-bold mb-6 text-gray-900">Programacion de dias y horarios de atencion por Expecialista</h2>
       <div className="flex flex-col lg:flex-row w-full space-y-6 lg:space-y-0 lg:space-x-6">
         <div className="w-full lg:w-1/4 bg-white shadow-lg rounded-xl p-6 mr-0 lg:mr-1 mb-4 lg:mb-0 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
           <Button
