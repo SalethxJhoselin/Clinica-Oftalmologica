@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, Modal } from 'antd';
-import { getUserByCI } from '../../../api/apiService';
+import { getUserByCI } from '../../../../api/apiService';
 import dayjs from 'dayjs';
 
 const RegistrationAppointment = ({ selectedSpecialist, selectedDate, startTime, isModalVisible, handleCancel, onAppointmentConfirmed }) => {

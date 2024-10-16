@@ -2,26 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import ProgramacionModal from './ProgramacionModal';
 import CustomCalendar from './CustomCalendar';
-import { specialistsSchedules } from '../../../utils/test';
-import SpecialistTableSearch from './SpecialistTableSearch'; 
+import { getAllSpecialistProgramming } from '../../../api/apiService';
+import SpecialistTableSearch from './SpecialistTableSearch';
 
 const formatDate = (date) => {
   return date.toISOString().split('T')[0];
 };
 
 const formatTime = (time) => {
-  return time.slice(0, 5); 
+  return time.slice(0, 5);
 };
 
 const ProgrammingCalendar = () => {
-  const [specialistSchedule, setSpecialistSchedule] = useState(specialistsSchedules);
+  const [specialistSchedule, setSpecialistSchedule] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [programacion, setProgramacion] = useState([]);
   const [selectedProgramming, setSelectedProgramming] = useState({ id: null, fechas: [] });
-  const [allDatesWithTimes, setAllDatesWithTimes] = useState([]); // Guardar fechas con horas
-  const [additionalSelectedDates, setAdditionalSelectedDates] = useState([]); // Guardar nuevas fechas seleccionadas
+  const [allDatesWithTimes, setAllDatesWithTimes] = useState([]);
+  const [additionalSelectedDates, setAdditionalSelectedDates] = useState([]);
   const [value, setValue] = useState(new Date());
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const fetchSpecialistsSchedules = async () => {
+    try {
+      const response = await getAllSpecialistProgramming();
+      console.log("response specialistsSchedules", response);
+      setSpecialistSchedule(response);
+    } catch (error) {
+      console.error("Error fetching specialist schedules:", error);
+    }
+  };
+  useEffect(() => {
+    fetchSpecialistsSchedules();
+  }, []);
 
   const handleSelectPerson = (person) => {
     setSelectedPerson(person);
@@ -36,7 +49,7 @@ const ProgrammingCalendar = () => {
           }
           datesWithTimes[fecha].push({
             horaInicio: formatTime(horario.horaInicio),
-            horaFinal: formatTime(horario.horaFinal) 
+            horaFinal: formatTime(horario.horaFinal)
           });
         });
       });
@@ -45,10 +58,10 @@ const ProgrammingCalendar = () => {
         horarios
       }));
       console.log('Fechas y horarios del especialista seleccionado:', datesWithTimesArray);
-      setAllDatesWithTimes(datesWithTimesArray); 
+      setAllDatesWithTimes(datesWithTimesArray);
       setSelectedProgramming({
         id: person.id,
-        fechas: datesWithTimesArray.map(item => item.fecha) 
+        fechas: datesWithTimesArray.map(item => item.fecha)
       });
     } else {
       console.log('No se encontró la programación para el especialista seleccionado.');
@@ -56,7 +69,7 @@ const ProgrammingCalendar = () => {
         id: person.id,
         fechas: []
       });
-      setAllDatesWithTimes([]); 
+      setAllDatesWithTimes([]);
     }
   };
 
@@ -85,7 +98,7 @@ const ProgrammingCalendar = () => {
       } else if (isAdditionalSelected) {
         return 'bg-green-200 text-black-900 rounded-full';
       } else {
-        return ''; 
+        return '';
       }
     }
   };
@@ -122,10 +135,10 @@ const ProgrammingCalendar = () => {
         <div className="w-full lg:w-1/4 bg-white shadow-lg rounded-xl p-6 mr-0 lg:mr-1 mb-4 lg:mb-0 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
           <Button
             style={{
-              backgroundColor: '#4CAF50', 
-              color: '#fff', 
-              borderRadius: '15px', 
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' 
+              backgroundColor: '#4CAF50',
+              color: '#fff',
+              borderRadius: '15px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
             }}
             type="primary"
             className="w-full"
@@ -134,7 +147,7 @@ const ProgrammingCalendar = () => {
             + Programar Horario
           </Button>
           <SpecialistTableSearch
-            onSelectSpecialist={handleSelectPerson} 
+            onSelectSpecialist={handleSelectPerson}
           />
         </div>
         <div className=" bg-white shadow-lg rounded-xl p-6 transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105">
@@ -142,7 +155,7 @@ const ProgrammingCalendar = () => {
             value={value}
             onChange={setValue}
             tileClassName={tileClassName}
-            tileContent={tileContent} 
+            tileContent={tileContent}
             onClickDay={handleDayClick}
           />
         </div>
@@ -151,7 +164,7 @@ const ProgrammingCalendar = () => {
         isVisible={isModalVisible}
         onCancel={handleCancel}
         selectedPerson={selectedPerson}
-        additionalSelectedDates={additionalSelectedDates} 
+        additionalSelectedDates={additionalSelectedDates}
       />
     </div>
   );

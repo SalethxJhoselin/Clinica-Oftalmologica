@@ -87,7 +87,7 @@ const SidebarLinks = (userRol, userPermisos) => [
         to: "/medical-care/patient-registry",
       },
       {
-        label: "Horarios y cupos",
+        label: "Horarios y Reg. de Citas",
         to: "/medical-care/bookAppointmentsAdm",
       },
       {

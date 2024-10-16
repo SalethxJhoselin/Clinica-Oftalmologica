@@ -39,11 +39,9 @@ export const registerRequest = async (userData) => {
 //==========USERS====================================//AYUDA!!!!!
 export const getUserByCI = async (ciUser) => {
     try {
-        console.log({ ci: ciUser });
         const response = await api.get(`/usuarios/obtenerUsuario`, {
             params: { ci: ciUser },
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error al obtener los datos del usuario:', error);
@@ -366,7 +364,7 @@ export const getAllBookingAppointments = async () => {
 };
 export const createBookingAppointment = (specialistData) => {
     try {
-        console.log("specialistData",specialistData);
+        console.log("specialistData", specialistData);
         const response = api.post(`citas/crear`, specialistData);
         message.success("especialista gistrado exitosamente");
         return response;

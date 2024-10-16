@@ -15,7 +15,7 @@ import ManageEspeciality from '../components/views/registro/ManageEspeciality';
 import ManagePatients from '../components/views/atencionesMedicas/ManagePatients';
 import ManageSpecialists from '../components/views/personal/ManageSpecialists';
 import ProgrammingCalendar from '../components/views/configuracion/ProgrammingCalendar';
-import BookAppointmentsAdm from '../components/views/atencionesMedicas/BookAppointmentsAdm';
+import BookAppointmentsAdm from '../components/views/atencionesMedicas/Horarios y registro de citas/BookAppointmentsAdm';
 
 
 const MyRoutes = () => {
@@ -46,15 +46,15 @@ const MyRoutes = () => {
                 <Route path="/admin/roles" element={<ManageRoles />} />
                 <Route path="/admin/permissions" element={<ManagePermissions />} />
                 <Route path="/admin/users" element={<ManageUsuarios />} />
-                
+
                 <Route path="/personnel/professions-registry" element={<ManageProfession />} />
                 <Route path="/personnel/manageEmployees" element={<ManageEmployees />} />
-                <Route path="/admin/specialties" element={<ManageEspeciality/>} />
-                <Route path="/medical-care/patient-registry" element={<ManagePatients/>} />
-                <Route path="/personnel/manageSpecialists" element={<ManageSpecialists/>} />
-                <Route path="/settings/programmingCalendar" element={<ProgrammingCalendar/>} />
-                <Route path="/medical-care/bookAppointmentsAdm" element={<BookAppointmentsAdm/>} />
-                
+                <Route path="/admin/specialties" element={<ManageEspeciality />} />
+                <Route path="/medical-care/patient-registry" element={<ManagePatients />} />
+                <Route path="/personnel/manageSpecialists" element={<ManageSpecialists />} />
+                <Route path="/settings/programmingCalendar" element={<ProgrammingCalendar />} />
+                <Route path="/medical-care/bookAppointmentsAdm" element={<BookAppointmentsAdm />} />
+
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
