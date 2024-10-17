@@ -535,7 +535,7 @@ export const makePayment = (date) => {
 export const createPaymentRecord = (payData) => {
     try {
         console.log("specialistData vamos aver si funca, sino efe", payData);
-        const response = api.post(`pago/registrar`, payData);
+        const response = api.post(`pagos/insertar`, payData);
         message.success("pago gistrado exitosamente");
         return response;
     } catch (error) {

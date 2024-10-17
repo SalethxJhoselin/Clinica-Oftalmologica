@@ -29,7 +29,7 @@ const MakePayments = ({ user, selectedSpecialist, comentario, onPaymentSuccess }
             
             const response = await makePayment(payData);
             const response2 = await createPaymentRecord(payDataRecord);
-            
+            console.log("response2 es de registro de pago",response2)
             if (response.data && response.data.url) {
                 window.open(response.data.url, '_blank');
                 message.success("Pago realizado con éxito.");
