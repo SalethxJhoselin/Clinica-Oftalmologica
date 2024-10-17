@@ -3,8 +3,8 @@ import { Space, Table, Button, Modal, message, Typography } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import EmployeeDetail from './EmployeeDetail';
 import RegisterEmploye from './RegisterEmployee';
+import ReporteEmpleados from '../reportes/ReporteEmpleados'; // Importamos el componente para generar el reporte
 import { getAllEmployees } from '../../../api/apiService'; // Ajusta la importación según la ubicación de tu archivo de API
-//import EgressNoteDetail from './EgressNoteDetail';
 
 const { Title } = Typography;
 
@@ -14,6 +14,7 @@ const ManageEmployees = () => {
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [employeeToDelete, setEmployeeToDelete] = useState(null);
+    const [isReportModalVisible, setIsReportModalVisible] = useState(false); // Estado para controlar el modal del reporte
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -29,7 +30,6 @@ const ManageEmployees = () => {
     }, []);
 
     const handleShowDetail = (record) => {
-        console.log("desde afuera una vez mas tratando de ver los datos", record)
         setSelectedEmployee(record);
         setIsDetailModalVisible(true);
     };
@@ -41,16 +41,25 @@ const ManageEmployees = () => {
 
     const handleDeleteConfirm = async () => {
         try { 
-            
-        setDeleteModalVisible(false);
-        message.success('Empleado eliminado exitosamente');
+            setDeleteModalVisible(false);
+            message.success('Empleado eliminado exitosamente');
         } catch(error) {
-            
-         }
+            message.error('Error al eliminar empleado');
+        }
     };
 
     const handleDeleteCancel = () => {
         setDeleteModalVisible(false);
+    };
+
+    // Abrir modal para generar reporte
+    const handleOpenReportModal = () => {
+        setIsReportModalVisible(true);
+    };
+
+    // Cerrar modal de reporte
+    const handleReportModalClose = () => {
+        setIsReportModalVisible(false);
     };
 
     const columns = [
@@ -100,8 +109,12 @@ const ManageEmployees = () => {
     return (
         <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
             <Title level={3} className="text-center">Administrar Empleados</Title>
-            <div className="flex justify-end mb-6">
+            <div className="flex justify-between mb-6">
                 <RegisterEmploye />
+                {/* Botón para abrir el modal de generar reporte */}
+                <Button type="primary" onClick={handleOpenReportModal}>
+                    Generar Reporte
+                </Button>
             </div>
             <Table
                 columns={columns}
@@ -124,6 +137,15 @@ const ManageEmployees = () => {
                     user={selectedEmployee}
                 />
             )}
+            {/* Modal para generar reporte */}
+            <Modal
+                title="Generar Reporte de Empleados"
+                visible={isReportModalVisible}
+                onCancel={handleReportModalClose}
+                footer={null}  // Si quieres botones personalizados, puedes agregarlos en el footer
+            >
+                <ReporteEmpleados />
+            </Modal>
         </div>
     );
 };

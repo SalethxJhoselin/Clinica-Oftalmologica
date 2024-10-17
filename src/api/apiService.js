@@ -396,3 +396,15 @@ const getUserIdFromToken = () => {
       throw error;
     }
   };
+
+  export const generarReporte = async (data) => {
+    try {
+      const response = await api.post('/reporte/empleado', data, {
+        responseType: 'blob' // Esto es importante para recibir el archivo generado
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error al generar reporte:', error);
+      throw error;
+    }
+  };
