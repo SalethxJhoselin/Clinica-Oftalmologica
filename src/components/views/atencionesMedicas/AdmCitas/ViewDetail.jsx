@@ -23,7 +23,7 @@ const ViewDetailsModal = ({ appointment, visible, onCancel, onConfirmCancel }) =
           };
           console.log(updatedAppointment);
           const response = await editBookingAppointment(updatedAppointment);
-          console.log("response a ver que sale",response)
+          console.log("response a ver que sale", response);
           if (response && response.success) {
             message.success('La cita ha sido cancelada exitosamente.');
             onConfirmCancel();
@@ -48,9 +48,12 @@ const ViewDetailsModal = ({ appointment, visible, onCancel, onConfirmCancel }) =
       visible={visible}
       onCancel={onCancel}
       footer={[
-        <Button key="cancel" type="danger" onClick={handleCancelAppointment}>
-          Cancelar Cita
-        </Button>,
+        // Solo muestra el botón si el estado no es 'cancelado'
+        appointment.estado !== 'cancelado' && (
+          <Button key="cancel" type="danger" onClick={handleCancelAppointment}>
+            Cancelar Cita
+          </Button>
+        ),
         <Button key="close" onClick={onCancel}>
           Cerrar
         </Button>,
