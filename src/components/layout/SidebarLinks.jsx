@@ -48,7 +48,7 @@ const SidebarLinks = (userRol, userPermisos) => [
         label: "Servicios",
         to: "/admin/services",
       },
-      {
+      hasPermission(userPermisos, "Pagos") &&{
         label: "Pagos",
         to: "/admin/pagosrealizados",
       }
@@ -76,7 +76,7 @@ const SidebarLinks = (userRol, userPermisos) => [
     label: "Configuración",
     icon: <SettingOutlined />,
     subMenu: [
-      {
+      hasPermission(userPermisos, "Programación de Médicos") &&{
         label: "Programación de Médicos",
         to: "/settings/programmingCalendar",
       }
@@ -86,7 +86,7 @@ const SidebarLinks = (userRol, userPermisos) => [
     label: "Atenciones Médicas",
     icon: <SolutionOutlined />,
     subMenu: [
-      {
+      hasPermission(userPermisos, "Registro de Pacientes") &&{
         label: "Registro de Pacientes",
         to: "/medical-care/patient-registry",
       },
@@ -94,7 +94,7 @@ const SidebarLinks = (userRol, userPermisos) => [
         label: "Horarios y Reg. de Citas",
         to: "/medical-care/bookAppointmentsAdm",
       },
-      {
+      hasPermission(userPermisos, "Administrar Citas Medicas") &&{
         label: "Administrar Citas Medicas",
         to: "/medical-care/manageAppointments",
       },

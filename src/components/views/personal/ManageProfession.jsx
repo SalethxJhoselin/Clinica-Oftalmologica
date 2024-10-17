@@ -3,9 +3,17 @@ import { Space, Table, Button, Input, Typography } from 'antd';
 import ProfessionModal from './ProfessionModal'; // Asegúrate de tener este componente para agregar profesiones
 import { getProfessions, editProfession, deleteProfession } from '../../../api/apiService';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useUser } from '../../../context/UserContext';
+
+const hasPermission = (userPermisos, requiredPermission) => {
+  return userPermisos.includes(requiredPermission);
+};
 
 const { Title } = Typography;
+
+
 const ManageProfession = () => {
+  const { userPermisos } = useUser();
   const [editingProfessionId, setEditingProfessionId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [professions, setProfessions] = useState([]);
@@ -101,14 +109,18 @@ const ManageProfession = () => {
             </>
           ) : (
             <>
-              <Button type="primary" onClick={() => handleEditProfession(record.id)}><EditOutlined /></Button>
-              <Button style={{
-                backgroundColor: '#F44336',
-                color: '#fff',
-                borderRadius: '10px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-              }}
-                onClick={() => handleDeleteProfession(record.id)}><DeleteOutlined /></Button>
+              {hasPermission(userPermisos, 'editar_profesion') && (
+                <Button type="primary" onClick={() => handleEditProfession(record.id)}><EditOutlined /></Button>
+              )}
+              {hasPermission(userPermisos, 'eliminar_profesion') && (
+                <Button style={{
+                  backgroundColor: '#F44336',
+                  color: '#fff',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}
+                  onClick={() => handleDeleteProfession(record.id)}><DeleteOutlined /></Button>
+              )}
             </>
           )}
         </Space>
@@ -120,10 +132,12 @@ const ManageProfession = () => {
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Profesiones</Title>
       <div className="flex justify-end mb-6">
-        <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
-          .then(response => setProfessions(response.data))
-          .catch(error => console.error('Error al obtener las profesiones:', error))}
-        />
+        {hasPermission(userPermisos, 'crear_profesion') && (
+          <ProfessionModal getDatos={() => axios.get('https://clinica-oftalmologica.onrender.com/profesiones')
+            .then(response => setProfessions(response.data))
+            .catch(error => console.error('Error al obtener las profesiones:', error))}
+          />
+        )}
       </div>
       <Table
         columns={columns}
