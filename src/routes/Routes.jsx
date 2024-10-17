@@ -18,6 +18,7 @@ import ProgrammingCalendar from '../components/views/configuracion/ProgrammingCa
 import BookAppointmentsAdm from '../components/views/atencionesMedicas/Horarios y registro de citas/BookAppointmentsAdm';
 import ManageAppointments from '../components/views/atencionesMedicas/AdmCitas/ManageAppointments';
 import ManageBitacoraData from '../components/views/administrador/ManageBitacoraData';
+import ManagePagos from '../components/views/registro/ManagePagos';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -56,6 +57,7 @@ const MyRoutes = () => {
                 <Route path="/settings/programmingCalendar" element={<ProgrammingCalendar />} />
                 <Route path="/medical-care/bookAppointmentsAdm" element={<BookAppointmentsAdm />} />
                 <Route path="/medical-care/manageAppointments" element={<ManageAppointments />} />
+                <Route path="/admin/pagosrealizados" element={<ManagePagos />} />
 
                 <Route path="/admin/access-log" element={<ManageBitacoraData/>} />
                 
