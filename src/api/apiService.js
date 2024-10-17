@@ -524,12 +524,22 @@ export const editBookingAppointment = async (data) => {
 //==========REALIZAR PAGOS====================================
 export const makePayment = (date) => {
     try {
-        console.log("specialistData vamos aver si funca, sino efe", date);
         const response = api.post(`/create_payment_web`, date);
         console.log("respuesta despues de pago", response);
         return response;
     } catch (error) {
         message.error('Error al realizar pago:');
+        throw error;
+    }
+};
+export const createPaymentRecord = (payData) => {
+    try {
+        console.log("specialistData vamos aver si funca, sino efe", payData);
+        const response = api.post(`pago/registrar`, payData);
+        message.success("pago gistrado exitosamente");
+        return response;
+    } catch (error) {
+        message.error('Error al registrar pago:');
         throw error;
     }
 };
