@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Row, Col, message, Select, DatePicker } from 'antd';
+import { Button, Checkbox, Row, Col, message, Select, DatePicker, Form } from 'antd';
 import { generarReporte } from '../../../api/apiService';
-import moment from 'moment';
 
 const columnasDisponibles = [
   { label: 'ID', value: 'id' },
@@ -16,7 +15,7 @@ const columnasDisponibles = [
   { label: 'Género', value: 'genero' },
   { label: 'Especialidades', value: 'especialidades' },
   { label: 'Profesión', value: 'profesion' },
-  { label: 'Estado', value: 'estado' }
+  { label: 'Estado', value: 'estadoo' },
 ];
 
 const { Option } = Select;
@@ -24,16 +23,33 @@ const { RangePicker } = DatePicker;
 
 const ReporteEmpleados = () => {
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState([]);
-  const [estado, setEstado] = useState(null);
-  const [genero, setGenero] = useState(null);
+  const [filtros, setFiltros] = useState({});
   const [ordenColumna, setOrdenColumna] = useState('id');
   const [ordenDireccion, setOrdenDireccion] = useState('asc');
   const [formato, setFormato] = useState('pdf');
-  const [fechaContratacion, setFechaContratacion] = useState([]);
-  const [fechaNacimiento, setFechaNacimiento] = useState([]);
 
   const onChangeColumnas = (checkedValues) => {
     setColumnasSeleccionadas(checkedValues);
+  };
+
+  // Función para actualizar los filtros
+  const handleFiltroChange = (newFiltros) => {
+    setFiltros((prevFiltros) => {
+      // Eliminamos los filtros con valores vacíos
+      const filtrosActualizados = { ...prevFiltros, ...newFiltros };
+      Object.keys(filtrosActualizados).forEach((key) => {
+        const value = filtrosActualizados[key];
+        if (
+          value === undefined ||
+          value === null ||
+          value === '' ||
+          (Array.isArray(value) && value.length === 0)
+        ) {
+          delete filtrosActualizados[key];
+        }
+      });
+      return filtrosActualizados;
+    });
   };
 
   const handleGenerarReporte = async () => {
@@ -43,40 +59,40 @@ const ReporteEmpleados = () => {
     }
 
     try {
-      const filtros = {
-        estadoo: estado,
-        genero: genero,
-        fecha_contratacion_desde: fechaContratacion.length > 0 ? fechaContratacion[0].format('YYYY-MM-DD') : null,
-        fecha_contratacion_hasta: fechaContratacion.length > 0 ? fechaContratacion[1].format('YYYY-MM-DD') : null,
-        fecha_nacimiento_desde: fechaNacimiento.length > 0 ? fechaNacimiento[0].format('YYYY-MM-DD') : null,
-        fecha_nacimiento_hasta: fechaNacimiento.length > 0 ? fechaNacimiento[1].format('YYYY-MM-DD') : null
-      };
-
-      const response = await generarReporte({
+      const data = {
         columnas: columnasSeleccionadas,
         filtros: filtros,
         orden: {
           columna: ordenColumna,
-          direccion: ordenDireccion
+          direccion: ordenDireccion,
         },
-        formato: formato
-      });
+        formato: formato,
+      };
+
+      console.log('Datos enviados al backend:', data);
+
+      const response = await generarReporte(data);
 
       if (response) {
+        const blobType =
+          formato === 'pdf'
+            ? 'application/pdf'
+            : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        const blob = new Blob([response], { type: blobType });
         const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(new Blob([response], { type: `application/${formato}` }));
-        link.download = `reporte_empleados.${formato}`;
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `reporte_empleados.${formato === 'pdf' ? 'pdf' : 'xlsx'}`;
         link.click();
         message.success('Reporte generado con éxito');
       }
     } catch (error) {
       message.error('Error al generar el reporte.');
-      console.error(error);
+      console.error('Error al generar el reporte:', error);
     }
   };
 
   return (
-    <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
+    <div>
       <h3>Selecciona las columnas para el reporte</h3>
       <Checkbox.Group style={{ width: '100%' }} onChange={onChangeColumnas}>
         <Row>
@@ -89,57 +105,100 @@ const ReporteEmpleados = () => {
       </Checkbox.Group>
 
       <h3 className="mt-4">Filtros</h3>
-      <Row gutter={16}>
-        <Col span={8}>
-          <label>Estado:</label>
-          <Select placeholder="Seleccionar estado" onChange={(value) => setEstado(value)}>
-            <Option value={true}>Activo</Option>
-            <Option value={false}>Inactivo</Option>
+      <Form layout="vertical">
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item label="Estado">
+              <Select
+                placeholder="Seleccionar estado"
+                onChange={(value) => handleFiltroChange({ estadoo: value })}
+                allowClear
+              >
+                <Option value={true}>Activo</Option>
+                <Option value={false}>Inactivo</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Género">
+              <Select
+                placeholder="Seleccionar género"
+                onChange={(value) => handleFiltroChange({ genero: value })}
+                allowClear
+              >
+                <Option value="Masculino">Masculino</Option>
+                <Option value="Femenino">Femenino</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Fecha de Contratación">
+              <RangePicker
+                format="YYYY-MM-DD"
+                onChange={(dates, dateStrings) => {
+                  handleFiltroChange({
+                    fecha_contratacion_desde: dateStrings[0] || null,
+                    fecha_contratacion_hasta: dateStrings[1] || null,
+                  });
+                }}
+                allowClear
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Fecha de Nacimiento">
+              <RangePicker
+                format="YYYY-MM-DD"
+                onChange={(dates, dateStrings) => {
+                  handleFiltroChange({
+                    fecha_nacimiento_desde: dateStrings[0] || null,
+                    fecha_nacimiento_hasta: dateStrings[1] || null,
+                  });
+                }}
+                allowClear
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <h3 className="mt-4">Ordenar por</h3>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Columna">
+              <Select defaultValue="id" onChange={(value) => setOrdenColumna(value)}>
+                {columnasDisponibles.map((col) => (
+                  <Option key={col.value} value={col.value}>
+                    {col.label}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Dirección">
+              <Select defaultValue="asc" onChange={(value) => setOrdenDireccion(value)}>
+                <Option value="asc">Ascendente</Option>
+                <Option value="desc">Descendente</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <h3 className="mt-4">Formato de salida</h3>
+        <Form.Item>
+          <Select defaultValue="pdf" onChange={(value) => setFormato(value)} style={{ width: 200 }}>
+            <Option value="pdf">PDF</Option>
+            <Option value="excel">Excel</Option>
           </Select>
-        </Col>
-        <Col span={8}>
-          <label>Género:</label>
-          <Select placeholder="Seleccionar género" onChange={(value) => setGenero(value)}>
-            <Option value="Masculino">Masculino</Option>
-            <Option value="Femenino">Femenino</Option>
-          </Select>
-        </Col>
-      </Row>
+        </Form.Item>
 
-      <h3 className="mt-4">Fecha de Contratación</h3>
-      <RangePicker onChange={(dates) => setFechaContratacion(dates)} />
-
-      <h3 className="mt-4">Fecha de Nacimiento</h3>
-      <RangePicker onChange={(dates) => setFechaNacimiento(dates)} />
-
-      <h3 className="mt-4">Ordenar por</h3>
-      <Row gutter={16}>
-        <Col span={12}>
-          <label>Columna:</label>
-          <Select defaultValue="id" onChange={(value) => setOrdenColumna(value)}>
-            {columnasSeleccionadas.map((col) => (
-              <Option key={col} value={col}>{col}</Option>
-            ))}
-          </Select>
-        </Col>
-        <Col span={12}>
-          <label>Dirección:</label>
-          <Select defaultValue="asc" onChange={(value) => setOrdenDireccion(value)}>
-            <Option value="asc">Ascendente</Option>
-            <Option value="desc">Descendente</Option>
-          </Select>
-        </Col>
-      </Row>
-
-      <h3 className="mt-4">Formato de salida</h3>
-      <Select defaultValue="pdf" onChange={(value) => setFormato(value)}>
-        <Option value="pdf">PDF</Option>
-        <Option value="excel">Excel</Option>
-      </Select>
-
-      <Button type="primary" className="mt-4" onClick={handleGenerarReporte}>
-        Generar Reporte
-      </Button>
+        <Button type="primary" className="mt-4" onClick={handleGenerarReporte}>
+          Generar Reporte
+        </Button>
+      </Form>
     </div>
   );
 };
