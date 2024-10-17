@@ -5,10 +5,10 @@ import { getAllServices, createSpecialistProgramming } from '../../../api/apiSer
 
 const { Option } = Select;
 
-const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, additionalSelectedDates }) => {
+const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, additionalSelectedDates, onCreateSuccess }) => {
   const [form] = Form.useForm(); 
   const [services, setServices] = useState([]); 
- 
+
   const fetchServices = async () => {
     try {
       const response = await getAllServices();
@@ -40,6 +40,12 @@ const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, additionalSele
       const response = await createSpecialistProgramming(dataToSend);
       form.resetFields();
       onCancel();
+
+      // Llamar al callback de confirmación si existe
+      if (onCreateSuccess) {
+        onCreateSuccess();
+      }
+
       console.log('Datos enviados al backend:', dataToSend, 'Respuesta:', response);
     } catch (error) {
       console.error('Error al enviar la programación:', error);

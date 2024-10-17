@@ -23,6 +23,7 @@ const ProgrammingCalendar = () => {
   const [value, setValue] = useState(new Date());
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // Función para obtener la programación de los especialistas
   const fetchSpecialistsSchedules = async () => {
     try {
       const response = await getAllSpecialistProgramming();
@@ -32,6 +33,7 @@ const ProgrammingCalendar = () => {
       console.error("Error fetching specialist schedules:", error);
     }
   };
+
   useEffect(() => {
     fetchSpecialistsSchedules();
   }, []);
@@ -129,6 +131,12 @@ const ProgrammingCalendar = () => {
     setIsModalVisible(false);
   };
 
+  // Función que se llama cuando se crea una nueva programación con éxito
+  const handleCreateSuccess = () => {
+    fetchSpecialistsSchedules(); // Actualiza los datos del calendario
+    setIsModalVisible(false); // Cierra el modal
+  };
+
   return (
     <div className="flex flex-col items-center p-6 min-h-screen max-w-screen-lg mx-auto">
       <h2 className="text-center text-2xl font-bold mb-6 text-gray-900">Programacion de dias y horarios de atencion por Expecialista</h2>
@@ -166,6 +174,7 @@ const ProgrammingCalendar = () => {
         onCancel={handleCancel}
         selectedPerson={selectedPerson}
         additionalSelectedDates={additionalSelectedDates}
+        onCreateSuccess={handleCreateSuccess} // Pasamos la función de éxito
       />
     </div>
   );
