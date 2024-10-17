@@ -353,18 +353,17 @@ export const deleteSpecialist = async (id) => {
 //==========GESTIONAR CITAS====================================
 export const getAllBookingAppointments = async () => {
     try {
-        const response = await api.get('/especialistas/listar');
-        console.log("response.data");
-        console.log(response.data);
+        const response = await api.get('/citas/listar');
         return response.data;
     } catch (error) {
-        console.error('Error al obtener lista de empleados:', error);
+        message.error('Error al obtener datos');
+        console.error('Error al obtener lista de los registros de citas:', error);
         throw error;
     }
 };
 export const createBookingAppointment = (specialistData) => {
     try {
-        console.log("specialistData", specialistData);
+        console.log("specialistData vamos aver si funca, sino efe", specialistData);
         const response = api.post(`citas/crear`, specialistData);
         message.success("especialista gistrado exitosamente");
         return response;
@@ -373,16 +372,26 @@ export const createBookingAppointment = (specialistData) => {
         throw error;
     }
 };
-export const deleteBookingAppointment = async (id) => {
+export const editBookingAppointment = async (data) => {
     try {
-        console.log("id");
-        console.log(id);
-        api.delete('/especialistas/eliminar', {
-            data: { empleado_id: id }
-        });
-        message.success("especialista eliminado exitosamente");
+        const response=api.put('/citas/editar',data);
+        console.log("dataresponse");
+        console.log(response);
+        message.success("cita cancelada exitosamente");
     } catch (error) {
-        message.error('Error al eliminar especialista:');
+        message.error('Error al cancelar la cita:');
+        throw error;
+    }
+};
+//==========REALIZAR PAGOS====================================
+export const makePayment = (date) => {
+    try {
+        console.log("specialistData vamos aver si funca, sino efe", date);
+        const response = api.post(`/create_payment_web`, date);
+        console.log("respuesta despues de pago", response);
+        return response;
+    } catch (error) {
+        message.error('Error al realizar pago:');
         throw error;
     }
 };

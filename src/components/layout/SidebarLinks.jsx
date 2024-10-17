@@ -91,6 +91,10 @@ const SidebarLinks = (userRol, userPermisos) => [
         to: "/medical-care/bookAppointmentsAdm",
       },
       {
+        label: "Administrar Citas Medicas",
+        to: "/medical-care/manageAppointments",
+      },
+      {
         label: "Consultas Médicas",
         to: "/medical-care/consultations",
       },
