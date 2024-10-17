@@ -17,6 +17,7 @@ import ManageSpecialists from '../components/views/personal/ManageSpecialists';
 import ProgrammingCalendar from '../components/views/configuracion/ProgrammingCalendar';
 import BookAppointmentsAdm from '../components/views/atencionesMedicas/Horarios y registro de citas/BookAppointmentsAdm';
 import ManageAppointments from '../components/views/atencionesMedicas/AdmCitas/ManageAppointments';
+import ManageBitacoraData from '../components/views/administrador/ManageBitacoraData';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -56,6 +57,8 @@ const MyRoutes = () => {
                 <Route path="/medical-care/bookAppointmentsAdm" element={<BookAppointmentsAdm />} />
                 <Route path="/medical-care/manageAppointments" element={<ManageAppointments />} />
 
+                <Route path="/admin/access-log" element={<ManageBitacoraData/>} />
+                
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
