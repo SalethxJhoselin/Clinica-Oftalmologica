@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, Select, Checkbox, message, Typography, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, Select, message, Typography, Space } from 'antd';
 import { getAllPatients } from '../../../../api/apiService';
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -9,7 +9,9 @@ const Antecedentes = () => {
   const [patients, setPatients] = useState([]);
   const [antecedentes, setAntecedentes] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedAntecedentes, setSelectedAntecedentes] = useState([]);
   const [form] = Form.useForm();
 
   // Datos simulados de antecedentes médicos
@@ -18,42 +20,16 @@ const Antecedentes = () => {
       usuario: { id: 1, nombre: "Jhon Said", apellido_paterno: "Andia", apellido_materno: "Merino" },
       fecha_apertura: "2024-11-20T00:00:00.000Z",
       antecedentes: [
-        {
-          id: 3,
-          tipo: "Alergias",
-          descripcion: "Alergia severa a penicilina",
-          especifico1: "medicamentos",
-          especifico2: "penicilina",
-          fecha_evento: "2024-01-01T00:00:00.000Z",
-          fecha_creacion: "2024-11-20T00:00:00.000Z",
-          es_importante: false,
-        },
-        {
-          id: 7,
-          tipo: "Familiar",
-          descripcion: "Cáncer Biliar",
-          especifico1: "Hígado afectado",
-          especifico2: "etapa terminal",
-          fecha_evento: "2022-10-16T00:00:00.000Z",
-          fecha_creacion: "2024-11-21T00:00:00.000Z",
-          es_importante: true,
-        },
+        { id: 3, tipo: "Alergias" },
+        { id: 7, tipo: "Familiar" },
       ],
     },
     {
       usuario: { id: 8, nombre: "jhoel", apellido_paterno: "rodas", apellido_materno: "cabrera" },
       fecha_apertura: "2024-11-20T00:00:00.000Z",
       antecedentes: [
-        {
-          id: 1,
-          tipo: "Alergias",
-          descripcion: "Alergia severa a penicilina",
-          especifico1: "medicamentos",
-          especifico2: "penicilina",
-          fecha_evento: "2024-01-01T00:00:00.000Z",
-          fecha_creacion: "2024-11-20T00:00:00.000Z",
-          es_importante: true,
-        },
+        { id: 1, tipo: "Alergias" },
+        { id: 6, tipo: "Operacion" },
       ],
     },
   ];
@@ -84,7 +60,6 @@ const Antecedentes = () => {
       const payload = {
         ...formData,
         usuario_id: selectedPatient.id, // Incluye el ID del paciente seleccionado
-        es_importante: formData.es_importante || false, // Por defecto false si no se selecciona
       };
       console.log('Antecedente registrado:', payload); // Simula el envío al backend
       message.success('Antecedente registrado exitosamente');
@@ -98,6 +73,17 @@ const Antecedentes = () => {
   const handleModalCancel = () => {
     setIsModalVisible(false); // Cierra el modal
     setSelectedPatient(null); // Resetea el paciente seleccionado
+  };
+
+  const handleDetailModalOpen = (record) => {
+    setSelectedAntecedentes(record.antecedentes); // Obtiene los antecedentes del paciente seleccionado
+    setSelectedPatient(record.usuario); // Establece el paciente seleccionado
+    setIsDetailModalVisible(true); // Abre el modal
+  };
+
+  const handleDetailModalClose = () => {
+    setIsDetailModalVisible(false); // Cierra el modal
+    setSelectedAntecedentes([]); // Resetea los antecedentes seleccionados
   };
 
   const patientColumns = [
@@ -138,27 +124,13 @@ const Antecedentes = () => {
       render: (usuario) => `${usuario.nombre} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
     },
     {
-      title: 'Tipo',
-      dataIndex: 'antecedentes',
-      key: 'tipo',
-      render: (_, record) =>
-        record.antecedentes.map((antecedente) => <div key={antecedente.id}>{antecedente.tipo}</div>),
-    },
-    {
-      title: 'Descripción',
-      dataIndex: 'antecedentes',
-      key: 'descripcion',
-      render: (_, record) =>
-        record.antecedentes.map((antecedente) => <div key={antecedente.id}>{antecedente.descripcion}</div>),
-    },
-    {
-      title: 'Importante',
-      dataIndex: 'antecedentes',
-      key: 'importante',
-      render: (_, record) =>
-        record.antecedentes.map((antecedente) => (
-          <div key={antecedente.id}>{antecedente.es_importante ? 'Sí' : 'No'}</div>
-        )),
+      title: 'Acciones',
+      key: 'acciones',
+      render: (_, record) => (
+        <Button type="default" onClick={() => handleDetailModalOpen(record)}>
+          Ver Detalle
+        </Button>
+      ),
     },
   ];
 
@@ -209,6 +181,22 @@ const Antecedentes = () => {
             <TextArea rows={4} />
           </Form.Item>
         </Form>
+      </Modal>
+      <Modal
+        title={`Detalles del Paciente - ${selectedPatient?.id}`}
+        visible={isDetailModalVisible}
+        onCancel={handleDetailModalClose}
+        footer={null}
+      >
+        <ul>
+          <li><b>ID del Paciente:</b> {selectedPatient?.id}</li>
+          <b>IDs de Antecedentes:</b>
+          <ul>
+            {selectedAntecedentes.map((antecedente) => (
+              <li key={antecedente.id}>{antecedente.id}</li>
+            ))}
+          </ul>
+        </ul>
       </Modal>
     </div>
   );
