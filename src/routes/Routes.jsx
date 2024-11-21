@@ -76,7 +76,7 @@ const MyRoutes = () => {
 
                 <Route path="/medical-care/triage" element={<ManageTriaje/>} />
                 <Route path="/medical-care/patologias" element={<ManagePatologia/>} />
-                
+                <Route path="/admin/access-log" element={<ManageBitacoraData />} />
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />

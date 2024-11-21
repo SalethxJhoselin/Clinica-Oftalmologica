@@ -851,3 +851,13 @@ export const createServicio = async (nombre, descripcion, idDepartamento, idEspe
       throw error;
     }
   };
+
+  export const createBackup = async () => {
+    try {
+      const response = await api.get('/backup'); // Realiza la solicitud GET al endpoint /backup
+      return response.data; // Devuelve la respuesta del servidor
+    } catch (error) {
+      console.error('Error al crear el backup:', error);
+      throw error;
+    }
+  };
