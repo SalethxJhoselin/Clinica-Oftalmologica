@@ -220,6 +220,7 @@ const Antecedentes = () => {
                 visible={isDetailModalVisible}
                 onCancel={handleDetailModalClose}
                 footer={null}
+                width="80%"
             >
                 <Table
                     dataSource={selectedAntecedentes}
@@ -233,6 +234,7 @@ const Antecedentes = () => {
                     ]}
                     rowKey="id"
                     pagination={false}
+                    scroll={{ y: 300, x: '100%' }}
                 />
             </Modal>
         </div>
