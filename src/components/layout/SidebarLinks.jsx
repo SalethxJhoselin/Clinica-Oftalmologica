@@ -103,8 +103,12 @@ const SidebarLinks = (userRol, userPermisos) => [
         to: "/medical-care/consultations",
       },
       {
-        label: "Triaje",
+        label: "Gestionar Triaje",
         to: "/medical-care/triage",
+      },
+      {
+        label: " Gestionar Patologias",
+        to: "/medical-care/patologias",
       }
     ],
   }

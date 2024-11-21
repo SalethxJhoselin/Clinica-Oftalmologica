@@ -543,3 +543,311 @@ export const createPaymentRecord = (payData) => {
         throw error;
     }
 };
+
+// /----------------------TRIAJES-------------------------------
+export const getAllTriajes = async () => {
+    try {
+        const response = await api.get('/triaje/listar');
+        return response.data; // Devuelve los triajes obtenidos
+    } catch (error) {
+        console.error('Error al obtener lista de triajes:', error);
+        message.error('Error al obtener lista de triajes');
+        throw error;
+    }
+};
+export const createTriaje = async (triajeData) => {
+    try {
+        // Hacer la solicitud POST para crear el triaje, pasando directamente el objeto triajeData
+        const response = await api.post('/triaje/crear', triajeData);
+        
+        // Mostrar mensaje de éxito
+        message.success("Triaje creado exitosamente");
+
+        // Retornar los datos de la respuesta
+        return response.data;
+
+    } catch (error) {
+        // Mostrar mensaje de error si algo falla
+        message.error('Error al crear el triaje');
+        throw error; // Lanza el error para que se pueda manejar en el lugar donde se invoque
+    }
+};
+export const deleteTriaje = async (id) => {
+    try {
+        // Hacer la solicitud DELETE para eliminar el triaje por ID
+        const response = await api.delete('/triaje/eliminar', {
+            data: { id }, // Pasar el ID del triaje como cuerpo de la solicitud
+        });
+
+        // Mostrar mensaje de éxito
+        message.success('Triaje eliminado exitosamente');
+
+        // Retornar la respuesta completa (o solo los datos si es necesario)
+        return response.data;
+    } catch (error) {
+        // Manejo de errores
+        console.error('Error al eliminar el triaje:', error);
+        message.error('Error al eliminar el triaje');
+        throw error;
+    }
+};
+// ---------DEPARTAMENTO------------------
+
+// Crear un departamento
+export const createDepartamento = async (nombre) => {
+    try {
+        const response = await api.post('/departamentos/crear', { nombre });
+        message.success('Departamento creado exitosamente');
+        return response.data; // Retorna la respuesta del servidor
+    } catch (error) {
+        console.error('Error al crear el departamento:', error);
+        message.error('Error al crear el departamento');
+        throw error;
+    }
+};
+
+// Editar un departamento
+export const editDepartamento = async (id, nombre) => {
+    try {
+        const response = await api.put('/departamentos/editar', { id, nombre });
+        message.success('Departamento editado exitosamente');
+        return response.data; // Retorna la respuesta del servidor
+    } catch (error) {
+        console.error('Error al editar el departamento:', error);
+        message.error('Error al editar el departamento');
+        throw error;
+    }
+};
+
+// Eliminar un departamento
+export const deleteDepartamento = async (id) => {
+    try {
+        const response = await api.delete('/departamentos/eliminar', {
+            data: { id }, // Enviar el ID del departamento en el cuerpo de la solicitud
+        });
+        message.success('Departamento eliminado exitosamente');
+        return response.data; // Retorna la respuesta del servidor
+    } catch (error) {
+        console.error('Error al eliminar el departamento:', error);
+        message.error('Error al eliminar el departamento');
+        throw error;
+    }
+};
+
+// Listar departamentos
+export const getAllDepartamentos = async () => {
+    try {
+        const response = await api.get('/departamentos/listar');
+        return response.data; // Retorna la lista de departamentos
+    } catch (error) {
+        console.error('Error al obtener la lista de departamentos:', error);
+        message.error('Error al obtener la lista de departamentos');
+        throw error;
+    }
+};
+
+// -------------------------Function para subir imagenes---------------
+export const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'Clinica'); // Cambia esto si usas otro preset en Cloudinary
+  
+    try {
+      const response = await fetch('https://api.cloudinary.com/v1_1/drugalhsm/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al subir la imagen');
+      }
+  
+      const data = await response.json();
+      return data.secure_url; // URL pública de la imagen subida
+    } catch (error) {
+      console.error('Error al subir la imagen:', error);
+      throw error;
+    }
+  };
+// --------------------Servicios------------------
+
+// Crear una patología
+export const createPatologia = async (nombre, descripcion, file) => {
+    try {
+      let imagenUrl = null;
+  
+      // Subir imagen si se proporciona
+      if (file) {
+        imagenUrl = await uploadImage(file); // Utiliza tu función de subida de imágenes
+      }
+  
+      const response = await api.post('/patologias/crear', {
+        nombre,
+        descripcion,
+        imagen: imagenUrl,
+      });
+  
+      return response.data; // Devuelve la respuesta del servidor
+    } catch (error) {
+      console.error('Error al crear la patología:', error);
+      throw error;
+    }
+  };
+  
+  // Editar una patología
+  export const editPatologia = async (id, nombre, descripcion, file) => {
+    try {
+        if (file) {
+            imagenUrl = await uploadImage(file); // Sube la nueva imagen
+          }
+          
+      // Construir el cuerpo de la solicitud dinámicamente
+      const requestBody = {
+        id,
+        nombre,
+        descripcion,
+      };
+     
+  
+      
+  
+      const response = await api.put('/patologias/editar', requestBody);
+  
+      return response.data; // Devuelve la respuesta del servidor
+    } catch (error) {
+      console.error('Error al editar la patología:', error);
+      throw error;
+    }
+  };
+
+//   export const editPatologia = async (id, nombre, descripcion, file) => {
+//     try {
+//       let imagenUrl = null;
+  
+//       // Obtener los datos actuales de la patología
+//       const currentPatologia = await getPatologiaById(id);
+  
+//       // Si se proporciona un archivo, subir la nueva imagen
+//       if (file) {
+//         imagenUrl = await uploadImage(file); // Subir la nueva imagen
+//       } else {
+//         // Si no se proporciona un archivo, mantener la imagen actual
+//         imagenUrl = currentPatologia.imagen;
+//       }
+  
+//       // Construir el cuerpo de la solicitud
+//       const requestBody = {
+//         id,
+//         nombre,
+//         descripcion,
+//         imagen: imagenUrl, // Usar la imagen actual o la nueva
+//       };
+  
+//       const response = await api.put('/patologias/editar', requestBody);
+  
+//       return response.data; // Devuelve la respuesta del servidor
+//     } catch (error) {
+//       console.error('Error al editar la patología:', error);
+//       throw error;
+//     }
+//   };
+  
+  // Obtener una patología por ID
+  export const getPatologiaById = async (id) => {
+    try {
+      const response = await api.post(`/patologias/obtener/${id}`);
+      return response.data; // Devuelve los datos de la patología
+    } catch (error) {
+      console.error('Error al obtener la patología:', error);
+      throw error;
+    }
+  };
+  
+  // Listar todas las patologías
+  export const getAllPatologias = async () => {
+    try {
+      const response = await api.get('/patologias/listar');
+      return response.data; // Devuelve la lista de patologías
+    } catch (error) {
+      console.error('Error al listar las patologías:', error);
+      throw error;
+    }
+  };
+  
+  // Eliminar una patología
+  export const deletePatologia = async (id) => {
+    try {
+      const response = await api.delete('/patologias/eliminar', {
+        data: { id }, // Enviar el ID en el cuerpo
+      });
+  
+      return response.data; // Devuelve la respuesta del servidor
+    } catch (error) {
+      console.error('Error al eliminar la patología:', error);
+      throw error;
+    }
+  };
+
+
+//   -------------------Servicios---------------------------------
+
+// Crear un servicio
+export const createServicio = async (nombre, descripcion, idDepartamento, idEspecialidad, precio, file) => {
+    try {
+      let imagenUrl = null;
+  
+      // Subir imagen si se proporciona
+      if (file) {
+        imagenUrl = await uploadImage(file); // Subir la imagen a Cloudinary
+      }
+  
+      const response = await api.post('/servicios/crear', {
+        nombre,
+        descripcion,
+        id_departamento: idDepartamento,
+        id_especialidad: idEspecialidad,
+        precio,
+        imagen_url: imagenUrl, // URL de la imagen subida
+      });
+  
+      return response.data; // Devuelve la respuesta del servidor
+    } catch (error) {
+      console.error('Error al crear el servicio:', error);
+      throw error;
+    }
+  };
+  
+  // Editar un servicio
+  export const editServicio = async (id, nombre, descripcion) => {
+    try {
+      const response = await api.put('/servicios/editar', { id, nombre, descripcion });
+      return response.data; // Respuesta del backend
+    } catch (error) {
+      console.error('Error al actualizar el servicio:', error);
+      throw error;
+    }
+  };
+  // Eliminar un servicio
+  export const deleteServicio = async (id) => {
+    try {
+      const response = await api.delete('/servicios/delete', {
+        data: { id }, // Enviar el ID en el cuerpo
+      });
+  
+      return response.data; // Devuelve la respuesta del servidor
+    } catch (error) {
+      console.error('Error al eliminar el servicio:', error);
+      throw error;
+    }
+  };
+  
+  // Listar todos los servicios
+  export const getAllServicios = async () => {
+    try {
+      const response = await api.get('/servicios/listar');
+      return response.data; // Devuelve la lista de servicios
+    } catch (error) {
+      console.error('Error al listar los servicios:', error);
+      throw error;
+    }
+  };

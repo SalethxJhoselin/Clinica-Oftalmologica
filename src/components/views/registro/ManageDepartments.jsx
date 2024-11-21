@@ -1,72 +1,103 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Space, Table, Button, Input, Typography } from 'antd';
+import { Space, Table, Button, Input, Typography, message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { getAllDepartamentos, deleteDepartamento, editDepartamento } from '../../../api/apiService'; // Importa tus APIs
+import RegisterDepartamento from './RegisterDepartamento';
 
 const { Title } = Typography;
 
-const ManageDepartments = () => {
-  const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+const ManageDepartaments = () => {
+  const [editingDepartamentoId, setEditingDepartamentoId] = useState(null);
   const [editedData, setEditedData] = useState({});
-  const [departments, setDepartments] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
 
-  // Simulated data
-  const fetchDepartments = async () => {
-    const simulatedDepartments = [
-      { id: 1, nombre: 'Recursos Humanos' },
-      { id: 2, nombre: 'Desarrollo' },
-      { id: 3, nombre: 'Marketing' },
-    ];
-    setDepartments(simulatedDepartments);
-  };
-
+  // Obtener departamentos de la API
   useEffect(() => {
-    fetchDepartments();
+    const fetchDepartamentos = async () => {
+      try {
+        const data = await getAllDepartamentos();
+        setDepartamentos(data);
+      } catch (error) {
+        console.error('Error al obtener los departamentos:', error);
+      }
+    };
+    fetchDepartamentos();
   }, []);
 
-  const handleEditDepartment = useCallback((departmentId) => {
-    setEditingDepartmentId(departmentId);
-    const department = departments.find(department => department.id === departmentId);
-    setEditedData({ [departmentId]: { nombre: department.nombre } });
-  }, [departments]);
+  // Función para iniciar la edición de un departamento
+  const handleEditDepartamento = useCallback((departamentoId) => {
+    setEditingDepartamentoId(departamentoId);
+    const departamento = departamentos.find((d) => d.id === departamentoId);
+    setEditedData({
+      [departamentoId]: { nombre: departamento.nombre },
+    });
+  }, [departamentos]);
 
-  const handleSaveDepartment = useCallback((departmentId) => {
-    setDepartments(prevDepartments => prevDepartments.map(department => 
-      department.id === departmentId ? { ...department, ...editedData[departmentId] } : department
-    ));
-    setEditingDepartmentId(null);
+  // Función para guardar los cambios realizados en un departamento
+  const handleSaveDepartamento = useCallback(async (departamentoId) => {
+    try {
+      const updatedData = editedData[departamentoId];
+      await editDepartamento(departamentoId, updatedData.nombre);
+      message.success(`Departamento actualizado exitosamente`);
+      setEditingDepartamentoId(null);
+      setDepartamentos((prev) =>
+        prev.map((d) =>
+          d.id === departamentoId ? { ...d, nombre: updatedData.nombre } : d
+        )
+      );
+    } catch (error) {
+      console.error('Error al guardar el departamento:', error);
+      message.error('Error al actualizar el departamento');
+    }
   }, [editedData]);
 
+  // Función para cancelar la edición
   const handleCancelEdit = useCallback(() => {
-    setEditingDepartmentId(null);
+    setEditingDepartamentoId(null);
     setEditedData({});
   }, []);
 
-  const handleDeleteDepartment = useCallback((departmentId) => {
-    setDepartments(prevDepartments => prevDepartments.filter(department => department.id !== departmentId));
+  // Función para eliminar un departamento
+  const handleDeleteDepartamento = useCallback(async (departamentoId) => {
+    try {
+      await deleteDepartamento(departamentoId);
+      message.success(`Departamento con ID ${departamentoId} eliminado exitosamente`);
+      setDepartamentos((prev) => prev.filter((d) => d.id !== departamentoId));
+    } catch (error) {
+      console.error('Error al eliminar el departamento:', error);
+      message.error('Error al eliminar el departamento');
+    }
   }, []);
 
-  const handleInputChange = useCallback((value, departmentId) => {
-    setEditedData(prevState => ({
+  // Función para manejar los cambios de entrada
+  const handleInputChange = useCallback((value, departamentoId) => {
+    setEditedData((prevState) => ({
       ...prevState,
-      [departmentId]: { nombre: value }
+      [departamentoId]: { nombre: value },
     }));
   }, []);
 
-  const renderEditableInput = (text, record) => {
-    if (record.id === editingDepartmentId) {
+  // Función para renderizar el input editable
+  const renderEditableInput = useCallback((text, record) => {
+    if (record.id === editingDepartamentoId) {
       return (
         <Input
           value={editedData[record.id]?.nombre || text}
           onChange={(e) => handleInputChange(e.target.value, record.id)}
-          onPressEnter={() => handleSaveDepartment(record.id)}
+          onPressEnter={() => handleSaveDepartamento(record.id)}
         />
       );
     }
     return text;
-  };
+  }, [editingDepartamentoId, editedData, handleInputChange, handleSaveDepartamento]);
 
+  // Definir las columnas para la tabla
   const columns = [
-    { title: 'ID', dataIndex: 'id', key: 'id' },
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
     {
       title: 'Nombre',
       dataIndex: 'nombre',
@@ -78,18 +109,22 @@ const ManageDepartments = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="small">
-          {editingDepartmentId === record.id ? (
+          {editingDepartamentoId === record.id ? (
             <>
-              <Button type="primary" onClick={() => handleSaveDepartment(record.id)}>Guardar</Button>
+              <Button type="primary" onClick={() => handleSaveDepartamento(record.id)}>Guardar</Button>
               <Button onClick={handleCancelEdit}>Cancelar</Button>
             </>
           ) : (
             <>
-              <Button type="primary" onClick={() => handleEditDepartment(record.id)}><EditOutlined /></Button>
+              <Button type="primary" onClick={() => handleEditDepartamento(record.id)}><EditOutlined /></Button>
               <Button
-                style={{ backgroundColor: '#F44336', color: '#fff' }}
-                onClick={() => handleDeleteDepartment(record.id)}
-              ><DeleteOutlined /></Button>
+                style={{
+                  backgroundColor: '#F44336',
+                  color: '#fff',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                }}
+                onClick={() => handleDeleteDepartamento(record.id)}><DeleteOutlined /></Button>
             </>
           )}
         </Space>
@@ -100,9 +135,12 @@ const ManageDepartments = () => {
   return (
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Departamentos</Title>
+      <div className="flex justify-end mb-6">
+        <RegisterDepartamento onSuccess={() => setDepartamentos([...departamentos])} />
+      </div>
       <Table
         columns={columns}
-        dataSource={departments}
+        dataSource={departamentos}
         rowKey="id"
         pagination={{ pageSize: 5, size: 'small' }}
         bordered
@@ -111,4 +149,4 @@ const ManageDepartments = () => {
   );
 };
 
-export default ManageDepartments;
+export default ManageDepartaments;
