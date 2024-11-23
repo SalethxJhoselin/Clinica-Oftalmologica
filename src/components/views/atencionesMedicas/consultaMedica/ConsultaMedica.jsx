@@ -1,7 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Modal, Form, Input, DatePicker, TimePicker, Select, message } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Table, Button, Space, Modal, Form, Input, DatePicker, message } from "antd";
 
 const { TextArea } = Input;
+
+// Componente personalizado para el TimePicker
+const CustomTimePicker = ({ value, onChange }) => {
+  const handleTimeChange = (e) => {
+    const time = e.target.value;
+    onChange(time); // Envía el valor seleccionado al formulario
+  };
+
+  return (
+    <input
+      type="time"
+      className="border rounded-md p-2 w-full"
+      value={value}
+      onChange={handleTimeChange}
+    />
+  );
+};
 
 const ConsultaMedica = () => {
   const [triajes, setTriajes] = useState([]);
@@ -34,28 +51,35 @@ const ConsultaMedica = () => {
 
   const columns = [
     {
-      title: 'ID Usuario',
-      dataIndex: 'usuario_id',
-      key: 'usuario_id',
+      title: "ID Usuario",
+      dataIndex: "usuario_id",
+      key: "usuario_id",
     },
     {
-      title: 'Fecha',
-      dataIndex: 'fecha',
-      key: 'fecha',
+      title: "Fecha",
+      dataIndex: "fecha",
+      key: "fecha",
       render: (text) => new Date(text).toLocaleDateString(),
     },
     {
-      title: 'Hora',
-      dataIndex: 'hora',
-      key: 'hora',
+      title: "Hora",
+      dataIndex: "hora",
+      key: "hora",
     },
     {
-      title: 'Acciones',
-      key: 'acciones',
+      title: "Acciones",
+      key: "acciones",
       render: (_, record) => (
         <Space size="small">
-          <Button type="primary" onClick={() => handleVerDetalle(record.id)}>Ver Detalle Triaje</Button>
-          <Button type="default" onClick={() => showModal(record.usuario_id, record.id)}>Generar Consulta</Button>
+          <Button type="primary" onClick={() => handleVerDetalle(record.id)}>
+            Ver Detalle Triaje
+          </Button>
+          <Button
+            type="default"
+            onClick={() => showModal(record.usuario_id, record.id)}
+          >
+            Generar Consulta
+          </Button>
         </Space>
       ),
     },
@@ -78,17 +102,17 @@ const ConsultaMedica = () => {
       const payload = {
         ...formData,
         fecha: formData.fecha.format("YYYY-MM-DD"),
-        hora_inicio: formData.hora_inicio.format("HH:mm:ss"),
-        hora_fin: formData.hora_fin.format("HH:mm:ss"),
+        hora_inicio: formData.hora_inicio,
+        hora_fin: formData.hora_fin,
         id_triaje: selectedTriajeId,
         id_usuario: selectedPacienteId,
       };
-      console.log('Datos enviados al backend:', payload);
-      message.success('Consulta registrada exitosamente');
+      console.log("Datos enviados al backend:", payload);
+      message.success("Consulta registrada exitosamente");
       setIsModalVisible(false);
     } catch (error) {
-      console.error('Error al enviar los datos:', error);
-      message.error('Error al registrar la consulta');
+      console.error("Error al enviar los datos:", error);
+      message.error("Error al registrar la consulta");
     }
   };
 
@@ -104,7 +128,7 @@ const ConsultaMedica = () => {
         columns={columns}
         rowKey="id"
         bordered
-        pagination={{ pageSize: 5, size: 'small' }}
+        pagination={{ pageSize: 5, size: "small" }}
       />
       {/* Modal para generar consulta */}
       <Modal
@@ -119,7 +143,7 @@ const ConsultaMedica = () => {
           <Form.Item
             label="Motivo de Consulta"
             name="motivo_consulta"
-            rules={[{ required: true, message: 'Ingrese el motivo de la consulta' }]}
+            rules={[{ required: true, message: "Ingrese el motivo de la consulta" }]}
           >
             <TextArea rows={3} />
           </Form.Item>
@@ -187,25 +211,25 @@ const ConsultaMedica = () => {
             <DatePicker />
           </Form.Item>
           <Form.Item
-            label="Hora Inicio"
-            name="hora_inicio"
-            rules={[{ required: true, message: 'Seleccione la hora de inicio' }]}
-          >
-            <TimePicker format="HH:mm" />
-          </Form.Item>
-          <Form.Item
-            label="Hora Fin"
-            name="hora_fin"
-            rules={[{ required: true, message: 'Seleccione la hora de fin' }]}
-          >
-            <TimePicker format="HH:mm" />
-          </Form.Item>
-          <Form.Item
             label="Test Lagrimal"
             name="test_lagrimal"
             rules={[{ required: true, message: 'Ingrese el test lagrimal' }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            label="Hora Inicio"
+            name="hora_inicio"
+            rules={[{ required: true, message: "Seleccione la hora de inicio" }]}
+          >
+            <CustomTimePicker />
+          </Form.Item>
+          <Form.Item
+            label="Hora Fin"
+            name="hora_fin"
+            rules={[{ required: true, message: "Seleccione la hora de fin" }]}
+          >
+            <CustomTimePicker />
           </Form.Item>
         </Form>
       </Modal>

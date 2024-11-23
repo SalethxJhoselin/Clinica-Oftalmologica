@@ -115,7 +115,6 @@ export const fetchPermissions = async () => {
     }
 };
 
-//////no quiere hacer put :( 
 export const updateRolePermissions = async (roleId, permissionsData) => {
     try {
         const payload = {

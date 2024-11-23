@@ -17,8 +17,5 @@ export default defineConfig({
   ],
   build: {
     chunkSizeWarningLimit: 2000, // Incrementa el límite de tamaño a 2 MB
-    rollupOptions: {
-      external: ['antd/es/time-picker/style'], // Externalizamos el módulo problemático
-    },
   },
 });

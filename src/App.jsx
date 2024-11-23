@@ -6,7 +6,7 @@ import Sidebar from './components/layout/Sidebar';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
 import { registrarVisita } from './api/apiService';
-import 'antd/dist/reset.css';
+
 const AppContent = () => {
   const { isLoggedIn, sidebarOpen, setSidebarOpen } = useAuth();
   const location = useLocation(); // Hook para obtener la ruta actual
