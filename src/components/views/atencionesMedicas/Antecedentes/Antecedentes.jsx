@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, message, Typography, Space } from 'antd';
+import axios from 'axios';
 import { getAllPatients } from '../../../../api/apiService';
 
 const { TextArea } = Input;
@@ -15,58 +16,6 @@ const Antecedentes = () => {
     const [selectedAntecedentes, setSelectedAntecedentes] = useState([]);
     const [form] = Form.useForm();
 
-    // Datos simulados de antecedentes médicos
-    const antecedentesData = [
-        {
-            usuario: { id: 1, nombre: "Jhon Said", apellido_paterno: "Andia", apellido_materno: "Merino" },
-            fecha_apertura: "2024-11-20T00:00:00.000Z",
-            antecedentes: [
-                {
-                    id: 3,
-                    tipo: "Alergias",
-                    descripcion: "Alergia severa a penicilina",
-                    especifico1: "medicamentos",
-                    especifico2: "penicilina",
-                    fecha_evento: "2024-01-01T00:00:00.000Z",
-                    es_importante: false,
-                },
-                {
-                    id: 7,
-                    tipo: "Familiar",
-                    descripcion: "Cáncer Biliar",
-                    especifico1: "Hígado afectado",
-                    especifico2: "etapa terminal",
-                    fecha_evento: "2022-10-16T00:00:00.000Z",
-                    es_importante: true,
-                },
-            ],
-        },
-        {
-            usuario: { id: 8, nombre: "jhoel", apellido_paterno: "rodas", apellido_materno: "cabrera" },
-            fecha_apertura: "2024-11-20T00:00:00.000Z",
-            antecedentes: [
-                {
-                    id: 1,
-                    tipo: "Alergias",
-                    descripcion: "Alergia severa a penicilina",
-                    especifico1: "medicamentos",
-                    especifico2: "penicilina",
-                    fecha_evento: "2024-01-01T00:00:00.000Z",
-                    es_importante: true,
-                },
-                {
-                    id: 6,
-                    tipo: "Operacion",
-                    descripcion: "Cornea",
-                    especifico1: "primer operación",
-                    especifico2: "nada",
-                    fecha_evento: "2024-10-20T00:00:00.000Z",
-                    es_importante: false,
-                },
-            ],
-        },
-    ];
-
     useEffect(() => {
         const fetchPatients = async () => {
             try {
@@ -78,7 +27,6 @@ const Antecedentes = () => {
         };
 
         fetchPatients();
-        setAntecedentes(antecedentesData); // Carga los antecedentes simulados
     }, []);
 
     const showModal = (patient) => {
@@ -94,9 +42,18 @@ const Antecedentes = () => {
                 ...formData,
                 usuario_id: selectedPatient.id, // Incluye el ID del paciente seleccionado
             };
-            console.log('Antecedente registrado:', payload); // Simula el envío al backend
-            message.success('Antecedente registrado exitosamente');
-            setIsModalVisible(false); // Cierra el modal
+            console.log('Datos enviados:', payload); // Muestra los datos que se enviarán
+
+            // Enviar los datos al backend
+            const response = await axios.post('https://clinica-oftalmologica.onrender.com/antecedentes/crear', payload);
+
+            if (response.status === 201 || response.status === 200) {
+                message.success('Antecedente registrado exitosamente');
+                setIsModalVisible(false); // Cierra el modal
+                form.resetFields(); // Limpia el formulario
+            } else {
+                throw new Error('Error al registrar antecedente');
+            }
         } catch (error) {
             console.error('Error al registrar antecedente:', error);
             message.error('Error al registrar el antecedente');
@@ -212,6 +169,36 @@ const Antecedentes = () => {
                         rules={[{ required: true, message: 'Por favor, ingrese una descripción' }]}
                     >
                         <TextArea rows={4} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Específico 1"
+                        name="especifico1"
+                        rules={[{ required: true, message: 'Por favor, ingrese un valor para Específico 1' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Específico 2"
+                        name="especifico2"
+                        rules={[{ required: true, message: 'Por favor, ingrese un valor para Específico 2' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Fecha del Evento"
+                        name="fecha_evento"
+                        rules={[{ required: true, message: 'Por favor, seleccione la fecha del evento' }]}
+                    >
+                        <Input type="date" />
+                    </Form.Item>
+                    <Form.Item
+                        name="es_importante"
+                        valuePropName="checked"
+                    >
+                        <Select>
+                            <Option value={true}>Importante</Option>
+                            <Option value={false}>No</Option>
+                        </Select>
                     </Form.Item>
                 </Form>
             </Modal>
