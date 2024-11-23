@@ -1,40 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Select, TimePicker, Input, Form, Button, message } from 'antd';
-import dayjs from 'dayjs';
+import { Modal, Select, Input, Form, Button } from 'antd';
 import { getAllServices, createSpecialistProgramming } from '../../../api/apiService';
 
 const { Option } = Select;
 
 const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, additionalSelectedDates }) => {
-  const [form] = Form.useForm(); 
-  const [services, setServices] = useState([]); 
- 
+  const [form] = Form.useForm();
+  const [services, setServices] = useState([]);
+
   const fetchServices = async () => {
     try {
       const response = await getAllServices();
-      setServices(response); 
+      setServices(response);
     } catch (error) {
       console.error('Error al obtener los servicios:', error);
     }
   };
 
   useEffect(() => {
-    fetchServices(); 
+    fetchServices();
   }, []);
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
       const selectedService = services.find(service => service.id === values.servicio);
-      const horaInicioFormatted = values.horaInicio.format('HH:mm:ss');
-      const horaFinFormatted = values.horaFinal.format('HH:mm:ss');
+
       const dataToSend = {
         empleado_id: selectedPerson.id,
         fechas: additionalSelectedDates,
-        hora_inicio: horaInicioFormatted,
-        hora_fin: horaFinFormatted,
+        hora_inicio: values.horaInicio,
+        hora_fin: values.horaFinal,
         servicio_id: values.servicio,
-        especialidad_id: selectedService ? selectedService.id_especialidad : null, // Agregamos especialidad_id
+        especialidad_id: selectedService ? selectedService.id_especialidad : null,
       };
 
       const response = await createSpecialistProgramming(dataToSend);
@@ -74,19 +72,27 @@ const ProgramacionModal = ({ isVisible, onCancel, selectedPerson, additionalSele
             ))}
           </Select>
         </Form.Item>
+
         <Form.Item
           name="horaInicio"
           label="Hora Inicio"
           rules={[{ required: true, message: 'Por favor seleccione la hora de inicio' }]}
         >
-          <TimePicker format="HH:mm" style={{ width: '100%' }} />
+          <Input
+            type="time"
+            className="border rounded-md w-full p-2"
+          />
         </Form.Item>
+
         <Form.Item
           name="horaFinal"
           label="Hora Final"
           rules={[{ required: true, message: 'Por favor seleccione la hora final' }]}
         >
-          <TimePicker format="HH:mm" style={{ width: '100%' }} />
+          <Input
+            type="time"
+            className="border rounded-md w-full p-2"
+          />
         </Form.Item>
       </Form>
     </Modal>
