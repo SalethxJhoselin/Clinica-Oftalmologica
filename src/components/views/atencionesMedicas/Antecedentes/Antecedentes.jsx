@@ -38,11 +38,19 @@ const Antecedentes = () => {
     const handleModalOk = async () => {
         try {
             const formData = await form.validateFields(); // Valida los campos del formulario
+
+            // Validar que exista un paciente seleccionado
+            if (!selectedPatient || !selectedPatient.paciente_id) {
+                message.error('Error: No se seleccionó un paciente válido.');
+                return;
+            }
+
             const payload = {
                 ...formData,
-                usuario_id: selectedPatient.id, // Incluye el ID del paciente seleccionado
+                usuario_id: selectedPatient.paciente_id, // Usar el campo correcto para el ID del paciente
             };
-            console.log('Datos enviados:', payload); // Muestra los datos que se enviarán
+
+            console.log('Datos enviados:', payload); // Mostrar los datos enviados al backend
 
             // Enviar los datos al backend
             const response = await axios.post('https://clinica-oftalmologica.onrender.com/antecedentes/crear', payload);
@@ -59,6 +67,19 @@ const Antecedentes = () => {
             message.error('Error al registrar el antecedente');
         }
     };
+
+    useEffect(() => {
+        const fetchAntecedentes = async () => {
+            try {
+                const response = await axios.get('https://clinica-oftalmologica.onrender.com/antecedentes/listar');
+                setAntecedentes(response.data);
+            } catch (error) {
+                message.error('Error al obtener la lista de antecedentes');
+            }
+        };
+
+        fetchAntecedentes();
+    }, []);
 
     const handleModalCancel = () => {
         setIsModalVisible(false); // Cierra el modal
@@ -111,7 +132,20 @@ const Antecedentes = () => {
             title: 'Paciente',
             dataIndex: 'usuario',
             key: 'usuario',
-            render: (usuario) => `${usuario.nombre} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
+            render: (usuario) =>
+                `${usuario.nombre} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
+        },
+        {
+            title: 'Fecha de Apertura',
+            dataIndex: 'fecha_apertura',
+            key: 'fecha_apertura',
+            render: (text) => new Date(text).toLocaleDateString(),
+        },
+        {
+            title: 'Tipo',
+            dataIndex: 'antecedentes',
+            key: 'tipo',
+            render: (antecedentes) => antecedentes.map((ant) => ant.tipo).join(', '),
         },
         {
             title: 'Acciones',
@@ -123,6 +157,7 @@ const Antecedentes = () => {
             ),
         },
     ];
+
 
     return (
         <div className="p-5 bg-white rounded-2xl shadow-lg mt-2">
