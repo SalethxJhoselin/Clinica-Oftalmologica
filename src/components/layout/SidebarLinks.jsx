@@ -118,9 +118,19 @@ const SidebarLinks = (userRol, userPermisos) => [
         to: "/cirugia",
       },
       {
+        label: " Gestionar Tratamiento",
+        to: "/medical-care/Tratamiento",
+      },
+      {
+        label: " Gestionar Diagnostico",
+        to: "/medical-care/Diagnostico",
+      },
+      {
         label: " Historia Clinica",
         to: "/historialMedico",
       }
+
+
     ],
   }
 ];
