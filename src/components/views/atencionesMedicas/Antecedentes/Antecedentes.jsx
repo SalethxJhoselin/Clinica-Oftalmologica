@@ -40,14 +40,14 @@ const Antecedentes = () => {
             const formData = await form.validateFields(); // Valida los campos del formulario
 
             // Validar que exista un paciente seleccionado
-            if (!selectedPatient || !selectedPatient.paciente_id) {
+            if (!selectedPatient || !selectedPatient.usuario_id) {
                 message.error('Error: No se seleccionó un paciente válido.');
                 return;
             }
 
             const payload = {
                 ...formData,
-                usuario_id: selectedPatient.paciente_id, // Usar el campo correcto para el ID del paciente
+                usuario_id: selectedPatient.usuario_id, // Usar el campo correcto para el ID del paciente
             };
 
             console.log('Datos enviados:', payload); // Mostrar los datos enviados al backend
