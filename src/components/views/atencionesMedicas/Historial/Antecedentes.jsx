@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, notification } from 'antd';
+import { Table, Button, Modal, notification } from 'antd';
 
 const Antecedentes = () => {
   const [antecedentes, setAntecedentes] = useState([]);
+  const [selectedAntecedente, setSelectedAntecedente] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchAntecedentes = async () => {
@@ -33,14 +35,41 @@ const Antecedentes = () => {
       title: 'Acciones',
       key: 'acciones',
       render: (_, record) => (
-        <Button type="primary" onClick={() => alert(`Ver detalle de Antecedente ID: ${record.antecedente_id}`)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setSelectedAntecedente(record);
+            setIsModalVisible(true);
+          }}
+        >
           Ver Detalle
         </Button>
       ),
     },
   ];
 
-  return <Table dataSource={antecedentes} columns={columns} rowKey="antecedente_id" />;
+  return (
+    <>
+      <Table dataSource={antecedentes} columns={columns} rowKey="antecedente_id" />
+
+      <Modal
+        title="Detalle del Antecedente"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        {selectedAntecedente && (
+          <div>
+            <p><strong>Tipo de Antecedente:</strong> {selectedAntecedente.tipo_antecedente}</p>
+            <p><strong>Especifico 1:</strong> {selectedAntecedente.especifico1}</p>
+            <p><strong>Especifico 2:</strong> {selectedAntecedente.especifico2}</p>
+            <p><strong>Fecha del Evento:</strong> {selectedAntecedente.fecha_evento}</p>
+            <p><strong>Importante:</strong> {selectedAntecedente.es_importante ? 'Sí' : 'No'}</p>
+          </div>
+        )}
+      </Modal>
+    </>
+  );
 };
 
 export default Antecedentes;

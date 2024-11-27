@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, notification } from 'antd';
+import { Table, Button, Modal, notification } from 'antd';
 
 const Diagnosticos = () => {
   const [diagnosticos, setDiagnosticos] = useState([]);
+  const [selectedDiagnostico, setSelectedDiagnostico] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchDiagnosticos = async () => {
@@ -33,14 +35,38 @@ const Diagnosticos = () => {
       title: 'Acciones',
       key: 'acciones',
       render: (_, record) => (
-        <Button type="primary" onClick={() => alert(`Ver detalle de Diagnóstico ID: ${record.id}`)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            setSelectedDiagnostico(record);
+            setIsModalVisible(true);
+          }}
+        >
           Ver Detalle
         </Button>
       ),
     },
   ];
 
-  return <Table dataSource={diagnosticos} columns={columns} rowKey="id" />;
+  return (
+    <>
+      <Table dataSource={diagnosticos} columns={columns} rowKey="id" />
+
+      <Modal
+        title="Detalle del Diagnóstico"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        {selectedDiagnostico && (
+          <div>
+            <p><strong>Consulta ID:</strong> {selectedDiagnostico.consulta_id}</p>
+            <p><strong>Fecha:</strong> {selectedDiagnostico.fecha}</p>
+          </div>
+        )}
+      </Modal>
+    </>
+  );
 };
 
 export default Diagnosticos;
