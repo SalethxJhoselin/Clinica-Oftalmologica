@@ -28,6 +28,7 @@ import ManagePatologia from '../components/views/atencionesMedicas/ManagePatolog
 import Antecedentes from '../components/views/atencionesMedicas/Antecedentes/Antecedentes';
 import ConsultaMedica from '../components/views/atencionesMedicas/consultaMedica/ConsultaMedica';
 import ManageHistorial from '../components/views/atencionesMedicas/Historial/ManageHistorial';
+import ManageCirugias from '../components/views/atencionesMedicas/Cirugias/ManageCirugias';
 
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
@@ -85,6 +86,7 @@ const MyRoutes = () => {
                 <Route path="/medical-care/patologias" element={<ManagePatologia />} />
 
                 <Route path="/historialMedico" element={<ManageHistorial />} />
+                <Route path="/cirugia" element={<ManageCirugias />} />
 
                 <Route path="/antecedentes" element={<Antecedentes />} />
                 <Route path="/consulta" element={<ConsultaMedica />} />
