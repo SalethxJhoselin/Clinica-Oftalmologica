@@ -32,10 +32,6 @@ const SidebarLinks = (userRol, userPermisos) => [
     label: "Registros",
     icon: <FileAddOutlined />,
     subMenu: [
-      hasPermission(userPermisos, "Tipos de Atenciones") && {
-        label: "Tipos de Atenciones",
-        to: "/admin/service-types",
-      },
       hasPermission(userPermisos, "Departamentos") && {
         label: "Departamentos",
         to: "/admin/departments",
@@ -116,6 +112,10 @@ const SidebarLinks = (userRol, userPermisos) => [
       {
         label: " Gestionar Patologias",
         to: "/medical-care/patologias",
+      },
+      {
+        label: " Historia Clinica",
+        to: "/historialMedico",
       }
     ],
   }

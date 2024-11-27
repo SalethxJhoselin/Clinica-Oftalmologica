@@ -27,6 +27,8 @@ import ManageTriaje from '../components/views/atencionesMedicas/ManageTriaje';
 import ManagePatologia from '../components/views/atencionesMedicas/ManagePatologia';
 import Antecedentes from '../components/views/atencionesMedicas/Antecedentes/Antecedentes';
 import ConsultaMedica from '../components/views/atencionesMedicas/consultaMedica/ConsultaMedica';
+import ManageHistorial from '../components/views/atencionesMedicas/Historial/ManageHistorial';
+
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -76,11 +78,13 @@ const MyRoutes = () => {
 
                 <Route path="/admin/pagosrealizados" element={<ManageTriaje />} />
 
-                <Route path="/medical-care/triage" element={<ManageTriaje/>} />
-                <Route path="/medical-care/patologias" element={<ManagePatologia/>} />
+                <Route path="/medical-care/triage" element={<ManageTriaje />} />
+                <Route path="/medical-care/patologias" element={<ManagePatologia />} />
                 <Route path="/admin/access-log" element={<ManageBitacoraData />} />
                 <Route path="/medical-care/triage" element={<ManageTriaje />} />
                 <Route path="/medical-care/patologias" element={<ManagePatologia />} />
+
+                <Route path="/historialMedico" element={<ManageHistorial />} />
 
                 <Route path="/antecedentes" element={<Antecedentes />} />
                 <Route path="/consulta" element={<ConsultaMedica />} />
