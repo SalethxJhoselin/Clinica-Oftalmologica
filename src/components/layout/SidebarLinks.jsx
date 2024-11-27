@@ -116,7 +116,16 @@ const SidebarLinks = (userRol, userPermisos) => [
       {
         label: " Gestionar Patologias",
         to: "/medical-care/patologias",
+      },
+      {
+        label: " Gestionar Tratamiento",
+        to: "/medical-care/Tratamiento",
+      },
+      {
+        label: " Gestionar Diagnostico",
+        to: "/medical-care/Diagnostico",
       }
+      
     ],
   }
 ];

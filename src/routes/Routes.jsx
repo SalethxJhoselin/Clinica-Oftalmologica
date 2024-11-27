@@ -27,6 +27,8 @@ import ManageTriaje from '../components/views/atencionesMedicas/ManageTriaje';
 import ManagePatologia from '../components/views/atencionesMedicas/ManagePatologia';
 import Antecedentes from '../components/views/atencionesMedicas/Antecedentes/Antecedentes';
 import ConsultaMedica from '../components/views/atencionesMedicas/consultaMedica/ConsultaMedica';
+import ManageTreatments from '../components/views/atencionesMedicas/ManageTreatments';
+import ManageDiagnostics from '../components/views/atencionesMedicas/ManageDiagnostics';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -81,10 +83,12 @@ const MyRoutes = () => {
                 <Route path="/admin/access-log" element={<ManageBitacoraData />} />
                 <Route path="/medical-care/triage" element={<ManageTriaje />} />
                 <Route path="/medical-care/patologias" element={<ManagePatologia />} />
-
+                
                 <Route path="/antecedentes" element={<Antecedentes />} />
                 <Route path="/consulta" element={<ConsultaMedica />} />
-
+                <Route path="/medical-care/Tratamiento" element={<ManageTreatments />} />
+                <Route path="/medical-care/Diagnostico" element={<ManageDiagnostics />} />
+                
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />

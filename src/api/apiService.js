@@ -860,3 +860,96 @@ export const createServicio = async (nombre, descripcion, idDepartamento, idEspe
       throw error;
     }
   };
+
+
+  // Crear un tratamiento
+export const createTreatment = async (treatmentData) => {
+    try {
+        const response = await api.post('/tratamientos/crear', treatmentData);
+        return response.data;
+    } catch (error) {
+        console.error('Error al crear el tratamiento:', error);
+        throw error;
+    }
+};
+
+// Editar un tratamiento
+export const updateTreatment = async (treatmentId, updatedData) => {
+    try {
+        const dataToSend = { id: treatmentId, ...updatedData };
+        const response = await api.put('/tratamientos/editar', dataToSend);
+        return response.data;
+    } catch (error) {
+        console.error('Error al actualizar el tratamiento:', error);
+        throw error;
+    }
+};
+
+// Obtener todos los tratamientos
+export const getAllTreatments = async () => {
+    try {
+        const response = await api.get('/tratamientos/listar');
+        return response.data;
+    } catch (error) {
+        console.error('Error al listar los tratamientos:', error);
+        throw error;
+    }
+};
+
+// Obtener tratamientos por consulta
+export const getTreatmentsByConsultaId = async (consultaId) => {
+    try {
+        const response = await api.get(`/tratamientos/consulta/${consultaId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener los tratamientos por consulta:', error);
+        throw error;
+    }
+};
+
+//========== DIAGNÓSTICOS ====================================
+
+// Crear un diagnóstico
+export const createDiagnostic = async (diagnosticData) => {
+    try {
+        const response = await api.post('/diagnosticos/crear', diagnosticData);
+        return response.data;
+    } catch (error) {
+        console.error('Error al crear el diagnóstico:', error);
+        throw error;
+    }
+};
+
+// Editar un diagnóstico
+export const updateDiagnostic = async (diagnosticId, updatedData) => {
+    try {
+        const dataToSend = { id: diagnosticId, ...updatedData };
+        const response = await api.put('/diagnosticos/editar', dataToSend);
+        return response.data;
+    } catch (error) {
+        console.error('Error al actualizar el diagnóstico:', error);
+        throw error;
+    }
+};
+
+// Listar todos los diagnósticos
+export const getAllDiagnostics = async () => {
+    try {
+        const response = await api.get('/diagnosticos/listar');
+        return response.data;
+    } catch (error) {
+        console.error('Error al listar los diagnósticos:', error);
+        throw error;
+    }
+};
+
+// Obtener diagnóstico por consulta
+export const getDiagnosticByConsultaId = async (consultaId) => {
+    try {
+        const response = await api.get(`/diagnosticos/consulta/${consultaId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener el diagnóstico por consulta:', error);
+        throw error;
+    }
+};
