@@ -953,3 +953,77 @@ export const getDiagnosticByConsultaId = async (consultaId) => {
         throw error;
     }
 };
+
+
+
+// API para crear medida de lentes
+export const createLensMeasure = async (measureData) => {
+    try {
+      const response = await api.post('/medidas-lentes/crear', measureData);
+      return response.data; // Devuelve la respuesta de la API
+    } catch (error) {
+      throw new Error('Error al crear la medida de lentes');
+    }
+  };
+
+  // API para editar medida de lentes
+  export const editLensMeasure = async (measureId,measureData) => {
+    try {
+      const dataToSend = { id: measureId, ...measureData }; // Asegúrate de incluir el 'id'
+      const response = await api.put('/medidas-lentes/editar', dataToSend);
+      return response.data; // Devuelve la respuesta de la API
+    } catch (error) {
+      throw new Error('Error al editar la medida de lentes');
+    }
+};
+
+  // API para listar medidas de lentes
+export const getLensMeasures = async () => {
+    try {
+      const response = await api.get('/medidas-lentes/listar');
+      return response.data; // Devuelve los datos de las medidas de lentes
+    } catch (error) {
+      throw new Error('Error al listar las medidas de lentes');
+    }
+  };
+  // API para obtener las medidas de lentes por ID
+export const getLensMeasureById = async (id) => {
+    try {
+      const response = await api.get(`/medidas-lentes/${id}`);
+      return response.data; // Devuelve los datos de la medida de lentes por ID
+    } catch (error) {
+      throw new Error('Error al obtener la medida de lentes');
+    }
+  };
+
+  // API para crear receta
+export const createRecipe = async (recipeData) => {
+    try {
+      const response = await api.post('/recetas/crear', recipeData);
+      return response.data; // Devuelve la respuesta de la API
+    } catch (error) {
+      throw new Error('Error al crear la receta');
+    }
+  };
+
+  // API para listar recetas
+export const getRecipes = async () => {
+    try {
+      const response = await api.get('/recetas/listar');
+      return response.data; // Devuelve las recetas listadas
+    } catch (error) {
+      throw new Error('Error al obtener las recetas');
+    }
+  };
+
+  // API para editar receta
+// API para editar receta
+export const editRecipe = async (recipeId, recipeData) => {
+    try {
+      // Usamos `recipeId` en la URL para la edición de la receta
+      const response = await api.put(`/recetas/editar/${recipeId}`, recipeData);
+      return response.data; // Devuelve la respuesta de la API
+    } catch (error) {
+      throw new Error('Error al editar la receta');
+    }
+  };

@@ -128,8 +128,15 @@ const SidebarLinks = (userRol, userPermisos) => [
       {
         label: " Historia Clinica",
         to: "/historialMedico",
+      },
+      {
+        label: " Gestionar Medidas",
+        to: "/medical-care/Medidas",
+      },
+      {
+        label: " Aministrar Medicamentos",
+        to: "/medical-care/Medicamentos",
       }
-
 
     ],
   }

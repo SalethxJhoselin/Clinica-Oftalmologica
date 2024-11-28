@@ -31,7 +31,8 @@ import ManageTreatments from '../components/views/atencionesMedicas/ManageTreatm
 import ManageDiagnostics from '../components/views/atencionesMedicas/ManageDiagnostics';
 import ManageHistorial from '../components/views/atencionesMedicas/Historial/ManageHistorial';
 import ManageCirugias from '../components/views/atencionesMedicas/Cirugias/ManageCirugias';
-
+import ManageLensMeasures from '../components/views/atencionesMedicas/ManageLensMeasures';
+import ManageRecipes from '../components/views/atencionesMedicas/ManageRecipes';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -95,6 +96,8 @@ const MyRoutes = () => {
                 <Route path="/consulta" element={<ConsultaMedica />} />
                 <Route path="/medical-care/Tratamiento" element={<ManageTreatments />} />
                 <Route path="/medical-care/Diagnostico" element={<ManageDiagnostics />} />
+                <Route path="/medical-care/Medidas" element={<ManageLensMeasures />} />
+                <Route path="/medical-care/Medicamentos" element={<ManageRecipes />} />
                 
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
