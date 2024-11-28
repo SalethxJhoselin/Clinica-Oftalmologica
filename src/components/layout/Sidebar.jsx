@@ -11,7 +11,7 @@ const { Sider } = Layout;
 const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen } = useAuth();
   const [openKeys, setOpenKeys] = useState([]);
-  const { userRol, userPermisos, idSub } = useUser(); // Obtener id_sub del contexto
+  const { userRol, userPermisos, userSubId } = useUser(); // Obtener id_sub del contexto
   const linksArray = SidebarLinks(userRol, userPermisos);
 
   const toggleSidebar = () => {
@@ -45,15 +45,20 @@ const Sidebar = () => {
 
   // Verificar si id_sub es diferente de null para mostrar el Sidebar
   useEffect(() => {
-    if (idSub) {
-      // Si idSub es no nulo, podemos hacer algo, como mostrar el sidebar o realizar una acción adicional
-      console.log("id_sub disponible:", idSub);
+    console.log("vamos a veerrr el sidebar!!!!:", userSubId);
+    if (userSubId) {
+      console.log("Sidebar renderizado - id_sub disponible:", userSubId);
     }
-  }, [idSub]); // Dependemos de la actualización de idSub
+  }, [userSubId]); // Dependemos de la actualización de userSubId
+
+  // Mostrar en consola cada vez que el Sidebar se renderice
+  useEffect(() => {
+    console.log("Sidebar renderizado");
+  }, [sidebarOpen, userSubId]);
 
   // No mostrar Sidebar si idSub es null
-  if (!idSub) {
-    return null; // No renderiza el Sidebar si id_sub es null
+  if (userSubId === null) {
+    return <div>Loading...</div>; // Mostrar mensaje de carga hasta que idSub esté disponible
   }
 
   return (

@@ -7,29 +7,30 @@ export const UserProvider = ({ children }) => {
     const [userCi, setUserCi] = useState(null);
     const [userRol, setUserRol] = useState(null);
     const [userPermisos, setUserPermisos] = useState([]);
-    const [userSubId, setUserSubId] = useState(null); // Agregar estado para id_sub
+    const [userSubId, setUserSubId] = useState(null); // Estado para id_sub
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); // Obtén el token del localStorage
+        const token = localStorage.getItem('token'); // Obtener token del localStorage
         if (token) {
             try {
-                const decodedToken = jwtDecode(token); // Decodifica el token
+                const decodedToken = jwtDecode(token); // Decodificar el token
                 console.log(decodedToken);
 
-                const ci = decodedToken.ci || null; // Obtén el ci del token decodificado
-                const subId = decodedToken.id_sub || null; // Obtén el id_sub del token decodificado
+                const ci = decodedToken.ci || null; // Obtener ci del token decodificado
+                const subId = decodedToken.id_sub || null; // Obtener id_sub del token decodificado
 
                 setUserCi(ci);
                 setUserRol(decodedToken.rol?.nombre || null);
                 setUserPermisos(decodedToken.permisos?.map(permiso => permiso.nombre) || []);
                 setUserSubId(subId); // Guardar el id_sub
 
-                // Guarda el userId (ci) y el id_sub en el localStorage
+                // Guardar los valores en localStorage
                 if (ci) {
-                    localStorage.setItem('userId', ci); // Almacena el userId (CI) en localStorage
+                    localStorage.setItem('userId', ci); // Almacenar userId (CI) en localStorage
                 }
                 if (subId) {
-                    localStorage.setItem('userSubId', subId); // Almacena el id_sub en localStorage
+                    console.log('userSubId en el userContext', subId);
+                    localStorage.setItem('userSubId', subId); // Almacenar id_sub en localStorage
                 }
             } catch (error) {
                 console.error('Error decoding token:', error);
@@ -39,14 +40,14 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider value={{
-            userCi, 
-            userRol, 
-            userPermisos, 
-            userSubId, // Proveer el id_sub en el contexto
-            setUserCi, 
-            setUserRol, 
-            setUserPermisos, 
-            setUserSubId // También proveer el setUserSubId
+            userCi,
+            userRol,
+            userPermisos,
+            userSubId, // Proveer id_sub en el contexto
+            setUserCi,
+            setUserRol,
+            setUserPermisos,
+            setUserSubId // También proveer setUserSubId
         }}>
             {children}
         </UserContext.Provider>
