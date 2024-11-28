@@ -3,26 +3,32 @@ import { Space, Table, Button, Input, Typography, message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { getAllDepartamentos, deleteDepartamento, editDepartamento } from '../../../api/apiService'; // Importa tus APIs
 import RegisterDepartamento from './RegisterDepartamento';
+import { useUser } from '../../../context/UserContext';
 
 const { Title } = Typography;
 
 const ManageDepartaments = () => {
+  const { userSubId } = useUser(); // Obtenemos el userSubId desde el contexto
   const [editingDepartamentoId, setEditingDepartamentoId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [departamentos, setDepartamentos] = useState([]);
 
-  // Obtener departamentos de la API
+  // Obtener departamentos de la API y filtrar por id_sub
   useEffect(() => {
     const fetchDepartamentos = async () => {
       try {
         const data = await getAllDepartamentos();
-        setDepartamentos(data);
+
+        // Filtrar los departamentos para que solo se muestren aquellos con el mismo id_sub que el del usuario
+        const filteredDepartamentos = data.filter((departamento) => departamento.id_sub === userSubId);
+
+        setDepartamentos(filteredDepartamentos);
       } catch (error) {
         console.error('Error al obtener los departamentos:', error);
       }
     };
     fetchDepartamentos();
-  }, []);
+  }, [userSubId]); // Dependemos de userSubId, por lo que si cambia, volvemos a obtener los departamentos
 
   // Función para iniciar la edición de un departamento
   const handleEditDepartamento = useCallback((departamentoId) => {

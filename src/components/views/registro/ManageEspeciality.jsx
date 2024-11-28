@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Space, Table, Button, Input, Typography, message } from 'antd';
-import EspecialityModal from './EspecialityModal'; // Cambiado a EspecialityModal
+import EspecialityModal from './EspecialityModal';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { getAllSpecialties, editSpecialty, deleteSpecialty } from '../../../api/apiService';
+import { useUser } from '../../../context/UserContext'; // Para obtener el id_sub
 
 const { Title } = Typography;
 
 const ManageEspeciality = () => {
+  const { userSubId } = useUser(); // Obtener el id_sub del usuario
   const [editingSpecialtyId, setEditingSpecialtyId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [specialties, setSpecialties] = useState([]);
@@ -15,15 +17,17 @@ const ManageEspeciality = () => {
   const fetchSpecialties = async () => {
     try {
       const specialtiesData = await getAllSpecialties();
-      setSpecialties(specialtiesData); // Asigna las especialidades desde la API
+      // Filtrar las especialidades por el id_sub del usuario
+      const filteredSpecialties = specialtiesData.filter(specialty => specialty.id_sub === userSubId);
+      setSpecialties(filteredSpecialties); // Asigna las especialidades filtradas
     } catch (error) {
       message.error('Error al obtener especialidades');
     }
   };
 
   useEffect(() => {
-    fetchSpecialties(); // Llamada inicial para cargar especialidades
-  }, []);
+    fetchSpecialties(); // Llamada inicial para cargar especialidades filtradas
+  }, [userSubId]); // Dependiendo del id_sub, si cambia, volvemos a cargar las especialidades
 
   // Manejar la edición de especialidades
   const handleEditSpecialty = useCallback((specialtyId) => {
@@ -61,8 +65,7 @@ const ManageEspeciality = () => {
   // Eliminar especialidad
   const handleDeleteSpecialty = useCallback(async (specialtyId) => {
     try {
-      console.log("ID enviado para eliminar:", specialtyId);  // Confirmar el ID que se envía
-      await deleteSpecialty(specialtyId);  // Llamar a la API para eliminar
+      await deleteSpecialty(specialtyId); // Llamar a la API para eliminar
       message.success('Especialidad eliminada exitosamente');
       setSpecialties(prevSpecialties => prevSpecialties.filter(specialty => specialty.id !== specialtyId));
     } catch (error) {
@@ -146,7 +149,6 @@ const ManageEspeciality = () => {
     <div className="p-5 bg-white rounded-2xl shadow-lg mt-2 ml-2 mr-2">
       <Title level={3} className="text-center">Gestionar Especialidades</Title>
       <div className="flex justify-end mb-6">
-        {/* Hacer async la función getDatos y usar await */}
         <EspecialityModal getDatos={fetchSpecialties} />
       </div>
       <Table

@@ -1,20 +1,27 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Space, Table, Button, Input, Typography } from 'antd';
+import { Space, Table, Button, Input, Typography, notification } from 'antd';
 import RoleModal from './RoleModal';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { fetchRoles, updateRole, deleteRole } from '../../../api/apiService';
+import { useUser } from '../../../context/UserContext'; // Importa el hook de contexto
 
 const { Title } = Typography;
+
 const ManageRoles = () => {
+  const { userSubId } = useUser(); // Obtén el id_sub desde el contexto
   const [editingRoleId, setEditingRoleId] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [roles, setRoles] = useState([]);
 
-  // Obtener datos
+  // Obtener datos y filtrar por id_sub
   const fetchData = async () => {
     try {
       const rolesData = await fetchRoles();
-      setRoles(rolesData);
+
+      // Filtrar roles según el id_sub en el contexto
+      const filteredRoles = rolesData.filter(role => role.id_sub === userSubId);
+
+      setRoles(filteredRoles);
     } catch (error) {
       notification.error({ message: 'Error al obtener roles', description: error.message });
     }
@@ -22,9 +29,7 @@ const ManageRoles = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  console.log(roles)
+  }, [userSubId]); // Vuelve a obtener los roles si el id_sub cambia
 
   const handleEditRole = useCallback((roleId) => {
     setEditingRoleId(roleId);
@@ -34,7 +39,6 @@ const ManageRoles = () => {
 
   const handleSaveRole = useCallback(async (roleId) => {
     try {
-      console.log("el usuario edito el rol")
       await updateRole(roleId, editedData[roleId]);
       setRoles(prevRoles => prevRoles.map(role => role.id === roleId ? { ...role, ...editedData[roleId] } : role));
       setEditingRoleId(null);
@@ -51,9 +55,7 @@ const ManageRoles = () => {
   const handleDeleteRole = useCallback(async (roleName) => {
     try {
       await deleteRole(roleName);
-      console.log("el usuario elimino el rol")
       setRoles(prevRoles => prevRoles.filter(role => role.nombre !== roleName));
-
     } catch (error) {
       notification.error({ message: 'Error al eliminar el rol', description: error.message });
     }

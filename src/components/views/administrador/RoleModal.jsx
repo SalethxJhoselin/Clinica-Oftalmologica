@@ -2,23 +2,30 @@ import React, { useState } from 'react';
 import { Button, Modal, Input, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createRole } from '../../../api/apiService';
+import { useUser } from '../../../context/UserContext'; // Importamos el hook para obtener userSubId
 
 const RoleModal = ({ getDatos }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [roleName, setRoleName] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
+    
+    const { userSubId } = useUser(); // Obtenemos el userSubId desde el contexto
 
     const handleOk = async () => {
         try {
-            await createRole(roleName);
-            console.log(`el usuario x creo el rol: ${roleName}`);
+            if (!userSubId) {
+                messageApi.error('No se pudo obtener el ID de usuario.');
+                return;
+            }
+            await createRole(roleName, userSubId); // Pasamos userSubId a la función createRole
+            console.log(`El usuario con ID ${userSubId} creo el rol: ${roleName}`);
             setIsModalOpen(false);
             setRoleName('');
             getDatos();
             messageApi.success('Rol guardado exitosamente');
         } catch (error) {
-            console.error('Error al crear el rooool:', error);
-            messageApi.success('Error al guardar el rol');
+            console.error('Error al crear el rol:', error);
+            messageApi.error('Error al guardar el rol');
         }
     };
 

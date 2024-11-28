@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Typography, Input } from 'antd';
 import { getAllUsers } from '../../../api/apiService';
+import { useUser } from '../../../context/UserContext';
 
 const { Title } = Typography;
 
 const ManageUsuarios = () => {
+  const { userSubId } = useUser(); // Obtén el id_sub desde el contexto
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -12,8 +14,13 @@ const ManageUsuarios = () => {
   const obtenerUsuarios = async () => {
     try {
       const response = await getAllUsers();
-      setUsers(response.data || []);
-      setFilteredUsers(response.data || []); // Inicialmente, todos los usuarios están filtrados
+      const usersData = response.data || [];
+
+      // Filtrar usuarios según el id_sub en el contexto
+      const filteredBySub = usersData.filter(user => user.id_sub === userSubId);
+
+      setUsers(filteredBySub);
+      setFilteredUsers(filteredBySub); // Inicialmente, todos los usuarios filtrados
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
     }
@@ -21,7 +28,7 @@ const ManageUsuarios = () => {
 
   useEffect(() => {
     obtenerUsuarios();
-  }, []);
+  }, [userSubId]); // Vuelve a obtener los usuarios si el id_sub cambia
 
   // Manejar cambios en el input de búsqueda
   const handleSearch = (e) => {

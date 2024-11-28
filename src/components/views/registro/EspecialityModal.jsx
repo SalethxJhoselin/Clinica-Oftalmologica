@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
 import { createSpecialty } from '../../../api/apiService';
+import { useUser } from '../../../context/UserContext';
 
 const EspecialityModal = ({ getDatos }) => {
+  const { userSubId } = useUser(); // Obtener el id_sub del contexto
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
@@ -17,10 +19,11 @@ const EspecialityModal = ({ getDatos }) => {
 
   const onFinish = async (values) => {
     try {
-      // Llamada a la API para crear una nueva especialidad
+      // Llamada a la API para crear una nueva especialidad, agregando id_sub
       await createSpecialty({
         nombre: values.nombre,
-        tiempo_estimado: values.tiempoEstimado, // puedes cambiar esto según el campo que uses en tu API
+        tiempo_estimado: values.tiempoEstimado, // Puedes cambiar esto según el campo que uses en tu API
+        id_sub: userSubId, // Añadir el id_sub del usuario
       });
 
       message.success('Especialidad creada exitosamente');

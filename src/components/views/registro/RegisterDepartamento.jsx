@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Button, Modal, Input, Form, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createDepartamento } from '../../../api/apiService'; // Asegúrate de importar tu función de servicio
+import { useUser } from '../../../context/UserContext'; // Importamos el hook para obtener el userSubId
 
 const RegisterDepartamento = ({ onSuccess }) => {
+  const { userSubId } = useUser(); // Obtenemos el userSubId desde el contexto
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
@@ -18,7 +20,13 @@ const RegisterDepartamento = ({ onSuccess }) => {
 
   const onFinish = async (values) => {
     try {
-      await createDepartamento(values.nombre); // Enviar los datos al backend
+      // Incluir el id_sub del usuario al crear el departamento
+      const departamentoData = {
+        nombre: values.nombre,
+        id_sub: userSubId, // Agregamos el id_sub
+      };
+
+      await createDepartamento(departamentoData); // Enviar los datos al backend con id_sub
       message.success('Departamento registrado exitosamente');
       form.resetFields();
       setIsModalOpen(false);
