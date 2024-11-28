@@ -851,7 +851,7 @@ export const getAllServicios = async () => {
     console.error('Error al listar los servicios:', error);
     throw error;
   }
-};
+}; 
 
 export const createBackup = async () => {
   try {
