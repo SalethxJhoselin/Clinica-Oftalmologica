@@ -855,7 +855,7 @@ export const getAllServicios = async () => {
 
 export const createBackup = async () => {
   try {
-    const response = await api.get('/backup'); // Realiza la solicitud GET al endpoint /backup
+    const response = await api.get('/backup?format=sql'); // Realiza la solicitud GET al endpoint /backup
     return response.data; // Devuelve la respuesta del servidor
   } catch (error) {
     console.error('Error al crear el backup:', error);
