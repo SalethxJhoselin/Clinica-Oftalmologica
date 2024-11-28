@@ -33,6 +33,8 @@ import ManageHistorial from '../components/views/atencionesMedicas/Historial/Man
 import ManageCirugias from '../components/views/atencionesMedicas/Cirugias/ManageCirugias';
 import ManageLensMeasures from '../components/views/atencionesMedicas/ManageLensMeasures';
 import ManageRecipes from '../components/views/atencionesMedicas/ManageRecipes';
+import Planes from '../components/layout/Planes';
+
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -54,6 +56,7 @@ const MyRoutes = () => {
             )}
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/planes" element={<Planes />} />
             {/*Protected Routes */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/perfil" element={<Perfil />} />
@@ -87,7 +90,7 @@ const MyRoutes = () => {
                 <Route path="/admin/access-log" element={<ManageBitacoraData />} />
                 <Route path="/medical-care/triage" element={<ManageTriaje />} />
                 <Route path="/medical-care/patologias" element={<ManagePatologia />} />
-                
+
 
                 <Route path="/historialMedico" element={<ManageHistorial />} />
                 <Route path="/cirugia" element={<ManageCirugias />} />
@@ -99,6 +102,7 @@ const MyRoutes = () => {
                 <Route path="/medical-care/Medidas" element={<ManageLensMeasures />} />
                 <Route path="/medical-care/Medicamentos" element={<ManageRecipes />} />
                 
+
             </Route>
             {/* Ruta por defecto para redirigir a login si no coincide ninguna ruta */}
             <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
