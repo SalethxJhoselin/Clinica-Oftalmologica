@@ -4,11 +4,12 @@ import Navbar from './components/Layout/Navbar';
 import MyRoutes from './routes/Routes';
 import Sidebar from './components/layout/Sidebar';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { UserProvider } from './context/UserContext';
 import { registrarVisita } from './api/apiService';
+import { UserProvider, useUser } from './context/UserContext';
 
 const AppContent = () => {
   const { isLoggedIn, sidebarOpen, setSidebarOpen } = useAuth();
+  const { userSubId } = useUser(); // Obtén userSubId del contexto
   const location = useLocation(); // Hook para obtener la ruta actual
 
   // Función para determinar la tabla afectada de manera automatizada
@@ -29,28 +30,31 @@ const AppContent = () => {
     }
   }, [location.pathname, isLoggedIn]); // Ejecuta el efecto cada vez que cambie la ruta o el estado de sesión
 
+  // Asegúrate de que el Sidebar solo se muestre si el usuario está logueado y tiene id_sub
+  const shouldRenderSidebar = isLoggedIn && userSubId !== null;
+
   return (
-    <UserProvider>
-      <div className="flex h-screen bg-white-100 transition-all duration-300">
-        {isLoggedIn && (
-          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        )}
-        <div className="flex-1 flex flex-col overflow-x-hidden">
-          <Navbar />
-          <div className="pt-16">
-            <MyRoutes />
-          </div>
+    <div className="flex h-screen bg-white-100 transition-all duration-300">
+      {shouldRenderSidebar && (
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      )}
+      <div className="flex-1 flex flex-col overflow-x-hidden">
+        <Navbar />
+        <div className="pt-16">
+          <MyRoutes />
         </div>
       </div>
-    </UserProvider >
+    </div>
   );
 };
 
 const App = () => (
   <BrowserRouter>
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <UserProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </UserProvider>
   </BrowserRouter>
 );
 

@@ -21,7 +21,8 @@ const FormRegister = () => {
             login();
             const { token } = response;
             localStorage.setItem('token', token);
-            navigate('/home');
+            console.log('token', token);
+            navigate('/planes');//cambiar a home si no
         } catch (error) {
             console.error('Error al registrar:', error.response.data);
         }
