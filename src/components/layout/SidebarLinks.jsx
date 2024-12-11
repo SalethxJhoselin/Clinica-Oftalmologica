@@ -75,6 +75,10 @@ const SidebarLinks = (userRol, userPermisos) => [
       hasPermission(userPermisos, "Programación de Médicos") && {
         label: "Programación de Médicos",
         to: "/settings/programmingCalendar",
+      },
+      {
+        label: " Comentarios",
+        to: "/settings/coments",
       }
     ],
   },

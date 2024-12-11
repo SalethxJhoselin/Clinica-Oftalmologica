@@ -34,7 +34,7 @@ import ManageCirugias from '../components/views/atencionesMedicas/Cirugias/Manag
 import ManageLensMeasures from '../components/views/atencionesMedicas/ManageLensMeasures';
 import ManageRecipes from '../components/views/atencionesMedicas/ManageRecipes';
 import Planes from '../components/layout/Planes';
-
+import CommentsSection from '../components/views/configuracion/CommentsSection';
 const MyRoutes = () => {
     const { isLoggedIn } = useAuth();
     return (
@@ -101,6 +101,7 @@ const MyRoutes = () => {
                 <Route path="/medical-care/Diagnostico" element={<ManageDiagnostics />} />
                 <Route path="/medical-care/Medidas" element={<ManageLensMeasures />} />
                 <Route path="/medical-care/Medicamentos" element={<ManageRecipes />} />
+                <Route path="/settings/coments" element={<CommentsSection />} />
                 
 
             </Route>

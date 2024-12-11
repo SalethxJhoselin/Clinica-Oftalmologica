@@ -1029,3 +1029,37 @@ export const editRecipe = async (recipeId, recipeData) => {
     throw new Error('Error al editar la receta');
   }
 };
+//==========COMMENTS====================================
+
+// Crear un comentario
+export const createComment = async (commentData) => {
+  try {
+    const response = await api.post('/comentarios/crear', commentData);
+    return response.data;
+  } catch (error) {
+    console.error('Error al crear el comentario:', error);
+    throw error;
+  }
+};
+
+// Listar todos los comentarios
+export const getAllComments = async () => {
+  try {
+    const response = await api.get('/comentarios/listar');
+    return response.data;
+  } catch (error) {
+    console.error('Error al listar los comentarios:', error);
+    throw error;
+  }
+};
+
+// Listar comentarios por usuario
+export const getCommentsByUser = async (userId) => {
+  try {
+    const response = await api.get(`/comentarios/listarByUser/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al listar los comentarios por usuario:', error);
+    throw error;
+  }
+};
